@@ -1,0 +1,4 @@
+Main-Class: serverPackage.Main
+Class-Path: lib/*.jar
+
+
