@@ -12,7 +12,7 @@ public class NetworkListener extends Thread {
 	
 	// server socket and the wel known service port
 	ServerSocket serverSocket = null;
-	private static final int wellknownPort = 1044;
+	private static int wellknownPort = 0;
 	
 	// Thread status indicator for outside surveillance
 	private boolean stopOrder;
@@ -22,6 +22,9 @@ public class NetworkListener extends Thread {
 	// Constructor 
 	public NetworkListener()
 	{
+		// Obtain the configured server port from the global config
+		wellknownPort = GameConfigs.serverPort;
+		
 		// Reset the stop order flag at first
 		this.stopOrder = false;
 		

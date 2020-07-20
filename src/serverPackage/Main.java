@@ -21,6 +21,9 @@ public class Main {
 			System.out.println("Configuration was loaded from file");
 		}
 		
+		// Print out the config values that will be used
+		GameConfigs.printConfig();
+		
 		// Call local init method 
 		initModules();
 		
@@ -51,7 +54,7 @@ public class Main {
 		listener = new NetworkListener();
 		listener.start();
 		
-		System.out.println();
+		System.out.println("Done");
 	}
 	
 	private static void shutdownModules()
