@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 
 public class GameConfigs {
 	
-	// relevant game configuration parameters
-	// ....
+	// relevant game configuration parameters default values
+	public static int serverPort = 1000;
 	
 	public static boolean readConfigFile() {
 		boolean result = true;
@@ -21,9 +21,8 @@ public class GameConfigs {
 		}
 		// Get all the values we need from the config file
 		try {
-			// ...
 			// value = file.getValueByName("valName");
-			// ...
+			serverPort = Integer.parseInt(file.getValueByName("server-port"));
 			
 		} catch(Exception e) {
 			System.out.println(e);
@@ -34,4 +33,10 @@ public class GameConfigs {
 		return result;
 	}
 	
+	public static void printConfig() {
+		System.out.println("Configuration Values: ");
+		System.out.println("Service Port: " + serverPort);
+		// ...
+		System.out.println();
+	}
 }
