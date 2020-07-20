@@ -1,2 +1,5 @@
 // valName:val 	syntax
 server-port:1044
+db-host:localhost
+db-user:java-data
+db-password:12345
