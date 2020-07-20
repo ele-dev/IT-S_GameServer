@@ -7,15 +7,18 @@ public class DatabaseAccess {
 	// Class members
 	private static Connection dbCon = null;
 	
-	// Login configuration
-	private static final String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB";
-	private static final String dbUser = "java-data";
-	private static final String dbPassword = "";
+	// Default Database connection configuration
+	private static String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB";
+	private static String dbUser = "java-data";
+	private static String dbPassword = "";
 	
 	// Constructor
 	public DatabaseAccess()
 	{
-		
+		// First obtain the global configuration values
+		dbUser = GameConfigs.dbUser;
+		dbPassword = GameConfigs.dbPassword;
+		dbUrl = "jdbc:mariadb://" + GameConfigs.dbHost + ":3306/onlineGameDB";
 	}
 	
 	// High level function for specific tasks
