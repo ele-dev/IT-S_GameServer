@@ -24,13 +24,18 @@ public class GameConfigs {
 		}
 		// Get all the values we need from the config file
 		try {
+			// General paradigma for reading in config values
 			// value = file.getValueByName("valName");
+			
+			// General values
 			serverPort = Integer.parseInt(file.getValueByName("server-port"));
 			
+			// Database (MariaDB/MySQL) related configuration values
 			dbHost = file.getValueByName("db-host");
 			dbUser = file.getValueByName("db-user");
 			dbPassword = file.getValueByName("db-password");
 
+			// ... 
 			
 		} catch(Exception e) {
 			System.out.println(e);
@@ -41,6 +46,7 @@ public class GameConfigs {
 		return result;
 	}
 	
+	// Static method for printing all the global configuration values to the server console
 	public static void printConfig() {
 		System.out.println("Configuration Values: ");
 		System.out.println("General:");
