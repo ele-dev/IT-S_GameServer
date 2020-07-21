@@ -39,10 +39,13 @@ public class NetworkListener extends Thread {
 	// Thread function for listening in the background
 	public void run()
 	{
-		// begin to listen for connection requests
+		// begin to listen continously for connection requests
 		this.listen();
 		
-		// close the server socket
+		// Notify all client handler threads to finish their work
+		ClientConnection.closeHandlerThreads();
+		
+		// close the server socket at last
 		try {
 			this.serverSocket.close();
 		} catch (IOException e) {

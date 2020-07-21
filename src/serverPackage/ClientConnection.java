@@ -18,12 +18,16 @@ public class ClientConnection extends Thread {
 	ObjectOutputStream objOut = null;
 	ObjectInputStream objIn = null;
 	
+	// Thread status indicator
+	private boolean stopOrder;
+	
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
 		// init values
 		super("ClientHandlerThread");
 		this.clientSocket = socket;
+		this.stopOrder = false;
 		
 		// create and prepare the i/o streams for data conversion
 		try {
@@ -60,7 +64,7 @@ public class ClientConnection extends Thread {
 	// Thread function that runs simultanious
 	public void run()
 	{
-		while(true)
+		while(!this.stopOrder)
 		{
 			// Check the input stream for incoming network messages
 			GenericMessage recvBuffer = null;
@@ -101,6 +105,18 @@ public class ClientConnection extends Thread {
 		for(int i = 0; i < clientList.size(); i++)
 		{
 			clientList.get(i).sendMessageToClient(networkMessage);
+		}
+	}
+	
+	// Public method that wait until all running client threads have finished their work
+	public static void closeHandlerThreads() 
+	{
+		// Loop through the client list and close all threads
+		for(ClientConnection cc: clientList)
+		{
+			// Instruct the handler thread to close and wait until it's done
+			cc.stopOrder = true;
+			while(cc.isAlive()) {}
 		}
 	}
 }
