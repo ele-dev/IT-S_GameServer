@@ -45,7 +45,6 @@ public class NetworkListener extends Thread {
 		// close the server socket
 		try {
 			this.serverSocket.close();
-			// System.out.println("server ssocket closed");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

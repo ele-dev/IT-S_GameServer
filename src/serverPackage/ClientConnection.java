@@ -37,7 +37,7 @@ public class ClientConnection extends Thread {
 		clientList.add(this);
 	}
 	
-	// Finalizer
+	// Finalizer that is called before garbage collection
 	@Override
 	public void finalize()
 	{
@@ -45,7 +45,7 @@ public class ClientConnection extends Thread {
 		try {
 			this.objIn.close();
 			this.objOut.close();
-		} catch (IOException e) {
+		} catch (IOException e) { 
 			System.err.println("Exception thrown while closing Object I/O streams!");
 		}
 		
