@@ -18,6 +18,7 @@ public class ClientConnection extends Thread {
 	ObjectOutputStream objOut = null;
 	ObjectInputStream objIn = null;
 	
+	// Constructor
 	public ClientConnection(Socket socket)
 	{
 		// init values
@@ -34,6 +35,26 @@ public class ClientConnection extends Thread {
 		
 		// add this instance to the client list 
 		clientList.add(this);
+	}
+	
+	// Finalizer
+	@Override
+	public void finalize()
+	{
+		// close the i/o streams
+		try {
+			this.objIn.close();
+			this.objOut.close();
+		} catch (IOException e) {
+			System.err.println("Exception thrown while closing Object I/O streams!");
+		}
+		
+		// close the associated client socket
+		try {
+			this.clientSocket.close();
+		} catch (IOException e) {
+			System.err.println("Exception thrown while closing client socket!");
+		}
 	}
 	
 	// Thread function that runs simultanious
