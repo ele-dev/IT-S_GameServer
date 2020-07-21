@@ -63,7 +63,7 @@ public class Main {
 		listener.sendStopOrder();
 		
 		// Wait until the thread has finished and return
-		System.out.print("Wait for threads to finish ... ");
+		System.out.print("Waiting for threads to finish ... ");
 		while(listener.isAlive()) {}
 		System.out.println("Done");
 	}
