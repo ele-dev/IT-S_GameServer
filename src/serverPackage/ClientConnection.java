@@ -86,7 +86,7 @@ public class ClientConnection extends Thread {
 				Main.logger.printWarning("Failed to parse incoming message", true);
 				continue;
 			} catch (Exception e) {
-				Main.logger.printWarning("Exception thrown while parsing message", true);
+				// Main.logger.printWarning("Exception thrown while parsing message", true);
 				continue;
 			}
 			
