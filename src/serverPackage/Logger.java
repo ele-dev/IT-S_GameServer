@@ -42,9 +42,14 @@ public class Logger {
     }
     
     // Different methods for formatted console output and file logging
-    public void print(String output) 
+    public void printInfo(String output) 
     {
-    	System.out.println(getTimestamp() + output);
+    	System.out.println(getTimestamp() + "[Info]: " + output);
+    }
+    
+    public void printError(String output) 
+    {
+    	System.out.println(getTimestamp() + "[Error]: " + output);
     }
     
     // Private function that returns a formatted timestamp for console output

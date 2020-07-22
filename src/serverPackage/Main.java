@@ -29,14 +29,15 @@ public class Main {
 		initModules();
 		
 		// dummy output
-		logger.print("This is a logger output");
+		logger.printInfo("This is an info output");
+		logger.printError("This is an Error output");
 		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);
 		String consoleInput = "";
 		
 		do {
-			System.out.print("~ ");
+			System.out.print("> ");
 			consoleInput = scanner.nextLine();
 			
 		} while(!consoleInput.equals("exit"));		// exit command takes server offline
