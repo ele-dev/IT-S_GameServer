@@ -65,7 +65,7 @@ public class Main {
 		listener.sendStopOrder();
 		
 		// Wait until the thread has finished and return
-		logger.printInfo("Waiting for threads to finish ... ", true);
+		logger.printInfo("Waiting for threads to finish ... ", true, 0);
 		while(listener.isAlive()) {}
 		
 		// Finalize the logger

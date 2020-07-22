@@ -34,19 +34,19 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket = new ServerSocket(wellknownPort);
 		} catch (IOException e) {
-			Main.logger.printError("Could not create and bind the server socket!", true);
+			Main.logger.printError("Could not create and bind the server socket!", true, 0);
 			status = false;
 		}
 		
 		if(status)
-			Main.logger.printInfo("Created Server Socket and bound to Port " + wellknownPort, true);
+			Main.logger.printInfo("Created Server Socket and bound to Port " + wellknownPort, true, 0);
 	}
 	
 	// Thread function for listening in the background
 	public void run()
 	{
 		// Print info message that server listener thread has just been launched
-		Main.logger.printInfo("Server listener thread launched", true);
+		Main.logger.printInfo("Server listener thread launched", true, 1);
 		
 		// begin to listen continously for connection requests
 		this.listen();
@@ -59,15 +59,15 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket.close();
 		} catch (IOException e) {
-			Main.logger.printError("Could not close the server socket properly!", true);
+			Main.logger.printError("Could not close the server socket properly!", true, 1);
 			status = false;
 		}
 		
 		if(status)
-			Main.logger.printInfo("Closed server socket", true);
+			Main.logger.printInfo("Closed server socket", true, 0);
 		
 		// Print info that server listener thread is closed now
-		Main.logger.printInfo("Server listener thread closed", true);
+		Main.logger.printInfo("Server listener thread closed", true, 1);
 		
 		return;
 	}
@@ -79,12 +79,12 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket.setSoTimeout(4000);
 		}  catch(SocketException e) {
-			Main.logger.printWarning("Could not set server socket timeout!", true);
+			Main.logger.printWarning("Could not set server socket timeout!", true, 1);
 			return;
 		}
 		
 		// Print little status message
-		Main.logger.printInfo("Server ready. Listening for connection requests ... ", true);
+		Main.logger.printInfo("Server ready. Listening for connection requests ... ", true, 0);
 			
 		// Listen until a stop order arrives from the outside
 		do {
@@ -94,25 +94,25 @@ public class NetworkListener extends Thread {
 				Socket clientSocket = this.serverSocket.accept();
 				
 				// Print info message that a new client has established a connection
-				Main.logger.printInfo("Accepted connection request", true);
+				Main.logger.printInfo("Accepted connection request", true, 0);
 				
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);
 				
-				Main.logger.printInfo("New client connection instance created", true);
+				Main.logger.printInfo("New client connection instance created", true, 1);
 				
 				// Launch a separate thread that will handle this client from now on
 				cc.start();
 				
-				Main.logger.printInfo("New client handler thread launched", true);
+				Main.logger.printInfo("New client handler thread launched", true, 1);
 			
 				// Catch various exceptions that might be thrown
 			} catch (SocketTimeoutException e1) {
-				Main.logger.printInfo("Socket Timeout exception thrown", false);
+				Main.logger.printInfo("Socket Timeout exception thrown", false, 2);
 			} catch (IOException e) {
-				Main.logger.printWarning("IO Exception thrown while listening", true);
+				Main.logger.printWarning("IO Exception thrown while listening", true, 2);
 			} catch (Exception e) {
-				Main.logger.printWarning("Unknown Exception thrown while listening/accepting!", true);
+				Main.logger.printWarning("Unknown Exception thrown while listening/accepting!", true, 2);
 				e.printStackTrace();
 			}
 			

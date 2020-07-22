@@ -36,6 +36,7 @@ public class Logger {
     
     // non static class members //
     private FileWriter fileWriter;
+    private int logLevel;		// basic = 0 | enhanced = 1 | detailed = 2
     
     // Constructor
     public Logger()
@@ -78,8 +79,12 @@ public class Logger {
     }
     
     // Different methods for formatted console output and file logging
-    public void printInfo(String output, boolean loggingOn) 
+    public void printInfo(String output, boolean loggingOn, int level) 
     {
+    	// Only write if the log level is high enough
+    	if(level > logLevel) 
+    		return;
+    	
     	// First get a formatted timestamp
     	String tStamp = getTimestamp();
     	
@@ -96,8 +101,12 @@ public class Logger {
     	}
     }
     
-    public void printError(String output, boolean loggingOn) 
+    public void printError(String output, boolean loggingOn, int level) 
     {
+    	// Only write if the log level is high enough
+    	if(level > logLevel) 
+    		return;
+    	
     	// First get a formatted timestamp
     	String tStamp = getTimestamp();
     	
@@ -115,8 +124,12 @@ public class Logger {
     	}
     }
     
-    public void printWarning(String output, boolean loggingOn) 
+    public void printWarning(String output, boolean loggingOn, int level) 
     {
+    	// Only write if the log level is high enough
+    	if(level > logLevel) 
+    		return;
+    	
     	// First get a formatted timestamp
     	String tStamp = getTimestamp();
     	

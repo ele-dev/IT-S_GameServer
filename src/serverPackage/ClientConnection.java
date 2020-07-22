@@ -38,13 +38,13 @@ public class ClientConnection extends Thread {
 			this.objOut.flush();
 			this.objIn = new ObjectInputStream(this.clientSocket.getInputStream());
 		} catch (Exception e) {
-			Main.logger.printError("Could not create object data streams!", true);
+			Main.logger.printError("Could not create object data streams!", true, 0);
 			e.printStackTrace();
 			status = false;
 		} 
 		
 		if(status)
-			Main.logger.printInfo("Object I/O streams created", true);
+			Main.logger.printInfo("Object I/O streams created", true, 1);
 		
 		// add this instance to the client list 
 		clientList.add(this);
@@ -63,7 +63,7 @@ public class ClientConnection extends Thread {
 				this.objOut.close();
 			}
 		} catch (IOException e) { 
-			Main.logger.printWarning("Could not close the object data streams properly", true);
+			Main.logger.printWarning("Could not close the object data streams properly", true, 1);
 		}
 		
 		// close the associated client socket
@@ -72,7 +72,7 @@ public class ClientConnection extends Thread {
 				this.clientSocket.close();
 			}
 		} catch (IOException e) {
-			Main.logger.printWarning("Could not close client socket properly", true);
+			Main.logger.printWarning("Could not close client socket properly", true, 1);
 		}
 		
 		// Finally remove this instance from the client list
@@ -82,13 +82,13 @@ public class ClientConnection extends Thread {
 	// Thread function that runs simultanious
 	public void run()
 	{
-		Main.logger.printInfo("Client handler thread running", true);
+		Main.logger.printInfo("Client handler thread running", true, 1);
 		
 		while(!this.stopOrder)
 		{
 			// Check if the connection is still alive
 			if(!this.clientSocket.isConnected()) {
-				Main.logger.printInfo("Client has closed the connection", true);
+				Main.logger.printInfo("Client has closed the connection", true, 0);
 				break;
 			}
 			
@@ -98,7 +98,7 @@ public class ClientConnection extends Thread {
 			try {
 				recvBuffer = (GenericMessage)this.objIn.readObject();
 			} catch (ClassNotFoundException e) {
-				Main.logger.printWarning("Failed to parse incoming message", true);
+				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
 			} catch (Exception e) {
 				// Main.logger.printWarning("Exception thrown while parsing message", true);
@@ -112,7 +112,7 @@ public class ClientConnection extends Thread {
 		// Finalize this instance
 		this.finalize();
 		
-		Main.logger.printInfo("Client handler thread finished", true);
+		Main.logger.printInfo("Client handler thread finished", true, 1);
 	}
 	
 	// Method for sending messages to this individual client
@@ -122,7 +122,7 @@ public class ClientConnection extends Thread {
 		try {
 			this.objOut.writeObject(networkMessage);
 		} catch (IOException e) {
-			Main.logger.printWarning("Failed to send message to client (Serialization Error)", true);
+			Main.logger.printWarning("Failed to send message to client (Serialization Error)", true, 0);
 		}
 		
 		return;
@@ -141,7 +141,7 @@ public class ClientConnection extends Thread {
 	// Public method that wait until all running client threads have finished their work
 	public static void closeHandlerThreads() 
 	{
-		Main.logger.printInfo("Closing client handler threads ... ", true);
+		Main.logger.printInfo("Closing client handler threads ... ", true, 1);
 		
 		// Loop through the client list and close all threads
 		for(ClientConnection cc: clientList)

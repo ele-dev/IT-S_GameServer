@@ -10,6 +10,7 @@ public class GameConfigs {
 	public static String dbUser = "dbUser";
 	public static String dbPassword = "dbPass";
 	public static String logFilename = "log.txt";
+	public static String logLevel = "basic";       // basic | enhanced | detailed
 	
 	public static boolean readConfigFile() {
 		boolean result = true;
@@ -35,6 +36,10 @@ public class GameConfigs {
 			dbHost = file.getValueByName("db-host");
 			dbUser = file.getValueByName("db-user");
 			dbPassword = file.getValueByName("db-password");
+			
+			// Logging related values
+			logFilename = file.getValueByName("log-file");
+			logLevel = file.getValueByName("log-level");
 
 			// ... 
 			
@@ -56,6 +61,9 @@ public class GameConfigs {
 		System.out.println("   Host: " + dbHost);
 		System.out.println("   Username: " + dbUser);
 		System.out.println("   Password: " + dbPassword);
+		System.out.println("Logging: ");
+		System.out.println("   logfile: " + logFilename);
+		System.out.println("   log level: " + logLevel);
 		// ...
 		System.out.println();
 	}
