@@ -29,9 +29,9 @@ public class Main {
 		initModules();
 		
 		// dummy output
-		logger.printInfo("This is an info output");
-		logger.printError("This is an Error output");
-		logger.printWarning("This is a warning output");
+		logger.printInfo("This is an info output", true);
+		logger.printError("This is an Error output", true);
+		logger.printWarning("This is a warning output", true);
 		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);

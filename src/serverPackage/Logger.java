@@ -1,10 +1,8 @@
 package serverPackage;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -37,16 +35,12 @@ public class Logger {
     public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
     
     // non static class members //
-    // private File logFile;
     private FileWriter fileWriter;
     
     // Constructor
     public Logger()
     {
-    	// create and open a log file
-    	// this.logFile = new File(GameConfigs.logFilename);
-    	
-    	// Create a file write for the open file
+    	// Create or reopen the log file in append mode
     	try {
 			this.fileWriter = new FileWriter(GameConfigs.logFilename, true);
 		} catch (IOException e) {
@@ -61,7 +55,7 @@ public class Logger {
     	// Enter a seperation line to mark the application launch in the logfile
     	try {
     		fileWriter.write("\n\n");
-			fileWriter.write("---------------------- Application launch at " + ts + "----------------------\n\n");
+			fileWriter.write("---------------------- Application launch at " + ts + " ----------------------\n\n");
 		} catch (IOException e) {
 			System.err.println("Failed to write to the log file!");
 		}
@@ -84,27 +78,60 @@ public class Logger {
     }
     
     // Different methods for formatted console output and file logging
-    public void printInfo(String output) 
+    public void printInfo(String output, boolean loggingOn) 
     {
-    	System.out.print(getTimestamp());
+    	// First get a formatted timestamp
+    	String tStamp = getTimestamp();
+    	
+    	// Then print the output to console in the right color
+    	System.out.print(tStamp);
     	System.out.print(WHITE + "[Info]: ");
     	System.out.println(output);
+    	
+    	// Optionally write to the logfile too
+    	if(loggingOn) {
+    		try {
+    			this.fileWriter.write(tStamp + "[Info]: " + output + "\n");
+    		} catch(Exception e) {}
+    	}
     }
     
-    public void printError(String output) 
+    public void printError(String output, boolean loggingOn) 
     {
-    	System.out.print(getTimestamp());
+    	// First get a formatted timestamp
+    	String tStamp = getTimestamp();
+    	
+    	// Then print the output to console in the right color
+    	System.out.print(tStamp);
     	System.out.print(RED + "[Error]: ");
     	System.out.println(output);
     	System.out.print(WHITE);
+    	
+    	// Optionally write to the logfile too
+    	if(loggingOn) {
+    		try {
+    			this.fileWriter.write(tStamp + "[Error]: " + output + "\n");
+    		} catch(Exception e) {}
+    	}
     }
     
-    public void printWarning(String output) 
+    public void printWarning(String output, boolean loggingOn) 
     {
-    	System.out.print(getTimestamp());
+    	// First get a formatted timestamp
+    	String tStamp = getTimestamp();
+    	
+    	// Then print the output to console in the right color
+    	System.out.print(tStamp);
     	System.out.print(YELLOW + "[Warning]: ");
     	System.out.println(output);
     	System.out.print(WHITE);
+    	
+    	// Optionally write to the logfile too
+    	if(loggingOn) {
+    		try {
+    			this.fileWriter.write(tStamp + "[Warning]: " + output + "\n");
+    		} catch(Exception e) {}
+    	}
     }
     
     // Private function that returns a formatted timestamp for console output
