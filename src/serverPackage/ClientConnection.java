@@ -30,14 +30,18 @@ public class ClientConnection extends Thread {
 		this.stopOrder = false;
 		
 		// create and prepare the i/o streams for data conversion
+		boolean status = true;
 		try {
 			this.objOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			this.objIn = new ObjectInputStream(this.clientSocket.getInputStream());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Main.logger.printError("Could not create object data streams!", true);
-		}
+			e.printStackTrace();
+			status = false;
+		} 
 		
-		Main.logger.printInfo("Object I/O streams created", true);
+		if(status)
+			Main.logger.printInfo("Object I/O streams created", true);
 		
 		// add this instance to the client list 
 		clientList.add(this);
