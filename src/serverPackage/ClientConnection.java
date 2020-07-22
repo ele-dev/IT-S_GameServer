@@ -37,6 +37,8 @@ public class ClientConnection extends Thread {
 			Main.logger.printError("Could not create object data streams!", true);
 		}
 		
+		Main.logger.printInfo("Object I/O streams created", true);
+		
 		// add this instance to the client list 
 		clientList.add(this);
 	}
@@ -73,6 +75,8 @@ public class ClientConnection extends Thread {
 	// Thread function that runs simultanious
 	public void run()
 	{
+		Main.logger.printInfo("Client handler thread running", true);
+		
 		while(!this.stopOrder)
 		{
 			// Check if the connection is still alive
@@ -100,6 +104,8 @@ public class ClientConnection extends Thread {
 		
 		// Finalize this instance
 		this.finalize();
+		
+		Main.logger.printInfo("Client handler thread finished", true);
 	}
 	
 	// Method for sending messages to this individual client

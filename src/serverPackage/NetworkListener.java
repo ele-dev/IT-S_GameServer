@@ -93,21 +93,28 @@ public class NetworkListener extends Thread {
 				// Wait for the next connection request and handle it
 				Socket clientSocket = this.serverSocket.accept();
 				
-				// create a new client instance and pass the client socket
-				ClientConnection cc = new ClientConnection(clientSocket);
-				
 				// Print info message that a new client has established a connection
 				Main.logger.printInfo("Accepted connection request", true);
 				
+				// create a new client instance and pass the client socket
+				ClientConnection cc = new ClientConnection(clientSocket);
+				
+				Main.logger.printInfo("New client connection instance created", true);
+				
 				// Launch a separate thread that will handle this client from now on
 				cc.start();
+				
+				Main.logger.printInfo("New client handler thread launched", true);
 			
 				// Catch various exceptions that might be thrown
 			} catch (SocketTimeoutException e1) {
-				// ... 
+				Main.logger.printInfo("Socket Timeout exception thrown", false);
 			} catch (IOException e) {
 				Main.logger.printWarning("IO Exception thrown while listening", true);
-			} 
+			} catch (Exception e) {
+				Main.logger.printWarning("Unknown Exception thrown while listening/accepting!", true);
+				e.printStackTrace();
+			}
 			
 		} while(this.stopOrder == false);
 			
