@@ -3,7 +3,10 @@ package serverPackage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 public class Logger {
 	
@@ -34,23 +37,34 @@ public class Logger {
     public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
     
     // non static class members //
-    private File logFile;
+    // private File logFile;
     private FileWriter fileWriter;
     
     // Constructor
     public Logger()
     {
     	// create and open a log file
-    	this.logFile = new File(GameConfigs.logFilename);
+    	// this.logFile = new File(GameConfigs.logFilename);
     	
     	// Create a file write for the open file
     	try {
-			this.fileWriter = new FileWriter(this.logFile);
+			this.fileWriter = new FileWriter(GameConfigs.logFilename, true);
 		} catch (IOException e) {
-			
+			System.err.println("Failed to open/create the logfile!");
 		}
     	
+    	// create a full time stamp including date 
+    	Date date = new Date();
+    	long time = date.getTime();
+    	Timestamp ts = new Timestamp(time);
     	
+    	// Enter a seperation line to mark the application launch in the logfile
+    	try {
+    		fileWriter.write("\n\n");
+			fileWriter.write("---------------------- Application launch at " + ts + "----------------------\n\n");
+		} catch (IOException e) {
+			System.err.println("Failed to write to the log file!");
+		}
     }
     
     // Finalizer
@@ -60,7 +74,9 @@ public class Logger {
     	// close the file writer before garbage collection
     	try {
 			this.fileWriter.close();
+			System.out.println("File Writer closed");
 		} catch (IOException e) {
+			System.err.println("Failed to close file writer");
 		}
     	
     	// Make sure the console text color is resetted before the application closes

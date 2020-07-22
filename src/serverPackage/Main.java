@@ -75,6 +75,9 @@ public class Main {
 		System.out.print("Waiting for threads to finish ... ");
 		while(listener.isAlive()) {}
 		System.out.println("Done");
+		
+		// Finalize the logger
+		logger.finalize();
 	}
 
 }
