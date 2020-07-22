@@ -45,6 +45,9 @@ public class NetworkListener extends Thread {
 	// Thread function for listening in the background
 	public void run()
 	{
+		// Print info message that server listener thread has just been launched
+		Main.logger.printInfo("Server listener thread launched", true);
+		
 		// begin to listen continously for connection requests
 		this.listen();
 		
@@ -62,6 +65,9 @@ public class NetworkListener extends Thread {
 		
 		if(status)
 			Main.logger.printInfo("Closed server socket", true);
+		
+		// Print info that server listener thread is closed now
+		Main.logger.printInfo("Server listener thread closed", true);
 		
 		return;
 	}
