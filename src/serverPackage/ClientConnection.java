@@ -47,15 +47,19 @@ public class ClientConnection extends Thread {
 	{
 		// close the i/o streams
 		try {
-			this.objIn.close();
-			this.objOut.close();
+			if(this.objIn != null) {
+				this.objIn.close();
+			}
+			if(this.objOut != null) {
+				this.objOut.close();
+			}
 		} catch (IOException e) { 
 			Main.logger.printWarning("Could not close the object data streams properly", true);
 		}
 		
 		// close the associated client socket
 		try {
-			if(this.clientSocket.isConnected()) {
+			if(this.clientSocket != null && this.clientSocket.isConnected()) {
 				this.clientSocket.close();
 			}
 		} catch (IOException e) {
