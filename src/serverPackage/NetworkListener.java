@@ -75,8 +75,9 @@ public class NetworkListener extends Thread {
 	// Method for accepting incoming connection requests from clients
 	private void listen()
 	{
+		// Set the server socket timeout to infinite
 		try {
-			this.serverSocket.setSoTimeout(4000);
+			this.serverSocket.setSoTimeout(0);
 		}  catch(SocketException e) {
 			Main.logger.printWarning("Could not set server socket timeout!", true);
 			return;
