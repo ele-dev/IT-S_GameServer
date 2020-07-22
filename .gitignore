@@ -2,3 +2,4 @@
 .settings
 bin/*
 GameServer.jar
+log.txt
