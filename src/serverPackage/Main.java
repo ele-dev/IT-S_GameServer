@@ -31,6 +31,7 @@ public class Main {
 		// dummy output
 		logger.printInfo("This is an info output");
 		logger.printError("This is an Error output");
+		logger.printWarning("This is a warning output");
 		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);

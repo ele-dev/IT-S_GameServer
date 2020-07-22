@@ -45,15 +45,24 @@ public class Logger {
     public void printInfo(String output) 
     {
     	System.out.print(getTimestamp());
-    	System.out.print(WHITE_BOLD + "[Info]" + RESET + ": ");
+    	System.out.print(WHITE + "[Info]: ");
     	System.out.println(output);
     }
     
     public void printError(String output) 
     {
     	System.out.print(getTimestamp());
-    	System.out.print(RED_BOLD + "[Error]" + RED + ": ");
+    	System.out.print(RED + "[Error]: ");
     	System.out.println(output);
+    	System.out.print(WHITE);
+    }
+    
+    public void printWarning(String output) 
+    {
+    	System.out.print(getTimestamp());
+    	System.out.print(YELLOW + "[Warning]: ");
+    	System.out.println(output);
+    	System.out.print(WHITE);
     }
     
     // Private function that returns a formatted timestamp for console output
