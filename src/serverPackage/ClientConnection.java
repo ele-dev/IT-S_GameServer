@@ -61,6 +61,9 @@ public class ClientConnection extends Thread {
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true);
 		}
+		
+		// Finally remove this instance from the client list
+		
 	}
 	
 	// Thread function that runs simultanious
@@ -68,6 +71,12 @@ public class ClientConnection extends Thread {
 	{
 		while(!this.stopOrder)
 		{
+			// Check if the connection is still alive
+			if(!this.clientSocket.isConnected()) {
+				Main.logger.printInfo("Client has closed the connection", true);
+				break;
+			}
+			
 			// Check the input stream for incoming network messages
 			GenericMessage recvBuffer = null;
 			
@@ -84,6 +93,9 @@ public class ClientConnection extends Thread {
 			// Now handle and process the received message
 			// ...
 		}
+		
+		// Finalize this instance
+		this.finalize();
 	}
 	
 	// Method for sending messages to this individual client
@@ -120,7 +132,7 @@ public class ClientConnection extends Thread {
 			while(cc.isAlive()) {}
 			
 			// Finalize the client connection instance
-			cc.finalize();
+			// cc.finalize();
 		}
 	}
 }
