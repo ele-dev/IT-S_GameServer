@@ -1,6 +1,8 @@
 package serverPackage;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalTime;
 
 public class Logger {
@@ -33,12 +35,36 @@ public class Logger {
     
     // non static class members //
     private File logFile;
+    private FileWriter fileWriter;
     
     // Constructor
     public Logger()
     {
     	// create and open a log file
-    	// this.logFile = new File(GameConfigs.logFilename);
+    	this.logFile = new File(GameConfigs.logFilename);
+    	
+    	// Create a file write for the open file
+    	try {
+			this.fileWriter = new FileWriter(this.logFile);
+		} catch (IOException e) {
+			
+		}
+    	
+    	
+    }
+    
+    // Finalizer
+    @Override 
+    public void finalize() 
+    {
+    	// close the file writer before garbage collection
+    	try {
+			this.fileWriter.close();
+		} catch (IOException e) {
+		}
+    	
+    	// Make sure the console text color is resetted before the application closes
+    	System.out.print(RESET);
     }
     
     // Different methods for formatted console output and file logging
