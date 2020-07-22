@@ -29,10 +29,13 @@ public class ClientConnection extends Thread {
 		this.clientSocket = socket;
 		this.stopOrder = false;
 		
+		
+		
 		// create and prepare the i/o streams for data conversion
 		boolean status = true;
 		try {
 			this.objOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
+			this.objOut.flush();
 			this.objIn = new ObjectInputStream(this.clientSocket.getInputStream());
 		} catch (Exception e) {
 			Main.logger.printError("Could not create object data streams!", true);
