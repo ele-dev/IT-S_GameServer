@@ -68,7 +68,7 @@ public class Logger {
     	// close the file writer before garbage collection
     	try {
 			this.fileWriter.close();
-			System.out.println("File Writer closed");
+			System.out.println("Closed file writer");
 		} catch (IOException e) {
 			System.err.println("Failed to close file writer");
 		}

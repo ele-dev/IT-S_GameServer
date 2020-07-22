@@ -49,7 +49,7 @@ public class Main {
 	
 	private static void initModules() 
 	{
-		System.out.print("Loading modules ... ");
+		System.out.println("Loading modules ... ");
 		
 		// create a logger instance 
 		logger = new Logger();
@@ -57,8 +57,6 @@ public class Main {
 		// init and launch the network listener thread 
 		listener = new NetworkListener();
 		listener.start();
-		
-		System.out.println("Done");
 	}
 	
 	private static void shutdownModules()
@@ -67,9 +65,8 @@ public class Main {
 		listener.sendStopOrder();
 		
 		// Wait until the thread has finished and return
-		System.out.print("Waiting for threads to finish ... ");
+		logger.printInfo("Waiting for threads to finish ... ", true);
 		while(listener.isAlive()) {}
-		System.out.println("Done");
 		
 		// Finalize the logger
 		logger.finalize();

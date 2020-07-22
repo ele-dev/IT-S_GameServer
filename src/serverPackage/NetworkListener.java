@@ -22,6 +22,8 @@ public class NetworkListener extends Thread {
 	// Constructor 
 	public NetworkListener()
 	{
+		boolean status = true;
+		
 		// Obtain the configured server port from the global config
 		wellknownPort = GameConfigs.serverPort;
 		
@@ -33,7 +35,11 @@ public class NetworkListener extends Thread {
 			this.serverSocket = new ServerSocket(wellknownPort);
 		} catch (IOException e) {
 			Main.logger.printError("Could not create and bind the server socket!", true);
+			status = false;
 		}
+		
+		if(status)
+			Main.logger.printInfo("Created Server Socket and bound to Port " + wellknownPort, true);
 	}
 	
 	// Thread function for listening in the background
@@ -46,11 +52,16 @@ public class NetworkListener extends Thread {
 		ClientConnection.closeHandlerThreads();
 		
 		// close the server socket at last
+		boolean status = true;
 		try {
 			this.serverSocket.close();
 		} catch (IOException e) {
 			Main.logger.printError("Could not close the server socket properly!", true);
+			status = false;
 		}
+		
+		if(status)
+			Main.logger.printInfo("Closed server socket", true);
 		
 		return;
 	}
@@ -64,10 +75,14 @@ public class NetworkListener extends Thread {
 			Main.logger.printWarning("Could not set server socket timeout!", true);
 			return;
 		}
+		
+		// Print little status message
+		Main.logger.printInfo("Server ready. Listening for connection requests ... ", true);
 			
 		// Listen until a stop order arrives from the outside
 		do {
 			
+			boolean status = false;
 			try {
 				// Wait for the next connection request and handle it
 				Socket clientSocket = this.serverSocket.accept();
@@ -77,6 +92,7 @@ public class NetworkListener extends Thread {
 				
 				// Launch a separate thread that will handle this client from now on
 				cc.start();
+				status = true;
 			
 				// Catch various exceptions that might be thrown
 			} catch (SocketTimeoutException e) {
@@ -84,6 +100,9 @@ public class NetworkListener extends Thread {
 			} catch (IOException e) {
 				Main.logger.printWarning("IO Exception thrown while listening", true);
 			}
+			
+			if(status)
+				Main.logger.printInfo("Accepted connection request", true);
 			
 		} while(this.stopOrder == false);
 			
