@@ -1,5 +1,8 @@
 package serverPackage;
 
+import java.io.File;
+import java.time.LocalTime;
+
 public class Logger {
 	
 	// static class members //
@@ -28,9 +31,29 @@ public class Logger {
     public static final String CYAN_BOLD = "\033[1;36m";   // CYAN
     public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
     
+    // non static class members //
+    private File logFile;
+    
+    // Constructor
+    public Logger()
+    {
+    	// create and open a log file
+    	// this.logFile = new File(GameConfigs.logFilename);
+    }
+    
+    // Different methods for formatted console output and file logging
+    public void print(String output) 
+    {
+    	System.out.println(getTimestamp() + output);
+    }
+    
+    // Private function that returns a formatted timestamp for console output
+    // Desired timestamp format 	[hh:mm:ss]
     private static String getTimestamp()
     {
-    	String timestamp = "";
+    	LocalTime now = LocalTime.now();
+    	
+    	String timestamp = "[" + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "] ";
     	
     	return timestamp;
     }

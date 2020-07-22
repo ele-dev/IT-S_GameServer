@@ -6,6 +6,7 @@ public class Main {
 	
 	// The main parts of the application
 	static NetworkListener listener = null;
+	static Logger logger = null;
 
 	
 	// --- Application Entry point --- //
@@ -26,6 +27,9 @@ public class Main {
 		
 		// Call local init method 
 		initModules();
+		
+		// dummy output
+		logger.print("This is a logger output");
 		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);
@@ -49,6 +53,9 @@ public class Main {
 	private static void initModules() 
 	{
 		System.out.print("Loading modules ... ");
+		
+		// create a logger instance 
+		logger = new Logger();
 		
 		// init and launch the network listener thread 
 		listener = new NetworkListener();
