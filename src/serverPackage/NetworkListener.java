@@ -77,7 +77,7 @@ public class NetworkListener extends Thread {
 	{
 		// Set the server socket timeout to infinite
 		try {
-			this.serverSocket.setSoTimeout(0);
+			this.serverSocket.setSoTimeout(4000);
 		}  catch(SocketException e) {
 			Main.logger.printWarning("Could not set server socket timeout!", true);
 			return;
@@ -89,7 +89,6 @@ public class NetworkListener extends Thread {
 		// Listen until a stop order arrives from the outside
 		do {
 			
-			boolean status = false;
 			try {
 				// Wait for the next connection request and handle it
 				Socket clientSocket = this.serverSocket.accept();
@@ -97,19 +96,18 @@ public class NetworkListener extends Thread {
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);
 				
+				// Print info message that a new client has established a connection
+				Main.logger.printInfo("Accepted connection request", true);
+				
 				// Launch a separate thread that will handle this client from now on
 				cc.start();
-				status = true;
 			
 				// Catch various exceptions that might be thrown
-			} catch (SocketTimeoutException e) {
-				// e.printStackTrace();
+			} catch (SocketTimeoutException e1) {
+				// ... 
 			} catch (IOException e) {
 				Main.logger.printWarning("IO Exception thrown while listening", true);
-			}
-			
-			if(status)
-				Main.logger.printInfo("Accepted connection request", true);
+			} 
 			
 		} while(this.stopOrder == false);
 			

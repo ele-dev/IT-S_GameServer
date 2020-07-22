@@ -128,15 +128,17 @@ public class ClientConnection extends Thread {
 	// Public method that wait until all running client threads have finished their work
 	public static void closeHandlerThreads() 
 	{
+		Main.logger.printInfo("Closing client handler threads ... ", true);
+		
 		// Loop through the client list and close all threads
 		for(ClientConnection cc: clientList)
 		{
 			// Instruct the handler thread to close and wait until it's done
-			cc.stopOrder = true;
-			while(cc.isAlive()) {}
-			
-			// Finalize the client connection instance
-			// cc.finalize();
+			if(cc != null && cc.isAlive()) 
+			{
+				cc.stopOrder = true;
+				while(cc.isAlive()) {}
+			}
 		}
 	}
 }
