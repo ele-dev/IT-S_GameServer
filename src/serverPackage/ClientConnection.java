@@ -55,7 +55,9 @@ public class ClientConnection extends Thread {
 		
 		// close the associated client socket
 		try {
-			this.clientSocket.close();
+			if(this.clientSocket.isConnected()) {
+				this.clientSocket.close();
+			}
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true);
 		}
@@ -82,7 +84,6 @@ public class ClientConnection extends Thread {
 			// Now handle and process the received message
 			// ...
 		}
-		
 	}
 	
 	// Method for sending messages to this individual client
@@ -117,6 +118,9 @@ public class ClientConnection extends Thread {
 			// Instruct the handler thread to close and wait until it's done
 			cc.stopOrder = true;
 			while(cc.isAlive()) {}
+			
+			// Finalize the client connection instance
+			cc.finalize();
 		}
 	}
 }
