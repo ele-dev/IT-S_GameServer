@@ -32,7 +32,7 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket = new ServerSocket(wellknownPort);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Main.logger.printError("Could not create and bind the server socket!", true);
 		}
 	}
 	
@@ -49,7 +49,7 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Main.logger.printError("Could not close the server socket properly!", true);
 		}
 		
 		return;
@@ -61,7 +61,7 @@ public class NetworkListener extends Thread {
 		try {
 			this.serverSocket.setSoTimeout(4000);
 		}  catch(SocketException e) {
-			System.err.println("Could not set server socket timeout!");
+			Main.logger.printWarning("Could not set server socket timeout!", true);
 			return;
 		}
 			
@@ -82,7 +82,7 @@ public class NetworkListener extends Thread {
 			} catch (SocketTimeoutException e) {
 				// e.printStackTrace();
 			} catch (IOException e) {
-				// e.printStackTrace();
+				Main.logger.printWarning("IO Exception thrown while listening", true);
 			}
 			
 		} while(this.stopOrder == false);

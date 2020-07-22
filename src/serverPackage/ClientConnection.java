@@ -34,7 +34,7 @@ public class ClientConnection extends Thread {
 			this.objOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
 			this.objIn = new ObjectInputStream(this.clientSocket.getInputStream());
 		} catch (IOException e) {
-			System.err.println("[Error]: Exception thrown while creating data streams!");
+			Main.logger.printError("Could not create object data streams!", true);
 		}
 		
 		// add this instance to the client list 
@@ -50,14 +50,14 @@ public class ClientConnection extends Thread {
 			this.objIn.close();
 			this.objOut.close();
 		} catch (IOException e) { 
-			System.err.println("Exception thrown while closing Object I/O streams!");
+			Main.logger.printWarning("Could not close the object data streams properly", true);
 		}
 		
 		// close the associated client socket
 		try {
 			this.clientSocket.close();
 		} catch (IOException e) {
-			System.err.println("Exception thrown while closing client socket!");
+			Main.logger.printWarning("Could not close client socket properly", true);
 		}
 	}
 	
@@ -72,10 +72,10 @@ public class ClientConnection extends Thread {
 			try {
 				recvBuffer = (GenericMessage)this.objIn.readObject();
 			} catch (ClassNotFoundException e) {
-				System.err.println("[Error]: Failed to parse incoming message!");
+				Main.logger.printWarning("Failed to parse incoming message", true);
 				continue;
 			} catch (Exception e) {
-				System.err.println("[Error]: Exception while reading parsing message!");
+				Main.logger.printWarning("Exception thrown while parsing message", true);
 				continue;
 			}
 			
@@ -92,7 +92,7 @@ public class ClientConnection extends Thread {
 		try {
 			this.objOut.writeObject(networkMessage);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Main.logger.printWarning("Failed to send message to client (Serialization Error)", true);
 		}
 		
 		return;
