@@ -9,6 +9,7 @@ public class GameConfigs {
 	public static String dbHost = "localhost";
 	public static String dbUser = "dbUser";
 	public static String dbPassword = "dbPass";
+	public static String logFilename = "log.txt";
 	
 	public static boolean readConfigFile() {
 		boolean result = true;
