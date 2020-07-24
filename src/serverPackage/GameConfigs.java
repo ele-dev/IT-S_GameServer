@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 
 public class GameConfigs {
 	
+	// hardcoded constant
+	private static final String configFilePath = "config.txt";
+	
 	// relevant game configuration parameters default values
 	public static int serverPort = 1000;
 	public static String dbHost = "localhost";
@@ -19,7 +22,7 @@ public class GameConfigs {
 		
 		// Open the config file
 		try {
-			file = new ConfigFile("config.txt");
+			file = new ConfigFile(configFilePath);
 		} catch (FileNotFoundException e) {
 			result = false;
 			return false;

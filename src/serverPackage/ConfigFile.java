@@ -55,6 +55,10 @@ public class ConfigFile {
 			}
 		}
 		
+		// Print message if the config value wasnt found 
+		System.out.println("Unable to find config value named " + name + ". Please check " + this.configFile.getName());
+		System.out.println("  --> using default config value");
+		
 		return value;
 	}
 }
