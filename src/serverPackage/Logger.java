@@ -60,6 +60,9 @@ public class Logger {
 		} catch (IOException e) {
 			System.err.println("Failed to write to the log file!");
 		}
+    	
+    	// Set the initial log level
+    	this.setLogLevel(GameConfigs.logLevel);
     }
     
     // Finalizer
@@ -76,6 +79,38 @@ public class Logger {
     	
     	// Make sure the console text color is resetted before the application closes
     	System.out.print(RESET);
+    }
+    
+    // Method to change the current log level
+    public void setLogLevel(String level)
+    {
+    	switch(level)
+    	{
+			case "basic":
+			{
+				this.logLevel = 0;
+				break;
+			}
+			
+			case "enhanced":
+			{
+				this.logLevel = 1;
+				break;
+			}
+			
+			case "detailed":
+			{
+				this.logLevel = 2;
+				break;
+			}
+			
+    		default:
+    		{
+    			// Set the default log level to 0 (basic)
+    			this.logLevel = 0;
+    			break;
+    		}
+    	}
     }
     
     // Different methods for formatted console output and file logging

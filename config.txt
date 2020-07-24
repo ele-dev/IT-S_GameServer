@@ -4,4 +4,4 @@ db-host:localhost
 db-user:java-data
 db-password:12345
 log-file:log.txt
-log-level:detailed
+log-level:basic
