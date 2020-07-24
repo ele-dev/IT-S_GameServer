@@ -79,7 +79,7 @@ public class ClientConnection extends Thread {
 		if(!removed) {
 			Main.logger.printError("Could not remove player from client list!", true, 0);
 		} else {
-			Main.logger.printError("Player removed from client list", true, 1);
+			Main.logger.printInfo("Player removed from client list", true, 1);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class ClientConnection extends Thread {
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
 			} catch (Exception e) {
-				Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
+				// Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
 				continue;
 			}
 			
