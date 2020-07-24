@@ -75,7 +75,7 @@ public class NetworkListener extends Thread {
 	// Method for accepting incoming connection requests from clients
 	private void listen()
 	{
-		// Set the server socket timeout to infinite
+		// Set the server socket timeout to 4 seconds (blocking mode)
 		try {
 			this.serverSocket.setSoTimeout(4000);
 		}  catch(SocketException e) {
@@ -99,7 +99,7 @@ public class NetworkListener extends Thread {
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);
 				
-				Main.logger.printInfo("New client connection instance created", true, 1);
+				Main.logger.printInfo("New client connection instance created", true, 2);
 				
 				// Launch a separate thread that will handle this client from now on
 				cc.start();

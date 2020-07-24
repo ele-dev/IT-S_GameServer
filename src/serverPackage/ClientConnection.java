@@ -29,9 +29,7 @@ public class ClientConnection extends Thread {
 		this.clientSocket = socket;
 		this.stopOrder = false;
 		
-		
-		
-		// create and prepare the i/o streams for data conversion
+		// create and prepare the i/o streams for data serialization
 		boolean status = true;
 		try {
 			this.objOut = new ObjectOutputStream(this.clientSocket.getOutputStream());
@@ -39,7 +37,8 @@ public class ClientConnection extends Thread {
 			this.objIn = new ObjectInputStream(this.clientSocket.getInputStream());
 		} catch (Exception e) {
 			Main.logger.printError("Could not create object data streams!", true, 0);
-			e.printStackTrace();
+			Main.logger.printError(e.getStackTrace().toString(), true, 2);
+			// e.printStackTrace();
 			status = false;
 		} 
 		
@@ -76,10 +75,16 @@ public class ClientConnection extends Thread {
 		}
 		
 		// Finally remove this instance from the client list
-		
+		boolean removed = clientList.remove(this);
+		if(!removed) {
+			Main.logger.printError("Could not remove player from client list!", true, 0);
+		} else {
+			Main.logger.printError("Player removed from client list", true, 1);
+		}
 	}
 	
-	// Thread function that runs simultanious
+	// Thread function that runs simultanenious
+	@Override
 	public void run()
 	{
 		Main.logger.printInfo("Client handler thread running", true, 1);
@@ -88,7 +93,6 @@ public class ClientConnection extends Thread {
 		{
 			// Check if the connection is still alive
 			if(!this.clientSocket.isConnected()) {
-				Main.logger.printInfo("Client has closed the connection", true, 0);
 				break;
 			}
 			
@@ -101,7 +105,7 @@ public class ClientConnection extends Thread {
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
 			} catch (Exception e) {
-				// Main.logger.printWarning("Exception thrown while parsing message", true);
+				Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
 				continue;
 			}
 			
@@ -111,6 +115,8 @@ public class ClientConnection extends Thread {
 		
 		// Finalize this instance
 		this.finalize();
+		
+		Main.logger.printInfo("Client has closed the connection", true, 0);
 		
 		Main.logger.printInfo("Client handler thread finished", true, 1);
 	}
@@ -138,7 +144,7 @@ public class ClientConnection extends Thread {
 		}
 	}
 	
-	// Public method that wait until all running client threads have finished their work
+	// Public method that waits until all running client threads have finished their work
 	public static void closeHandlerThreads() 
 	{
 		Main.logger.printInfo("Closing client handler threads ... ", true, 1);
