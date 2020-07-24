@@ -28,11 +28,6 @@ public class Main {
 		// Call local init method 
 		initModules();
 		
-		// Dummy Output
-		logger.printInfo("Log level 0 (basic) message", true, 0);
-		logger.printInfo("Log level 1 (enhanced) message", true, 1);
-		logger.printInfo("Log level 2 (detailed) message", true, 2);
-		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);
 		String consoleInput = "";
