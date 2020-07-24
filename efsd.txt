@@ -1,0 +1,27 @@
+
+
+---------------------- Application launch at 2020-07-24 15:23:54.282 ----------------------
+
+[15:23:54] [Info]: Created Server Socket and bound to Port 1044
+[15:23:54] [Info]: Server ready. Listening for connection requests ... 
+[15:27:42] [Info]: Waiting for threads to finish ... 
+[15:27:46] [Info]: Closed server socket
+
+
+---------------------- Application launch at 2020-07-24 15:28:04.535 ----------------------
+
+[15:28:4] [Info]: Created Server Socket and bound to Port 1044
+[15:28:4] [Info]: Server ready. Listening for connection requests ... 
+[15:29:47] [Info]: Waiting for threads to finish ... 
+[15:29:48] [Info]: Closed server socket
+
+
+---------------------- Application launch at 2020-07-24 15:33:22.751 ----------------------
+
+[15:33:22] [Info]: Created Server Socket and bound to Port 1044
+[15:33:22] [Info]: Server listener thread launched
+[15:33:22] [Info]: Server ready. Listening for connection requests ... 
+[15:33:31] [Info]: Waiting for threads to finish ... 
+[15:33:34] [Info]: Closing client handler threads ... 
+[15:33:34] [Info]: Closed server socket
+[15:33:34] [Info]: Server listener thread closed

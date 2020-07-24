@@ -28,11 +28,12 @@ public class ConfigFile {
 			// Read in the complete next line
 			String line = this.scanner.nextLine();
 			
-			// Remove all spaces between characters in the line
-			// ... 
+			// Remove all whitespaces (including tabs) between characters in this line
+			line = line.replaceAll("\\s+", "");
 			
-			// Remove optional comments after // from the line
-			// ...
+			// Remove optional comments following after the comment marker (//) from the line
+			String[] temp = line.split("//");
+			line = temp[0];
 			
 			// Add the reduced line to the list
 			this.lines.add(line);
@@ -41,17 +42,16 @@ public class ConfigFile {
 	
 	// Public functions //
 	public String getValueByName(String name) {
-		String value = "";
+		String value = "not found";
 		
+		// Go through the lines and to find the corresponding entry
 		for(String x: this.lines)
 		{
+			// Extract the value by seperating name and value from each other
 			String[] tmpArray = x.split(":");
 			if(tmpArray[0].equals(name)) {
 				value = tmpArray[1];
-				if(value.charAt(0) == ' ') {
-					value.replace(" ", "");
-					return value;
-				}
+				return value;
 			}
 		}
 		
