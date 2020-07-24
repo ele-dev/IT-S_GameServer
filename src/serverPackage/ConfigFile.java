@@ -25,7 +25,17 @@ public class ConfigFile {
 		// read in the textfile content line by line
 		while(this.scanner.hasNextLine()) 
 		{
-			this.lines.add(this.scanner.nextLine());
+			// Read in the complete next line
+			String line = this.scanner.nextLine();
+			
+			// Remove all spaces between characters in the line
+			// ... 
+			
+			// Remove optional comments after // from the line
+			// ...
+			
+			// Add the reduced line to the list
+			this.lines.add(line);
 		}
 	}
 	
