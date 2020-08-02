@@ -100,7 +100,7 @@ public class ClientConnection extends Thread {
 			GenericMessage recvBuffer = null;
 			
 			try {
-				recvBuffer = (GenericMessage)this.objIn.readObject();
+				recvBuffer = (GenericMessage) this.objIn.readObject();
 			} catch (ClassNotFoundException e) {
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
