@@ -3,7 +3,9 @@ package serverPackage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import networking.*;
@@ -89,16 +91,22 @@ public class ClientConnection extends Thread {
 			{
 				break;
 			}
-			
+	
 			// Check the input stream for incoming network messages
 			GenericMessage recvBuffer = null;
-			
+		
 			try {
 				recvBuffer = (GenericMessage) this.objIn.readObject();
 			} catch (ClassNotFoundException e) {
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
-			} catch (Exception e) {
+			} catch (StreamCorruptedException e1) {
+				Main.logger.printWarning("Stream corrupted exception", true, 0);
+				continue;
+			} catch (SocketException e2) {
+				Main.logger.printWarning("Scoket exception while reading", true, 0);
+				continue;
+			} catch (Exception e3) {
 				// Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
 				continue;
 			}
