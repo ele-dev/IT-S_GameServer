@@ -85,33 +85,26 @@ public class ClientConnection extends Thread {
 		
 		while(!this.stopOrder)
 		{
-			// Check if the connection is still alive
-			if(!this.clientSocket.isConnected() || this.clientSocket.isClosed() ||
-					this.clientSocket.isInputShutdown() || this.clientSocket.isOutputShutdown()) 
-			{
-				break;
-			}
-	
-			// Check the input stream for incoming network messages
+			// Initialize an empty object for storing a message of any kind
 			GenericMessage recvBuffer = null;
 		
+			// Check the input stream for incoming network messages
 			try {
 				recvBuffer = (GenericMessage) this.objIn.readObject();
 			} catch (ClassNotFoundException e) {
+				Main.logger.printWarning(e.getMessage(), true, 2);
+				Main.logger.printWarning("Class Not Found Exception thrown", false, 1);
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
 			} catch (StreamCorruptedException e1) {
 				Main.logger.printWarning("Stream corrupted exception", true, 0);
-				continue;
-			} catch (SocketException e2) {
-				Main.logger.printWarning("Scoket exception while reading", true, 0);
-				continue;
+				break;
 			} catch(IOException e3) {
-				Main.logger.printWarning("IOException while reading from socket", true, 0);
+				Main.logger.printWarning("IOException while reading from socket", true, 2);
 				break;
 			} catch (Exception e4) {
-				// Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
-				continue;
+				Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
+				break;
 			}
 			
 			// Now handle and process the received message
