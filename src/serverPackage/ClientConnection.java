@@ -84,7 +84,7 @@ public class ClientConnection extends Thread {
 		while(!this.stopOrder)
 		{
 			// Check if the connection is still alive
-			if(!this.clientSocket.isConnected()) {
+			if(!this.clientSocket.isConnected() || this.clientSocket.isClosed()) {
 				break;
 			}
 			
@@ -149,17 +149,10 @@ public class ClientConnection extends Thread {
 			{
 				cc.stopOrder = true;
 				while(cc.isAlive()) {}
-				
-				/*
-				// Finally remove the instance from the client list
-				boolean removed = clientList.remove(cc);
-				if(!removed) {
-					Main.logger.printError("Could not remove player from client list!", true, 0);
-				} else {
-					Main.logger.printInfo("Player removed from client list", true, 1);
-				}
-				*/
 			}
 		}
+		
+		// Empty the whole client list
+		clientList.clear();
 	}
 }
