@@ -106,13 +106,13 @@ public class ClientConnection extends Thread {
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
 			} catch(SocketTimeoutException e1) {
-				Main.logger.printWarning("Socket Timeout exception while reading from client socket", false, 2);
+				Main.logger.printInfo("Client Socket Timeout exception thrown while reading", false, 2);
 				continue;
 			} catch (StreamCorruptedException e2) {
-				Main.logger.printWarning("Stream corrupted exception", true, 0);
+				Main.logger.printWarning("Stream corrupted exception thrown while reading", true, 0);
 				break;
 			} catch(IOException e3) {
-				Main.logger.printWarning("IOException while reading from socket", true, 2);
+				Main.logger.printWarning("IOException thrown while reading", true, 2);
 				break;
 			} catch (Exception e4) {
 				Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);

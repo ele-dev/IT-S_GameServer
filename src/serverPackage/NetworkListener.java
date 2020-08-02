@@ -108,7 +108,7 @@ public class NetworkListener extends Thread {
 			
 				// Catch various exceptions that might be thrown
 			} catch (SocketTimeoutException e1) {
-				Main.logger.printInfo("Socket Timeout exception thrown", false, 2);
+				Main.logger.printInfo("Server Socket Timeout exception thrown while listening", false, 2);
 			} catch (IOException e) {
 				Main.logger.printWarning("IO Exception thrown while listening", true, 2);
 			} catch (Exception e) {
