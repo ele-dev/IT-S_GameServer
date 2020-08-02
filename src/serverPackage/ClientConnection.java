@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import networking.*;
@@ -30,6 +31,14 @@ public class ClientConnection extends Thread {
 		super("ClientHandlerThread");
 		this.clientSocket = socket;
 		this.stopOrder = false;
+		
+		// Set the timeout for the client socket
+		try {
+			this.clientSocket.setSoTimeout(3000);
+		} catch (SocketException e1) {
+			Main.logger.printWarning("Failed to set timeout for client socket", true, 1);
+			e1.printStackTrace();
+		}
 		
 		// create and prepare the i/o streams for data serialization
 		boolean status = true;
@@ -96,7 +105,10 @@ public class ClientConnection extends Thread {
 				Main.logger.printWarning("Class Not Found Exception thrown", false, 1);
 				Main.logger.printWarning("Failed to parse incoming message", true, 0);
 				continue;
-			} catch (StreamCorruptedException e1) {
+			} catch(SocketTimeoutException e1) {
+				Main.logger.printWarning("Socket Timeout exception while reading from client socket", false, 2);
+				continue;
+			} catch (StreamCorruptedException e2) {
 				Main.logger.printWarning("Stream corrupted exception", true, 0);
 				break;
 			} catch(IOException e3) {
