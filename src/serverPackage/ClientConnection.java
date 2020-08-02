@@ -96,13 +96,6 @@ public class ClientConnection extends Thread {
 				break;
 			}
 			
-			// Try to load runtime class descriptor for GenericMessage Class
-			try {
-				Class.forName("GenericMessage");
-			} catch (ClassNotFoundException e1) {
-				Main.logger.printWarning("Failed to load GenericMessage class descriptor during runtime", true, 0);
-			}
-			
 			// Check the input stream for incoming network messages
 			GenericMessage recvBuffer = null;
 			
