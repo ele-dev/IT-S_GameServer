@@ -84,7 +84,9 @@ public class ClientConnection extends Thread {
 		while(!this.stopOrder)
 		{
 			// Check if the connection is still alive
-			if(!this.clientSocket.isConnected() || this.clientSocket.isClosed()) {
+			if(!this.clientSocket.isConnected() || this.clientSocket.isClosed() ||
+					this.clientSocket.isInputShutdown() || this.clientSocket.isOutputShutdown()) 
+			{
 				break;
 			}
 			
