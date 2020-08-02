@@ -73,14 +73,6 @@ public class ClientConnection extends Thread {
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true, 1);
 		}
-		
-		// Finally remove this instance from the client list
-		boolean removed = clientList.remove(this);
-		if(!removed) {
-			Main.logger.printError("Could not remove player from client list!", true, 0);
-		} else {
-			Main.logger.printInfo("Player removed from client list", true, 1);
-		}
 	}
 	
 	// Thread function that runs simultanenious
@@ -157,6 +149,14 @@ public class ClientConnection extends Thread {
 			{
 				cc.stopOrder = true;
 				while(cc.isAlive()) {}
+				
+				// Finally remove the instance from the client list
+				boolean removed = clientList.remove(cc);
+				if(!removed) {
+					Main.logger.printError("Could not remove player from client list!", true, 0);
+				} else {
+					Main.logger.printInfo("Player removed from client list", true, 1);
+				}
 			}
 		}
 	}
