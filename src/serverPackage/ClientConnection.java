@@ -150,6 +150,7 @@ public class ClientConnection extends Thread {
 				cc.stopOrder = true;
 				while(cc.isAlive()) {}
 				
+				/*
 				// Finally remove the instance from the client list
 				boolean removed = clientList.remove(cc);
 				if(!removed) {
@@ -157,6 +158,7 @@ public class ClientConnection extends Thread {
 				} else {
 					Main.logger.printInfo("Player removed from client list", true, 1);
 				}
+				*/
 			}
 		}
 	}
