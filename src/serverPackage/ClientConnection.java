@@ -106,7 +106,10 @@ public class ClientConnection extends Thread {
 			} catch (SocketException e2) {
 				Main.logger.printWarning("Scoket exception while reading", true, 0);
 				continue;
-			} catch (Exception e3) {
+			} catch(IOException e3) {
+				Main.logger.printWarning("IOException while reading from socket", true, 0);
+				continue;
+			} catch (Exception e4) {
 				// Main.logger.printWarning("Unhandled Exception thrown while parsing incoming message!", true, 2);
 				continue;
 			}
