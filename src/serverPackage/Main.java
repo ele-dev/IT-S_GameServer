@@ -6,6 +6,7 @@ public class Main {
 	
 	// The main parts of the application
 	static NetworkListener listener = null;
+	public static Logger logger = null;
 
 	
 	// --- Application Entry point --- //
@@ -32,7 +33,7 @@ public class Main {
 		String consoleInput = "";
 		
 		do {
-			System.out.print("~ ");
+			System.out.print("> ");
 			consoleInput = scanner.nextLine();
 			
 		} while(!consoleInput.equals("exit"));		// exit command takes server offline
@@ -48,13 +49,14 @@ public class Main {
 	
 	private static void initModules() 
 	{
-		System.out.print("Loading modules ... ");
+		System.out.println("Loading modules ... ");
+		
+		// create a logger instance 
+		logger = new Logger();
 		
 		// init and launch the network listener thread 
 		listener = new NetworkListener();
 		listener.start();
-		
-		System.out.println("Done");
 	}
 	
 	private static void shutdownModules()
@@ -63,9 +65,11 @@ public class Main {
 		listener.sendStopOrder();
 		
 		// Wait until the thread has finished and return
-		System.out.print("Wait for thread to finish ... ");
+		logger.printInfo("Waiting for threads to finish ... ", true, 0);
 		while(listener.isAlive()) {}
-		System.out.println("Done");
+		
+		// Finalize the logger
+		logger.finalize();
 	}
 
 }

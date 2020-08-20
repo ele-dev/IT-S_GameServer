@@ -6,7 +6,8 @@
 # First delete the .class files
 rm -r bin/
 
-# Then delete the java package
+# Then delete the java package and the logfile
 rm GameServer.jar
+rm log.txt
 
 exit

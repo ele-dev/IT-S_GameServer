@@ -3,7 +3,7 @@
 # What is this application for?
 This Java Application runs on a linux machine.
 In combination with a MariaDB/MySQL Database it forms the backend of 
-a online multiplayer game.
+an online multiplayer game.
 
 # Software Requirements
 A Linux based Server that has Java SDK 8 (or higher) installed is required.
