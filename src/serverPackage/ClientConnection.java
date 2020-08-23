@@ -120,7 +120,7 @@ public class ClientConnection extends Thread {
 			}
 			
 			// Now handle and process the received message
-			// ...
+			MessageHandler.handleMessage(recvBuffer, this);
 		}
 		
 		// Finalize this instance
