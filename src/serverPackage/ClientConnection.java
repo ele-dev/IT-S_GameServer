@@ -24,6 +24,9 @@ public class ClientConnection extends Thread {
 	// Thread status indicator
 	private boolean stopOrder;
 	
+	// Login status of the client
+	private boolean loggedIn;
+	
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
@@ -31,6 +34,7 @@ public class ClientConnection extends Thread {
 		super("ClientHandlerThread");
 		this.clientSocket = socket;
 		this.stopOrder = false;
+		this.loggedIn = false;
 		
 		// Set the timeout for the client socket
 		try {
@@ -172,5 +176,16 @@ public class ClientConnection extends Thread {
 		
 		// Empty the whole client list
 		clientList.clear();
+	}
+	
+	// Getter & Setter methods for login status
+	public boolean isLoggedIn() 
+	{
+		return this.loggedIn;
+	}
+	
+	public void setLoginStatus(boolean status) 
+	{
+		this.loggedIn = status;
 	}
 }
