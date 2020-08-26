@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
 	
 	// The main parts of the application
+	static DatabaseAccess database = null;
 	static NetworkListener listener = null;
 	public static Logger logger = null;
 
@@ -54,6 +55,14 @@ public class Main {
 		// create a logger instance 
 		logger = new Logger();
 		
+		// init and test local database connection
+		database = new DatabaseAccess();
+		boolean working = database.testConnection();
+		if(!working) {
+			shutdownModules();
+			System.exit(0);
+		}
+		
 		// init and launch the network listener thread 
 		listener = new NetworkListener();
 		listener.start();
@@ -68,7 +77,10 @@ public class Main {
 		logger.printInfo("Waiting for threads to finish ... ", true, 0);
 		while(listener.isAlive()) {}
 		
-		// Finalize the logger
+		// Finalize the database module
+		database.finalize();
+		
+		// Finalize the logger module
 		logger.finalize();
 	}
 
