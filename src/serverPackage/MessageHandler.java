@@ -1,8 +1,6 @@
 package serverPackage;
 
-import networking.GenericMessage;
-import networking.MsgLogin;
-import networking.MsgLoginStatus;
+import networking.*;
 
 public class MessageHandler {
 
@@ -26,8 +24,7 @@ public class MessageHandler {
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
 				// Validate the login request of the client
-				boolean status = true;
-				// ...
+				boolean status = loginMsg.getPasswordHash().equals("123456");
 				
 				// Respond with a login status message
 				MsgLoginStatus response = new MsgLoginStatus(status);
