@@ -58,7 +58,11 @@ public class DatabaseAccess {
 			}
 		} catch (SQLException e) {
 			Main.logger.printWarning("Problems during database connection cleanup!", true, 0);
+			return;
 		}
+		
+		// Ouput status message about clean close up
+		Main.logger.printInfo("Database Module unloaded", true, 0);
 	}
 	
 	// High level function for specific tasks
@@ -102,5 +106,7 @@ public class DatabaseAccess {
 		this.testQuery = this.dbCon.prepareStatement(queryStr);
 		
 		// ... 
+		
+		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
 }
