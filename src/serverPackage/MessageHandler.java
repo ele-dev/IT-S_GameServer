@@ -1,5 +1,7 @@
 package serverPackage;
 
+import java.sql.SQLException;
+
 import networking.*;
 
 public class MessageHandler {
@@ -24,7 +26,10 @@ public class MessageHandler {
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
 				// Validate the login request of the client
-				boolean status = loginMsg.getPasswordHash().equals("123456");
+				boolean status = false;
+				try {
+					status = Main.database.login(loginMsg.getUsername(), loginMsg.getPasswordHash());
+				} catch(SQLException e) {}
 				
 				// Respond with a login status message
 				MsgLoginStatus response = new MsgLoginStatus(status);
