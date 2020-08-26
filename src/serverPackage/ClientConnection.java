@@ -15,6 +15,7 @@ public class ClientConnection extends Thread {
 	
 	// --- static class members --- // 
 	private static ArrayList<ClientConnection> clientList = new ArrayList<>();
+	private static int threadCounter = 0;
 	
 	// --- non-static members --- //
 	Socket clientSocket = null;
@@ -30,8 +31,11 @@ public class ClientConnection extends Thread {
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
+		super();
+		
 		// init values
-		super("ClientHandlerThread");
+		super.setName("ClientHandlerThread-" + threadCounter);
+		threadCounter++;
 		this.clientSocket = socket;
 		this.stopOrder = false;
 		this.loggedIn = false;
