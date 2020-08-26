@@ -80,8 +80,8 @@ public class DatabaseAccess {
 		}
 		
 		// if the login was successfull then mark the player as online
-		this.pst_SetOnlineStatus.setString(1, username);
-		this.pst_SetOnlineStatus.setString(2, "online");
+		this.pst_SetOnlineStatus.setString(1, "online");
+		this.pst_SetOnlineStatus.setString(2, username);
 		this.pst_SetOnlineStatus.executeUpdate();
 		
 		return true;
