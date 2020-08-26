@@ -14,7 +14,7 @@ public class DatabaseAccess {
 	
 	// Prepared statements 
 	PreparedStatement testQuery = null;
-	
+	PreparedStatement pst_SetOnlineStatus = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -65,7 +65,7 @@ public class DatabaseAccess {
 		Main.logger.printInfo("Database Module unloaded", true, 0);
 	}
 	
-	// High level function for specific tasks
+	// High level functions for frequently used operations
 	public boolean login(String username, String passwordHash) throws SQLException {
 		
 		// Construct SQL query and statement for user login validation
@@ -78,6 +78,11 @@ public class DatabaseAccess {
 		if(loginResult.next() == false) {
 			return false;
 		}
+		
+		// if the login was successfull then mark the player as online
+		this.pst_SetOnlineStatus.setString(1, username);
+		this.pst_SetOnlineStatus.setString(2, "online");
+		this.pst_SetOnlineStatus.executeUpdate();
 		
 		return true;
 	}
@@ -105,7 +110,11 @@ public class DatabaseAccess {
 		String queryStr = "SELECT * FROM tbl_userAccounts";
 		this.testQuery = this.dbCon.prepareStatement(queryStr);
 		
-		// ... 
+		// statement to update a players online state
+		queryStr = "UPDATE tbl_userAccounts SET status = ? WHERE playername LIKE ?";
+		this.pst_SetOnlineStatus = this.dbCon.prepareStatement(queryStr);
+		
+		// ...
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
