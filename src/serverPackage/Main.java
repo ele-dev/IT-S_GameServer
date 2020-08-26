@@ -70,18 +70,25 @@ public class Main {
 	
 	private static void shutdownModules()
 	{
-		// Tell the network listener thread to complete his work
-		listener.sendStopOrder();
-		
-		// Wait until the thread has finished and return
-		logger.printInfo("Waiting for threads to finish ... ", true, 0);
-		while(listener.isAlive()) {}
+		// Finalize the network module first
+		if(listener != null) {
+			// Tell the network listener thread to complete his work
+			listener.sendStopOrder();
+			
+			// Wait until the thread has finished and return
+			logger.printInfo("Waiting for threads to finish ... ", true, 0);
+			while(listener.isAlive()) {}
+		}
 		
 		// Finalize the database module
-		database.finalize();
+		if(database != null) {
+			database.finalize();
+		}
 		
 		// Finalize the logger module
-		logger.finalize();
+		if(logger != null) {
+			logger.finalize();
+		}
 	}
 
 }

@@ -62,7 +62,7 @@ public class DatabaseAccess {
 	}
 	
 	// High level function for specific tasks
-	public boolean login(String username, String passwordHash) throws SQLException{
+	public boolean login(String username, String passwordHash) throws SQLException {
 		
 		// Construct SQL query and statement for user login validation
 		String sqlQuery = "SELECT * FROM tbl_userAccounts WHERE playername LIKE '" + username + "' AND"
