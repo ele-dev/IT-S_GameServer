@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
 	
 	// The main parts of the application
-	static DatabaseAccess database = null;
+	public static DatabaseAccess database = null;
 	static NetworkListener listener = null;
 	public static Logger logger = null;
 
