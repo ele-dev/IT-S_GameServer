@@ -73,19 +73,6 @@ public class DatabaseAccess {
 	// Function for handling the login of a registered player 
 	public boolean loginPlayer(String username, String passwordHash) throws SQLException {
 		
-		// Construct SQL query and statement for user login validation
-		/*
-		String sqlQuery = "SELECT * FROM tbl_userAccounts WHERE playername LIKE '" + username + "' AND"
-				+ " password_hash LIKE '" + passwordHash + "'";
-		Statement loginStatement = this.dbCon.createStatement();
-		
-		// Execute the query and store the result
-		ResultSet loginResult = loginStatement.executeQuery(sqlQuery);
-		if(loginResult.next() == false) {
-			return false;
-		}
-		*/
-		
 		// Execute the prepared statement and store the result
 		this.pst_VerifyLogin.setString(1, username);
 		this.pst_VerifyLogin.setString(2, passwordHash);
