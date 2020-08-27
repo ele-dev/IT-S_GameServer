@@ -37,6 +37,7 @@ public class MessageHandler {
 				
 				// Also print the result of the login attempt to the server console
 				if(status) {
+					sender.setLoginStatus(true);
 					Main.logger.printInfo("Client authentification successfull", true, 0);
 				} else {
 					Main.logger.printInfo("Client authentification failed!", true, 0);
@@ -58,6 +59,7 @@ public class MessageHandler {
 					Main.database.logout(sender.getName());
 				} catch (SQLException e) {}
 				Main.logger.printInfo("Received logout message from " + sender, false, 0);
+				sender.setLoginStatus(false);
 				
 				break;
 			}
