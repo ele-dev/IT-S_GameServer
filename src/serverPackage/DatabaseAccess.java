@@ -15,6 +15,8 @@ public class DatabaseAccess {
 	// Prepared statements 
 	PreparedStatement testQuery = null;
 	PreparedStatement pst_SetOnlineStatus = null;
+	PreparedStatement pst_AddGuestPlayer = null;
+	PreparedStatement pst_RemoveGuestPlayer = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -65,8 +67,10 @@ public class DatabaseAccess {
 		Main.logger.printInfo("Database Module unloaded", true, 0);
 	}
 	
-	// High level functions for frequently used operations
-	public boolean login(String username, String passwordHash) throws SQLException {
+	// High level functions for frequently used operations // 
+
+	// Function for handling the login of a registered player 
+	public boolean loginPlayer(String username, String passwordHash) throws SQLException {
 		
 		// Construct SQL query and statement for user login validation
 		String sqlQuery = "SELECT * FROM tbl_userAccounts WHERE playername LIKE '" + username + "' AND"
@@ -87,11 +91,25 @@ public class DatabaseAccess {
 		return true;
 	}
 	
-	public void logout(String username) throws SQLException {
+	// Function for handling the login of a unregistered guest player
+	public void loginGuest(String guestName) throws SQLException {
+		
+		// Insert the new guest player data into the table using prepared statement
+		this.pst_AddGuestPlayer.setString(1, guestName);
+		this.pst_AddGuestPlayer.executeUpdate();
+	}
+	
+	public void logoutPlayer(String username) throws SQLException {
 		// Execute a prepared statement to update the online status of the player
 		this.pst_SetOnlineStatus.setString(1, "offline");
 		this.pst_SetOnlineStatus.setString(2, username);
 		this.pst_SetOnlineStatus.executeUpdate();
+	}
+	
+	public void logoutGuest(String guestName) throws SQLException {
+		// Execute a prepared statement to delete the guests entry in the table
+		this.pst_RemoveGuestPlayer.setString(1, guestName);
+		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
 	// .... // 
@@ -121,7 +139,13 @@ public class DatabaseAccess {
 		queryStr = "UPDATE tbl_userAccounts SET status = ? WHERE playername LIKE ?";
 		this.pst_SetOnlineStatus = this.dbCon.prepareStatement(queryStr);
 		
-		// ...
+		// statement for inserting new guest players into the user account table
+		queryStr = "INSERT INTO tbl_userAccounts (playername, status) VALUES (?, 'online')";
+		this.pst_AddGuestPlayer = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for deleting a guest player who wants to logout from the user account table
+		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE ?";
+		this.pst_RemoveGuestPlayer = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}

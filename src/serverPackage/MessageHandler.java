@@ -26,20 +26,48 @@ public class MessageHandler {
 				// Parse the generic message in a more specific format
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
-				// Validate the login request of the client
 				boolean status = false;
-				try {
-					status = Main.database.login(loginMsg.getUsername(), loginMsg.getPasswordHash());
-				} catch(SQLException e) {}
+				String guestPlayerName = "";
 				
-				// Respond with a login status message
-				MsgLoginStatus response = new MsgLoginStatus(status);
-				sender.sendMessageToClient(response);
+				// Check if it's a guest or an account player who wants to login
+				// And handle the two cases differently
+				if(loginMsg.isGuest()) 
+				{
+					// Generate a new unique guest player name 
+					guestPlayerName = "guest-01";
+					
+					// Also update the database with new player information
+					try {
+						Main.database.loginGuest(guestPlayerName);
+					} catch(SQLException e) {
+						status = false;
+					}
+					
+					// Respond with a login status message that contains the assigned guest player name additionally
+					MsgLoginStatus response = new MsgLoginStatus(status, guestPlayerName);
+					sender.sendMessageToClient(response);
+				}
+				else 
+				{
+					// Validate the login request by checking the credentials in the database
+					try {
+						status = Main.database.loginPlayer(loginMsg.getUsername(), loginMsg.getPasswordHash());
+					} catch(SQLException e) {}
+					
+					// Respond with a login status message 
+					MsgLoginStatus response = new MsgLoginStatus(status);
+					sender.sendMessageToClient(response);
+				}
+				
 				
 				// Also print the result of the login attempt to the server console
 				if(status) {
 					sender.setLoginStatus(true);
-					sender.playerInstance = new Player(loginMsg.getUsername());
+					if(loginMsg.isGuest()) {
+						sender.playerInstance = new Player(guestPlayerName);
+					} else {
+						sender.playerInstance = new Player(loginMsg.getUsername());
+					}
 					Main.logger.printInfo("Client authentification successfull", true, 0);
 				} else {
 					Main.logger.printInfo("Client authentification failed!", true, 0);
@@ -56,11 +84,26 @@ public class MessageHandler {
 					break;
 				}
 				
-				// Update the players online status accordingly and print info message
+				// Get the playername of the sender of this message
 				String playerName = sender.playerInstance.getName();
-				try {
-					Main.database.logout(playerName);
-				} catch (SQLException e) {}
+				boolean isGuest = playerName.contains("guest");
+				
+				// Handle the logout message differently for guest and accounts
+				if(isGuest) 
+				{
+					// Logout the guest player
+					try {
+						Main.database.loginGuest(playerName);
+					} catch(SQLException e) {}
+				}
+				else
+				{
+					// Logout the registered player
+					try {
+						Main.database.logoutPlayer(playerName);
+					} catch (SQLException e) {}
+				}
+				
 				Main.logger.printInfo("Received logout message from " + playerName, false, 0);
 				sender.setLoginStatus(false);
 				
