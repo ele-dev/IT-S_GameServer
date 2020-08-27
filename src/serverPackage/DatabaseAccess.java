@@ -14,6 +14,7 @@ public class DatabaseAccess {
 	
 	// Prepared statements 
 	PreparedStatement testQuery = null;
+	PreparedStatement pst_VerifyLogin = null;
 	PreparedStatement pst_SetOnlineStatus = null;
 	PreparedStatement pst_AddGuestPlayer = null;
 	PreparedStatement pst_RemoveGuestPlayer = null;
@@ -73,6 +74,7 @@ public class DatabaseAccess {
 	public boolean loginPlayer(String username, String passwordHash) throws SQLException {
 		
 		// Construct SQL query and statement for user login validation
+		/*
 		String sqlQuery = "SELECT * FROM tbl_userAccounts WHERE playername LIKE '" + username + "' AND"
 				+ " password_hash LIKE '" + passwordHash + "'";
 		Statement loginStatement = this.dbCon.createStatement();
@@ -80,6 +82,15 @@ public class DatabaseAccess {
 		// Execute the query and store the result
 		ResultSet loginResult = loginStatement.executeQuery(sqlQuery);
 		if(loginResult.next() == false) {
+			return false;
+		}
+		*/
+		
+		// Execute the prepared statement and store the result
+		this.pst_VerifyLogin.setString(1, username);
+		this.pst_VerifyLogin.setString(2, passwordHash);
+		ResultSet loginResult = this.pst_VerifyLogin.executeQuery();
+		if(!loginResult.next()) {
 			return false;
 		}
 		
@@ -134,6 +145,10 @@ public class DatabaseAccess {
 		// test statement
 		String queryStr = "SELECT * FROM tbl_userAccounts";
 		this.testQuery = this.dbCon.prepareStatement(queryStr);
+		
+		// statement to select all matches to the given login credentials 
+		queryStr = "SELECT * FROM tbl_userAccounts WHERE playername LIKE ? AND password_hash LIKE ?";
+		this.pst_VerifyLogin = this.dbCon.prepareStatement(queryStr);
 		
 		// statement to update a players online state
 		queryStr = "UPDATE tbl_userAccounts SET status = ? WHERE playername LIKE ?";
