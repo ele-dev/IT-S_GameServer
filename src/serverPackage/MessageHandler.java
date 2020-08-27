@@ -97,7 +97,7 @@ public class MessageHandler {
 				{
 					// Logout the guest player
 					try {
-						Main.database.loginGuest(playerName);
+						Main.database.logoutGuest(playerName);
 					} catch(SQLException e) {}
 				}
 				else
