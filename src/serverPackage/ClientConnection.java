@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import networking.*;
-// import game.Player;
+import game.Player;
 
 public class ClientConnection extends Thread {
 	
@@ -28,7 +28,7 @@ public class ClientConnection extends Thread {
 	
 	// Login status of the client
 	private boolean loggedIn;
-	// private Player playerInstance = null;
+	public Player playerInstance = null;
 	
 	// Constructor
 	public ClientConnection(Socket socket)
