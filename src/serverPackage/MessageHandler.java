@@ -46,6 +46,13 @@ public class MessageHandler {
 					sender.sendMessageToClient(response);
 					
 					status = true;
+					if(status) {
+						sender.setLoginStatus(true);
+						sender.playerInstance = new Player(guestPlayerName);
+						Main.logger.printInfo("Guest login successfull", true, 0);
+					} else {
+						Main.logger.printInfo("Guest login failed", true, 0);
+					}
 				}
 				else 
 				{
@@ -57,20 +64,14 @@ public class MessageHandler {
 					// Respond with a login status message 
 					MsgLoginStatus response = new MsgLoginStatus(status);
 					sender.sendMessageToClient(response);
-				}
-				
-				
-				// Also print the result of the login attempt to the server console
-				if(status) {
-					sender.setLoginStatus(true);
-					if(loginMsg.isGuest()) {
-						sender.playerInstance = new Player(guestPlayerName);
-					} else {
+					
+					if(status) {
+						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(loginMsg.getUsername());
+						Main.logger.printInfo("Player authentification successfull", true, 0);
+					} else {
+						Main.logger.printInfo("Player authentification failed!", true, 0);
 					}
-					Main.logger.printInfo("Client authentification successfull", true, 0);
-				} else {
-					Main.logger.printInfo("Client authentification failed!", true, 0);
 				}
 				
 				break;
