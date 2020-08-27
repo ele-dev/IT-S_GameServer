@@ -53,7 +53,11 @@ public class MessageHandler {
 					break;
 				}
 				
-				Main.logger.printInfo("Received logout message", false, 2);
+				// Update the players online status accordingly and print info message
+				try {
+					Main.database.logout(sender.getName());
+				} catch (SQLException e) {}
+				Main.logger.printInfo("Received logout message from " + sender, false, 0);
 				
 				break;
 			}

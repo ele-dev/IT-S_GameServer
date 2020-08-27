@@ -87,6 +87,13 @@ public class DatabaseAccess {
 		return true;
 	}
 	
+	public void logout(String username) throws SQLException {
+		// Execute a prepared statement to update the online status of the player
+		this.pst_SetOnlineStatus.setString(1, "offline");
+		this.pst_SetOnlineStatus.setString(2, username);
+		this.pst_SetOnlineStatus.executeUpdate();
+	}
+	
 	// .... // 
 	
 	// Helper functions 
