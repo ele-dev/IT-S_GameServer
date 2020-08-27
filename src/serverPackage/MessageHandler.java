@@ -26,7 +26,8 @@ public class MessageHandler {
 				// Parse the generic message in a more specific format
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
-				boolean status = false;
+				// Important variable or login procedure
+				boolean status = true;
 				String guestPlayerName = "";
 				
 				// Check if it's a guest or an account player who wants to login
@@ -45,7 +46,6 @@ public class MessageHandler {
 					MsgLoginStatus response = new MsgLoginStatus(status, guestPlayerName);
 					sender.sendMessageToClient(response);
 					
-					status = true;
 					if(status) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(guestPlayerName);
@@ -56,6 +56,9 @@ public class MessageHandler {
 				}
 				else 
 				{
+					// intialize the status as false for this case
+					status = false;
+					
 					// Validate the login request by checking the credentials in the database
 					try {
 						status = Main.database.loginPlayer(loginMsg.getUsername(), loginMsg.getPasswordHash());
