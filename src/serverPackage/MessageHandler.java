@@ -39,13 +39,13 @@ public class MessageHandler {
 					// Also update the database with new player information
 					try {
 						Main.database.loginGuest(guestPlayerName);
-					} catch(SQLException e) {
-						status = false;
-					}
+					} catch(SQLException e) {}
 					
 					// Respond with a login status message that contains the assigned guest player name additionally
 					MsgLoginStatus response = new MsgLoginStatus(status, guestPlayerName);
 					sender.sendMessageToClient(response);
+					
+					status = true;
 				}
 				else 
 				{
