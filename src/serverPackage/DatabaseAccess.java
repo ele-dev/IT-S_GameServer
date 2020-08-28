@@ -18,6 +18,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_SetOnlineStatus = null;
 	PreparedStatement pst_AddGuestPlayer = null;
 	PreparedStatement pst_RemoveGuestPlayer = null;
+	PreparedStatement pst_GetPlayerAttribute = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -89,7 +90,7 @@ public class DatabaseAccess {
 		return true;
 	}
 	
-	// Function for handling the login of a unregistered guest player
+	// Function for handling the login of an unregistered guest player
 	public void loginGuest(String guestName) throws SQLException {
 		
 		// Insert the new guest player data into the table using prepared statement
@@ -110,7 +111,19 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
-	// .... // 
+	// Function for getting an attribute from a player with the give name
+	public String getPlayerAttribute(String attr, String playername) throws SQLException {
+		String value = "";
+		this.pst_GetPlayerAttribute.setString(1, attr);
+		this.pst_GetPlayerAttribute.setString(2, playername);
+		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
+		if(!result.next()) {
+			return null;
+		} 
+		value = result.getString(attr);
+		
+		return value;
+	}
 	
 	// Helper functions 
 	public boolean testConnection() {
@@ -148,6 +161,10 @@ public class DatabaseAccess {
 		// statement for deleting a guest player who wants to logout from the user account table
 		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_RemoveGuestPlayer = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for select a attribute of a player given by playername
+		queryStr = "SELECT ? FROM tbl_userAccounts WHERE playername LIKE ?";
+		this.pst_GetPlayerAttribute = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
