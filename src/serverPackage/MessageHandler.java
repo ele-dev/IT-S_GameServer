@@ -35,7 +35,8 @@ public class MessageHandler {
 				if(loginMsg.isGuest()) 
 				{
 					// Generate a new unique guest player name 
-					guestPlayerName = "guest-01";
+					guestPlayerName = "guest-" + Player.nextGuestId;
+					Player.nextGuestId++;
 					
 					// Also update the database with new player information
 					try {
