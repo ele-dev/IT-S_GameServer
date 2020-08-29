@@ -7,11 +7,13 @@ public class Player {
 	
 	// Class members 
 	private String name;
+	private int accountBalance;
 	
 	// Constructor
 	public Player()
 	{
 		this.name = "";
+		this.accountBalance = 0;
 	}
 	
 	public Player(String name) 
@@ -24,5 +26,10 @@ public class Player {
 	public String getName() 
 	{
 		return this.name;
+	}
+	
+	public int getAccountBalance() 
+	{
+		return this.accountBalance;
 	}
 }
