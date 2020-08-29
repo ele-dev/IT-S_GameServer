@@ -114,8 +114,7 @@ public class DatabaseAccess {
 	// Functions for getting an attribute from a player with the give name
 	public String getPlayerAttributeStr(String attr, String playername) throws SQLException {
 		String value = "";
-		this.pst_GetPlayerAttribute.setString(1, attr);
-		this.pst_GetPlayerAttribute.setString(2, playername);
+		this.pst_GetPlayerAttribute.setString(1, playername);
 		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
 		if(!result.next()) {
 			return null;
@@ -127,13 +126,12 @@ public class DatabaseAccess {
 	
 	public int getPlayerAttributeInt(String attr, String playername) throws SQLException {
 		int value = 0;
-		this.pst_GetPlayerAttribute.setString(1, attr);
-		this.pst_GetPlayerAttribute.setString(2, playername);
+		this.pst_GetPlayerAttribute.setString(1, playername);
 		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
-		if(!result.next()) {
-			return -1;
-		} 
-		value = result.getInt(attr);
+		
+		while(result.next()) {
+			value = result.getInt(attr);
+		}
 		
 		return value;
 	}
@@ -176,7 +174,7 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer = this.dbCon.prepareStatement(queryStr);
 		
 		// statement for selecting an attribute of a player given by playername
-		queryStr = "SELECT ? FROM tbl_userAccounts WHERE playername LIKE ?";
+		queryStr = "SELECT * FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_GetPlayerAttribute = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
