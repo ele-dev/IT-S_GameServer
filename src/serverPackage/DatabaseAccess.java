@@ -111,8 +111,8 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
-	// Function for getting an attribute from a player with the give name
-	public String getPlayerAttribute(String attr, String playername) throws SQLException {
+	// Functions for getting an attribute from a player with the give name
+	public String getPlayerAttributeStr(String attr, String playername) throws SQLException {
 		String value = "";
 		this.pst_GetPlayerAttribute.setString(1, attr);
 		this.pst_GetPlayerAttribute.setString(2, playername);
@@ -121,6 +121,19 @@ public class DatabaseAccess {
 			return null;
 		} 
 		value = result.getString(attr);
+		
+		return value;
+	}
+	
+	public int getPlayerAttributeInt(String attr, String playername) throws SQLException {
+		int value = 0;
+		this.pst_GetPlayerAttribute.setString(1, attr);
+		this.pst_GetPlayerAttribute.setString(2, playername);
+		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
+		if(!result.next()) {
+			return -1;
+		} 
+		value = result.getInt(attr);
 		
 		return value;
 	}

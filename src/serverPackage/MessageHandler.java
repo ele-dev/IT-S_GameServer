@@ -82,27 +82,19 @@ public class MessageHandler {
 					}
 					
 					// After successfull authentification send a player stats message to the client
-					String matchesStr = "0";
-					String balanceStr = "0";
 					int playedMatches = 0;
 					int accountBalance = 0;
 					try {
-						matchesStr = Main.database.getPlayerAttribute("playedMatches", loginMsg.getUsername());
-						balanceStr = Main.database.getPlayerAttribute("accountBalance", loginMsg.getUsername());
+						playedMatches = Main.database.getPlayerAttributeInt("playedMatches", loginMsg.getUsername());
+						accountBalance = Main.database.getPlayerAttributeInt("accountBalance", loginMsg.getUsername());
 					} catch (SQLException e) {
 						Main.logger.printWarning("Exception thrown during SQL Query", true, 1);
-					}
-					try {
-						playedMatches = Integer.parseInt(matchesStr);
-						accountBalance = Integer.parseInt(balanceStr);
-					} catch(NumberFormatException e) {
-						Main.logger.printWarning("Exception thrown during String to Number conversion", true, 1);
 					}
 					
 					// Create and send the message
 					MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
 					sender.sendMessageToClient(statsMsg);
-					Main.logger.printInfo("Sent Account Stats to the new logged in player", true, 1);
+					Main.logger.printInfo("Sent Account Stats to the newly logged in player", true, 1);
 				}
 				
 				break;
