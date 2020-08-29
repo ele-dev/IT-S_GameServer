@@ -116,10 +116,10 @@ public class DatabaseAccess {
 		String value = "";
 		this.pst_GetPlayerAttribute.setString(1, playername);
 		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
-		if(!result.next()) {
-			return null;
-		} 
-		value = result.getString(attr);
+		
+		while(result.next()) {
+			value = result.getString(attr);
+		}
 		
 		return value;
 	}

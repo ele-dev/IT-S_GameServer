@@ -97,7 +97,7 @@ public class NetworkListener extends Thread {
 				Socket clientSocket = this.serverSocket.accept();
 				
 				// Print info message that a new client has established a connection
-				Main.logger.printInfo("Accepted connection request", true, 0);
+				Main.logger.printInfo("Accepted connection request from " + clientSocket.getRemoteSocketAddress().toString(), true, 0);
 				
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);

@@ -107,7 +107,7 @@ public class ClientConnection extends Thread {
 	@Override
 	public void run()
 	{
-		Main.logger.printInfo("Client handler thread running", true, 1);
+		Main.logger.printInfo(Thread.currentThread().getName() + " running", true, 1);
 		
 		while(!this.stopOrder)
 		{
