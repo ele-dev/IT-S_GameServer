@@ -20,16 +20,16 @@ public class ClientConnection extends Thread {
 	private static int threadCounter = 0;
 	
 	// --- non-static members --- //
-	Socket clientSocket = null;
-	ObjectOutputStream objOut = null;
-	ObjectInputStream objIn = null;
+	private Socket clientSocket = null;
+	private ObjectOutputStream objOut = null;
+	private ObjectInputStream objIn = null;
 	
 	// Thread status indicator
 	private boolean stopOrder;
 	
 	// Login status of the client
 	private boolean loggedIn;
-	public Player playerInstance = null;
+	public Player playerInstance;
 	
 	// Constructor
 	public ClientConnection(Socket socket)
@@ -42,6 +42,7 @@ public class ClientConnection extends Thread {
 		this.clientSocket = socket;
 		this.stopOrder = false;
 		this.loggedIn = false;
+		this.playerInstance = null;
 		
 		// Set the timeout for the client socket
 		try {
@@ -60,7 +61,6 @@ public class ClientConnection extends Thread {
 		} catch (Exception e) {
 			Main.logger.printError("Could not create object data streams!", true, 0);
 			Main.logger.printError(e.getStackTrace().toString(), true, 2);
-			// e.printStackTrace();
 			status = false;
 		} 
 		

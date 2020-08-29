@@ -9,13 +9,14 @@ public class Player {
 	private String name;
 	private int accountBalance;
 	
-	// Constructor
+	// Default constructor for creating empty Player
 	public Player()
 	{
 		this.name = "";
 		this.accountBalance = 0;
 	}
 	
+	// Additional constructor for creating player with name
 	public Player(String name) 
 	{
 		this();
