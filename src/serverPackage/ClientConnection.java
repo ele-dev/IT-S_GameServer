@@ -10,11 +10,13 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import networking.*;
+import game.Player;
 
 public class ClientConnection extends Thread {
 	
 	// --- static class members --- // 
 	private static ArrayList<ClientConnection> clientList = new ArrayList<>();
+	private static int threadCounter = 0;
 	
 	// --- non-static members --- //
 	Socket clientSocket = null;
@@ -24,13 +26,21 @@ public class ClientConnection extends Thread {
 	// Thread status indicator
 	private boolean stopOrder;
 	
+	// Login status of the client
+	private boolean loggedIn;
+	public Player playerInstance = null;
+	
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
+		super();
+		
 		// init values
-		super("ClientHandlerThread");
+		super.setName("ClientHandlerThread-" + threadCounter);
+		threadCounter++;
 		this.clientSocket = socket;
 		this.stopOrder = false;
+		this.loggedIn = false;
 		
 		// Set the timeout for the client socket
 		try {
@@ -120,7 +130,7 @@ public class ClientConnection extends Thread {
 			}
 			
 			// Now handle and process the received message
-			// ...
+			MessageHandler.handleMessage(recvBuffer, this);
 		}
 		
 		// Finalize this instance
@@ -172,5 +182,16 @@ public class ClientConnection extends Thread {
 		
 		// Empty the whole client list
 		clientList.clear();
+	}
+	
+	// Getter & Setter methods for login status
+	public boolean isLoggedIn() 
+	{
+		return this.loggedIn;
+	}
+	
+	public void setLoginStatus(boolean status) 
+	{
+		this.loggedIn = status;
 	}
 }

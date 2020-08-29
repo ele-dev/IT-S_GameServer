@@ -22,6 +22,9 @@ public class NetworkListener extends Thread {
 	// Constructor 
 	public NetworkListener()
 	{
+		super();
+		super.setName("ServerListenerThread");
+		
 		boolean status = true;
 		
 		// Obtain the configured server port from the global config
