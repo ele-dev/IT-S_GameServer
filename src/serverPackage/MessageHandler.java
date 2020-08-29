@@ -99,6 +99,7 @@ public class MessageHandler {
 						Main.logger.printWarning("Exception thrown during String to Number conversion", true, 1);
 					}
 					
+					// Create and send the message
 					MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
 					sender.sendMessageToClient(statsMsg);
 					Main.logger.printInfo("Sent Account Stats to the new logged in player", true, 1);

@@ -7,6 +7,7 @@ import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import networking.*;
@@ -63,8 +64,9 @@ public class ClientConnection extends Thread {
 			status = false;
 		} 
 		
-		if(status)
+		if(status) {
 			Main.logger.printInfo("Object I/O streams created", true, 1);
+		}
 		
 		// add this instance to the client list 
 		clientList.add(this);
@@ -93,6 +95,19 @@ public class ClientConnection extends Thread {
 			}
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true, 1);
+		}
+		
+		// Set the player to offline in the database too
+		if(this.loggedIn) {
+			if(this.playerInstance.getName().contains("guest")) {
+				try {
+					Main.database.logoutGuest(this.playerInstance.getName());
+				} catch (SQLException e) {}
+			} else {
+				try {
+					Main.database.logoutPlayer(this.playerInstance.getName());
+				} catch (SQLException e) {}
+			}
 		}
 	}
 	

@@ -162,7 +162,7 @@ public class DatabaseAccess {
 		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_RemoveGuestPlayer = this.dbCon.prepareStatement(queryStr);
 		
-		// statement for select a attribute of a player given by playername
+		// statement for selecting an attribute of a player given by playername
 		queryStr = "SELECT ? FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_GetPlayerAttribute = this.dbCon.prepareStatement(queryStr);
 		
