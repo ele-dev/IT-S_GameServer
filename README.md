@@ -12,8 +12,7 @@ The Firewall must be configured properly to allow network traffic through the co
 
 # Installation/Setup Steps:
 - Clone the master branch of the repo on a linux machine
-- Run the buildApplication.sh script to get a runnable .jar file
 - Set the environment variables and settings in the config.txt file
-- Make sure the Database is running on the same host
-
+- Make sure the MariaDB Database is running on the same host
+- Run the executable jar file using the command java -jar GameServer.jar
 
