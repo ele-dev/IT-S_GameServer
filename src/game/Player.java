@@ -1,5 +1,9 @@
 package game;
 
+import java.sql.SQLException;
+
+import serverPackage.Main;
+
 public class Player {
 	
 	// static class members //
@@ -21,6 +25,29 @@ public class Player {
 	{
 		this();
 		this.name = name;
+	}
+	
+	// Method that simplyfies player logout no matter if guest or registered
+	public void logout() 
+	{
+		// Get the playername of the sender of this message
+		boolean isGuest = this.name.contains("guest");
+		
+		// Handle the logout message differently for guest and accounts
+		if(isGuest) 
+		{
+			// Logout the guest player
+			try {
+				Main.database.logoutGuest(this.name);
+			} catch(SQLException e) {}
+		}
+		else
+		{
+			// Logout the registered player
+			try {
+				Main.database.logoutPlayer(this.name);
+			} catch (SQLException e) {}
+		}
 	}
 	
 	// Getters //

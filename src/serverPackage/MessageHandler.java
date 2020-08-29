@@ -116,27 +116,9 @@ public class MessageHandler {
 					break;
 				}
 				
-				// Get the playername of the sender of this message
-				String playerName = sender.playerInstance.getName();
-				boolean isGuest = playerName.contains("guest");
+				sender.playerInstance.logout();
 				
-				// Handle the logout message differently for guest and accounts
-				if(isGuest) 
-				{
-					// Logout the guest player
-					try {
-						Main.database.logoutGuest(playerName);
-					} catch(SQLException e) {}
-				}
-				else
-				{
-					// Logout the registered player
-					try {
-						Main.database.logoutPlayer(playerName);
-					} catch (SQLException e) {}
-				}
-				
-				Main.logger.printInfo("Received logout message from " + playerName, false, 0);
+				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
 				sender.setLoginStatus(false);
 				
 				break;

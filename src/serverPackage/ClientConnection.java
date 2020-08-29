@@ -7,7 +7,6 @@ import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import networking.*;
@@ -98,16 +97,9 @@ public class ClientConnection extends Thread {
 		}
 		
 		// Set the player to offline in the database too
-		if(this.loggedIn) {
-			if(this.playerInstance.getName().contains("guest")) {
-				try {
-					Main.database.logoutGuest(this.playerInstance.getName());
-				} catch (SQLException e) {}
-			} else {
-				try {
-					Main.database.logoutPlayer(this.playerInstance.getName());
-				} catch (SQLException e) {}
-			}
+		if(this.loggedIn && this.playerInstance != null) {
+			this.playerInstance.logout();
+			this.loggedIn = false;
 		}
 	}
 	
