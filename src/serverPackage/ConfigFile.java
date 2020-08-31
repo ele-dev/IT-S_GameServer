@@ -1,5 +1,18 @@
 package serverPackage;
 
+/*
+ * writte by Elias Geiger
+ * 
+ * This class simplifies the usage of external config files in a simple key:value format
+ * When instantiated, it reads in the given textfile, seperates the lines from each other
+ * and removes all whitespaces and comments (// and following text is ignored)
+ * The : is used as seperator between key and value in a text line
+ * 
+ * It's a big advantage over hardcoding config values because this way it is possible to 
+ * quickly change environment variables without the need to rebuilt/recompile and export the whole application 
+ * 
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

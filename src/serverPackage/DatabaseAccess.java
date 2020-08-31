@@ -1,5 +1,24 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class is the interface to the mariaDB/MySQL Database backend
+ * which is neccessary to provide persistency for important game data
+ * 
+ * The class attempts to connect to the database in the constructor and executes a test query 
+ * to make sure the connection is working properly. The finalize method is responsible for the closeup
+ * before the application itself closes. The Majority of the required SQL Queries for are used very
+ * frequently with only slight changes in the paramaters. Thats why Prepared statements are used.
+ * They can be prepared/precompiled during application initialization with a few placeholders for parameters passing
+ * and later on they can be executed faster compared to the normal statements
+ * 
+ * This class contains a lot of functions that are designed for specific use cases e.g. login validation
+ * This way the database/SQL source code stays widely in this class and the functions can be called easily from 
+ * wherever they are needed
+ * 
+ */
+
 import java.sql.*;
 
 public class DatabaseAccess {

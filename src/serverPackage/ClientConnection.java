@@ -1,5 +1,23 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class is the endpoint of one client connected to the server
+ * The game server works with TCP/IP connections and has therefore 
+ * one Socket and one seperate Thread per client connection to handle.
+ * It means every time the server socket accepts a connection request, a new client handler
+ * thread is launched.
+ * 
+ * These handler threads do nothing more that waiting for messages and handling them
+ * as soon as they arrive. There are two possible cases in which a handler thread stop its execution
+ * First: The client sends a logout message and goes offline 
+ * Second: A server admin closes the game server application and all active ClientConnections and their threads are terminated
+ * 
+ * The class uses a static ArrayList to keep track of all the existing class instances during execution  
+ * 
+ */
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

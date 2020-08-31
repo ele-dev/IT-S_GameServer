@@ -1,5 +1,14 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This Class is reponsible for all the message handling and is only used
+ * in a static context. The handleMessage() Function is called from the clientHandler threads
+ * everytime a new message is received
+ * 
+ */
+
 import java.sql.SQLException;
 
 import game.Player;

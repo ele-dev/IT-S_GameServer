@@ -1,5 +1,21 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class is kind of a wrapper on top of the ConfigFile Class and is only used in static context
+ * Inside the readConfigFile Function all config values that are expected to be present in the configuration file
+ * are retrieved, parsed to other datatypes if necessary and finally stored inside public accessible variables
+ * 
+ * This additional class for config variables makes it even more comfortable to introduce additonal configuration variables
+ * into the project because the ConfigFile Class can remain untouched and stays resusable for other projects while 
+ * it requires only two lines of code more in this class to read in a new value
+ * 
+ * Last but not least the class offers the option to define default fallback values for the variable that will be used 
+ * in case the given configuration file can not be found and read for any reason
+ * 
+ */
+
 import java.io.FileNotFoundException;
 
 public class GameConfigs {

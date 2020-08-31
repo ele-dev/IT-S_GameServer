@@ -1,5 +1,27 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class was takes care of the logging and functionality and also provides useful methods 
+ * for formatted, colored console output  
+ * 
+ * There are 3 different console output channels: INFO (white), WARNING (yellow), ERROR (red) 
+ * this way it is possible to highlight messages and classify them. The three different Methods are 
+ * used in all source file when console output is printed out. Additonally the it can be specified through
+ * a boolean flag parameter if a console message should be written to the log file or not
+ * 
+ * Another handy feature is the conditional output implemented using a logLevel that can be 0, 1 or 2
+ * It's mainly used for debugging. If you need to know the value of a variable at a specific point of time for example 
+ * then it is useful to increase the loglevel for the debug message, then it is only shown if the log level during execution
+ * is high enough. The intial loglevel is also defined in the config.txt by the way
+ * 
+ * Note: The color codes for colored console messages aren't working on windows and aren't cross-platform in general
+ * They only work on linux platforms and since the server application is supposed to run on linux
+ * anyway I decided to keep this simple implementation coloring the console text
+ * 
+ */
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;

@@ -1,5 +1,14 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This is the main class, with the application entry point of
+ * Things are done on a high abstraction level.
+ * This way the application structure is more comprehendable
+ * 
+ */
+
 import java.util.Scanner;
 
 public class Main {
