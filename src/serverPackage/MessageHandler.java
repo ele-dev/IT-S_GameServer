@@ -35,7 +35,7 @@ public class MessageHandler {
 				// Parse the generic message in a more specific format
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
-				// Important variable or login procedure
+				// Important variables for login procedure
 				boolean status = true;
 				String guestPlayerName = "";
 				
