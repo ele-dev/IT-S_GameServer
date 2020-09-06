@@ -133,7 +133,39 @@ public class MessageHandler {
 					break;
 				}
 				
-				Main.logger.printInfo("Received logout keep alive message", false, 2);
+				Main.logger.printInfo("Received keep alive message", false, 2);
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_JOIN_QUICKMATCH:
+			{
+				// Ignore messages from unauthentificated clients
+				if(!sender.isLoggedIn()) {
+					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
+					break;
+				}
+				
+				// First update the players state 
+				sender.playerInstance.setState("searching");
+				Main.logger.printInfo(sender.getName() + " wants to play a quick match --> searching second player", true, 0);
+				
+				// Look in the quick match waiting queue for an enemy
+				Player potentialEnemy = Player.getWaitingPlayer();
+				
+				// If there is no other player currently searching an enemy, put the request sender on the queue
+				if(potentialEnemy == null) {
+					Player.putPlayerOnWaitingSlot(sender.playerInstance);
+					Main.logger.printInfo("Put " + sender.getName() + " on the waiting slot", true, 1);
+				} else {
+					// Update the players states
+					sender.playerInstance.setState("playing");
+					potentialEnemy.setState("playing");
+					
+					// Create a new Match with the two players and inform them 
+					// ...
+					Main.logger.printInfo("Starting new match: " + sender.getName() + " vs " + potentialEnemy.getName(), true, 0);
+				}
 				
 				break;
 			}
