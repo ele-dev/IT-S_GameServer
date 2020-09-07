@@ -169,6 +169,30 @@ public class MessageHandler {
 				
 				break;
 			}
+			
+			case GenericMessage.MSG_ABORT_MATCH_SEARCH:
+			{
+				// Ignore messages from unauthentificated clients
+				if(!sender.isLoggedIn()) {
+					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
+					break;
+				}
+				
+				// Call the function for aborting a players quick match search and store the result
+				boolean isAborted = Player.abortWaiting(sender.playerInstance);
+				
+				// The result tells us if the abortion actually happended or if the request was invalid
+				if(isAborted) {
+					// Update the player state and output the message to the console
+					sender.playerInstance.setState("homescreen");
+					Main.logger.printInfo(sender.getName() + " aborted match search", true, 0);
+				} else {
+					// Output message about useless/misplaced match search abortion message
+					Main.logger.printWarning("Invalid match search abortion request", true, 1);
+				}
+				
+				break;
+			}
 		
 			default:
 			{

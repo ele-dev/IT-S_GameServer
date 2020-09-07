@@ -69,18 +69,31 @@ public class Player {
 		return this.currentState;
 	}
 	
+	// If there is a waiting player on the waiting slot then return him and free the slot
+	// Otherwise the function returns null to signal an empty waiting slot
 	public static Player getWaitingPlayer()
 	{
 		Player enemy = null;
 		
-		// If there is a waiting player then return him and free the waiting slot
-		// Otherwise the function returns null to signal an empty waiting slot
 		if(quickMatchWaitingSlot != null) {
 			enemy = quickMatchWaitingSlot;
 			quickMatchWaitingSlot = null;
 		}
 		
 		return enemy;
+	}
+	
+	// This method functions checks the equality of the waiting player and the passed instance
+	// Only if it is the same player then empty the slot and return true otherwise return false
+	public static boolean abortWaiting(Player player)
+	{
+		if(player.equals(quickMatchWaitingSlot)) {
+			// Empty the waiting slot to abort the players match search
+			quickMatchWaitingSlot = null;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	// Setters //
