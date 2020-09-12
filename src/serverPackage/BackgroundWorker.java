@@ -42,6 +42,16 @@ public class BackgroundWorker extends Thread {
 				boolean status = Main.database.testConnection();
 				lastSQLKeepAlive = now;
 			}
+			
+			// Do background tasks
+			// ...
+			
+			// A short break for the thread to prevent undesired high CPU consumption
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				continue;
+			}
 		}
 		
 		this.finalize();
