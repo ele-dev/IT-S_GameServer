@@ -1,5 +1,17 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * The Network Listener Class contains the ServerSocket which is responsible
+ * for listening for connection requests from clients and accepting them
+ * All of this runs in the ServerListenerThread parallel and independent to the main thread
+ * where the console input from server admins is handled.
+ * 
+ * From this thread, the client handler threads are created and launched
+ * 
+ */
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +22,7 @@ public class NetworkListener extends Thread {
 
 	// class members //
 	
-	// server socket and the wel known service port
+	// server socket and the well known service port
 	ServerSocket serverSocket = null;
 	private static int wellknownPort = 0;
 	
@@ -97,7 +109,7 @@ public class NetworkListener extends Thread {
 				Socket clientSocket = this.serverSocket.accept();
 				
 				// Print info message that a new client has established a connection
-				Main.logger.printInfo("Accepted connection request", true, 0);
+				Main.logger.printInfo("Accepted connection request from " + clientSocket.getRemoteSocketAddress().toString(), true, 0);
 				
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);

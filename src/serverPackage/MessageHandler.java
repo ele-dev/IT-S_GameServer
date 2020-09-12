@@ -1,5 +1,14 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This Class is reponsible for all the message handling and is only used
+ * in a static context. The handleMessage() Function is called from the clientHandler threads
+ * everytime a new message is received
+ * 
+ */
+
 import java.sql.SQLException;
 
 import game.Player;
@@ -26,7 +35,7 @@ public class MessageHandler {
 				// Parse the generic message in a more specific format
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
-				// Important variable or login procedure
+				// Important variables for login procedure
 				boolean status = true;
 				String guestPlayerName = "";
 				
@@ -71,13 +80,30 @@ public class MessageHandler {
 					MsgLoginStatus response = new MsgLoginStatus(status);
 					sender.sendMessageToClient(response);
 					
+					// Print the result status of the login to the console
 					if(status) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(loginMsg.getUsername());
 						Main.logger.printInfo("Player authentification successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Player authentification failed!", true, 0);
+						break;
 					}
+					
+					// After successfull authentification send a player stats message to the client
+					int playedMatches = 0;
+					int accountBalance = 0;
+					try {
+						playedMatches = Main.database.getPlayerAttributeInt("playedMatches", loginMsg.getUsername());
+						accountBalance = Main.database.getPlayerAttributeInt("accountBalance", loginMsg.getUsername());
+					} catch (SQLException e) {
+						Main.logger.printWarning("Exception thrown during SQL Query", true, 1);
+					}
+					
+					// Create and send the message
+					MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
+					sender.sendMessageToClient(statsMsg);
+					Main.logger.printInfo("Sent Account Stats to the newly logged in player", true, 1);
 				}
 				
 				break;
@@ -91,27 +117,9 @@ public class MessageHandler {
 					break;
 				}
 				
-				// Get the playername of the sender of this message
-				String playerName = sender.playerInstance.getName();
-				boolean isGuest = playerName.contains("guest");
+				sender.playerInstance.logout();
 				
-				// Handle the logout message differently for guest and accounts
-				if(isGuest) 
-				{
-					// Logout the guest player
-					try {
-						Main.database.logoutGuest(playerName);
-					} catch(SQLException e) {}
-				}
-				else
-				{
-					// Logout the registered player
-					try {
-						Main.database.logoutPlayer(playerName);
-					} catch (SQLException e) {}
-				}
-				
-				Main.logger.printInfo("Received logout message from " + playerName, false, 0);
+				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
 				sender.setLoginStatus(false);
 				
 				break;
@@ -125,7 +133,63 @@ public class MessageHandler {
 					break;
 				}
 				
-				Main.logger.printInfo("Received logout keep alive message", false, 2);
+				Main.logger.printInfo("Received keep alive message", false, 2);
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_JOIN_QUICKMATCH:
+			{
+				// Ignore messages from unauthentificated clients
+				if(!sender.isLoggedIn()) {
+					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
+					break;
+				}
+				
+				// First update the players state 
+				sender.playerInstance.setState("searching");
+				Main.logger.printInfo(sender.getName() + " wants to play a quick match --> searching second player", true, 0);
+				
+				// Look in the quick match waiting queue for an enemy
+				Player potentialEnemy = Player.getWaitingPlayer();
+				
+				// If there is no other player currently searching an enemy, put the request sender on the queue
+				if(potentialEnemy == null) {
+					Player.putPlayerOnWaitingSlot(sender.playerInstance);
+					Main.logger.printInfo("Put " + sender.getName() + " on the waiting slot", true, 1);
+				} else {
+					// Update the players states
+					sender.playerInstance.setState("playing");
+					potentialEnemy.setState("playing");
+					
+					// Create a new Match with the two players and inform them 
+					// ...
+					Main.logger.printInfo("Starting new match: " + sender.getName() + " vs " + potentialEnemy.getName(), true, 0);
+				}
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_ABORT_MATCH_SEARCH:
+			{
+				// Ignore messages from unauthentificated clients
+				if(!sender.isLoggedIn()) {
+					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
+					break;
+				}
+				
+				// Call the function for aborting a players quick match search and store the result
+				boolean isAborted = Player.abortWaiting(sender.playerInstance);
+				
+				// The result tells us if the abortion actually happended or if the request was invalid
+				if(isAborted) {
+					// Update the player state and output the message to the console
+					sender.playerInstance.setState("homescreen");
+					Main.logger.printInfo(sender.getName() + " aborted match search", true, 0);
+				} else {
+					// Output message about useless/misplaced match search abortion message
+					Main.logger.printWarning("Invalid match search abortion request", true, 1);
+				}
 				
 				break;
 			}

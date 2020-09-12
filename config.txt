@@ -1,5 +1,5 @@
 // valName:val 	syntax
-server-port:		1044
+server-port:		50044
 db-host:		localhost
 db-user:		dbuser
 db-password:		secret

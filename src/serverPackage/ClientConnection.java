@@ -1,5 +1,23 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class is the endpoint of one client connected to the server
+ * The game server works with TCP/IP connections and has therefore 
+ * one Socket and one seperate Thread per client connection to handle.
+ * It means every time the server socket accepts a connection request, a new client handler
+ * thread is launched.
+ * 
+ * These handler threads do nothing more that waiting for messages and handling them
+ * as soon as they arrive. There are two possible cases in which a handler thread stop its execution
+ * First: The client sends a logout message and goes offline 
+ * Second: A server admin closes the game server application and all active ClientConnections and their threads are terminated
+ * 
+ * The class uses a static ArrayList to keep track of all the existing class instances during execution  
+ * 
+ */
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,16 +37,16 @@ public class ClientConnection extends Thread {
 	private static int threadCounter = 0;
 	
 	// --- non-static members --- //
-	Socket clientSocket = null;
-	ObjectOutputStream objOut = null;
-	ObjectInputStream objIn = null;
+	private Socket clientSocket = null;
+	private ObjectOutputStream objOut = null;
+	private ObjectInputStream objIn = null;
 	
 	// Thread status indicator
 	private boolean stopOrder;
 	
 	// Login status of the client
 	private boolean loggedIn;
-	public Player playerInstance = null;
+	public Player playerInstance;
 	
 	// Constructor
 	public ClientConnection(Socket socket)
@@ -41,6 +59,7 @@ public class ClientConnection extends Thread {
 		this.clientSocket = socket;
 		this.stopOrder = false;
 		this.loggedIn = false;
+		this.playerInstance = null;
 		
 		// Set the timeout for the client socket
 		try {
@@ -59,12 +78,12 @@ public class ClientConnection extends Thread {
 		} catch (Exception e) {
 			Main.logger.printError("Could not create object data streams!", true, 0);
 			Main.logger.printError(e.getStackTrace().toString(), true, 2);
-			// e.printStackTrace();
 			status = false;
 		} 
 		
-		if(status)
+		if(status) {
 			Main.logger.printInfo("Object I/O streams created", true, 1);
+		}
 		
 		// add this instance to the client list 
 		clientList.add(this);
@@ -94,13 +113,19 @@ public class ClientConnection extends Thread {
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true, 1);
 		}
+		
+		// Set the player to offline in the database too
+		if(this.loggedIn && this.playerInstance != null) {
+			this.playerInstance.logout();
+			this.loggedIn = false;
+		}
 	}
 	
 	// Thread function that runs simultanenious
 	@Override
 	public void run()
 	{
-		Main.logger.printInfo("Client handler thread running", true, 1);
+		Main.logger.printInfo(Thread.currentThread().getName() + " running", true, 1);
 		
 		while(!this.stopOrder)
 		{

@@ -1,5 +1,24 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class is the interface to the mariaDB/MySQL Database backend
+ * which is neccessary to provide persistency for important game data
+ * 
+ * The class attempts to connect to the database in the constructor and executes a test query 
+ * to make sure the connection is working properly. The finalize method is responsible for the closeup
+ * before the application itself closes. The Majority of the required SQL Queries for are used very
+ * frequently with only slight changes in the paramaters. Thats why Prepared statements are used.
+ * They can be prepared/precompiled during application initialization with a few placeholders for parameters passing
+ * and later on they can be executed faster compared to the normal statements
+ * 
+ * This class contains a lot of functions that are designed for specific use cases e.g. login validation
+ * This way the database/SQL source code stays widely in this class and the functions can be called easily from 
+ * wherever they are needed
+ * 
+ */
+
 import java.sql.*;
 
 public class DatabaseAccess {
@@ -57,6 +76,26 @@ public class DatabaseAccess {
 				this.testQuery.close();
 			}
 			
+			if(this.pst_AddGuestPlayer != null) {
+				this.pst_AddGuestPlayer.close();
+			}
+			
+			if(this.pst_GetPlayerAttribute != null) {
+				this.pst_GetPlayerAttribute.close();
+			}
+			
+			if(this.pst_RemoveGuestPlayer != null) {
+				this.pst_RemoveGuestPlayer.close();
+			}
+			
+			if(this.pst_SetOnlineStatus != null) {
+				this.pst_SetOnlineStatus.close();
+			}
+			
+			if(this.pst_VerifyLogin != null) {
+				this.pst_VerifyLogin.close();
+			}
+			
 			if(this.dbCon != null) {
 				dbCon.close();
 			}
@@ -111,21 +150,32 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
-	// Function for getting an attribute from a player with the give name
-	public String getPlayerAttribute(String attr, String playername) throws SQLException {
+	// Functions for getting an attribute from a player with the give name
+	public String getPlayerAttributeStr(String attr, String playername) throws SQLException {
 		String value = "";
-		this.pst_GetPlayerAttribute.setString(1, attr);
-		this.pst_GetPlayerAttribute.setString(2, playername);
+		this.pst_GetPlayerAttribute.setString(1, playername);
 		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
-		if(!result.next()) {
-			return null;
-		} 
-		value = result.getString(attr);
+		
+		while(result.next()) {
+			value = result.getString(attr);
+		}
 		
 		return value;
 	}
 	
-	// Helper functions 
+	public int getPlayerAttributeInt(String attr, String playername) throws SQLException {
+		int value = 0;
+		this.pst_GetPlayerAttribute.setString(1, playername);
+		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
+		
+		while(result.next()) {
+			value = result.getInt(attr);
+		}
+		
+		return value;
+	}
+	
+	// Helper functions // 
 	public boolean testConnection() {
 		if(this.dbCon == null) {
 			return false;
@@ -141,6 +191,7 @@ public class DatabaseAccess {
 		return true;
 	}
 	
+	// Method precompiles all neccessary prepared statements for faster execution during runtime
 	private void precompileStatements() throws SQLException {
 		// test statement
 		String queryStr = "SELECT * FROM tbl_userAccounts";
@@ -162,8 +213,8 @@ public class DatabaseAccess {
 		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_RemoveGuestPlayer = this.dbCon.prepareStatement(queryStr);
 		
-		// statement for select a attribute of a player given by playername
-		queryStr = "SELECT ? FROM tbl_userAccounts WHERE playername LIKE ?";
+		// statement for selecting an attribute of a player given by playername
+		queryStr = "SELECT * FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_GetPlayerAttribute = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
