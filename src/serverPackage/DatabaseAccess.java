@@ -27,7 +27,7 @@ public class DatabaseAccess {
 	private Connection dbCon = null;
 	
 	// Default Database connection configuration
-	private String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB?connectTimeout=0";
+	private String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB";
 	private String dbUser = "java-data";
 	private String dbPassword = "";
 	
@@ -45,7 +45,7 @@ public class DatabaseAccess {
 		// First obtain the global configuration values
 		dbUser = GameConfigs.dbUser;
 		dbPassword = GameConfigs.dbPassword;
-		dbUrl = "jdbc:mariadb://" + GameConfigs.dbHost + ":3306/onlineGameDB?connectTimeout=0";
+		dbUrl = "jdbc:mariadb://" + GameConfigs.dbHost + ":3306/onlineGameDB";
 		
 		// Now try to open the connection
 		try {
@@ -175,7 +175,7 @@ public class DatabaseAccess {
 		return value;
 	}
 	
-	// Helper functions 
+	// Helper functions // 
 	public boolean testConnection() {
 		if(this.dbCon == null) {
 			return false;
@@ -191,6 +191,7 @@ public class DatabaseAccess {
 		return true;
 	}
 	
+	// Method precompiles all neccessary prepared statements for faster execution during runtime
 	private void precompileStatements() throws SQLException {
 		// test statement
 		String queryStr = "SELECT * FROM tbl_userAccounts";
