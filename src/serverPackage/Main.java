@@ -17,6 +17,7 @@ public class Main {
 	public static DatabaseAccess database = null;
 	static NetworkListener listener = null;
 	public static Logger logger = null;
+	static BackgroundWorker worker = null;
 
 	
 	// --- Application Entry point --- //
@@ -57,6 +58,7 @@ public class Main {
 		return;
 	}
 	
+	// Intialization of the application modules
 	private static void initModules() 
 	{
 		System.out.println("Loading modules ... ");
@@ -75,11 +77,25 @@ public class Main {
 		// init and launch the network listener thread 
 		listener = new NetworkListener();
 		listener.start();
+		
+		// intit and launch the backgeound worker thread
+		worker = new BackgroundWorker();
+		worker.start();
 	}
 	
+	// Shutdown of the application modules
 	private static void shutdownModules()
 	{
-		// Finalize the network module first
+		// Finalize the background worker first
+		if(worker != null) {
+			// The tell the worker thread to complete his work
+			worker.sendStopOrder();
+			
+			// Wait until the thread has finished
+			while(worker.isAlive()) {}
+		}
+		
+		// Finalize the network module next
 		if(listener != null) {
 			// Tell the network listener thread to complete his work
 			listener.sendStopOrder();
