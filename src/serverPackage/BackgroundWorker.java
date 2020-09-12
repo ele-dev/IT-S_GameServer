@@ -28,6 +28,7 @@ public class BackgroundWorker extends Thread {
 	}
 	
 	// Thread function that runs background tasks periodically
+	@SuppressWarnings("unused")
 	@Override
 	public void run() 
 	{
