@@ -27,7 +27,7 @@ public class DatabaseAccess {
 	private Connection dbCon = null;
 	
 	// Default Database connection configuration
-	private String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB";
+	private String dbUrl = "jdbc:mariadb://localhost:3306/onlineGameDB?connectTimeout=0";
 	private String dbUser = "java-data";
 	private String dbPassword = "";
 	
@@ -45,7 +45,7 @@ public class DatabaseAccess {
 		// First obtain the global configuration values
 		dbUser = GameConfigs.dbUser;
 		dbPassword = GameConfigs.dbPassword;
-		dbUrl = "jdbc:mariadb://" + GameConfigs.dbHost + ":3306/onlineGameDB";
+		dbUrl = "jdbc:mariadb://" + GameConfigs.dbHost + ":3306/onlineGameDB?connectTimeout=0";
 		
 		// Now try to open the connection
 		try {
@@ -74,6 +74,26 @@ public class DatabaseAccess {
 		try {
 			if(this.testQuery != null) {
 				this.testQuery.close();
+			}
+			
+			if(this.pst_AddGuestPlayer != null) {
+				this.pst_AddGuestPlayer.close();
+			}
+			
+			if(this.pst_GetPlayerAttribute != null) {
+				this.pst_GetPlayerAttribute.close();
+			}
+			
+			if(this.pst_RemoveGuestPlayer != null) {
+				this.pst_RemoveGuestPlayer.close();
+			}
+			
+			if(this.pst_SetOnlineStatus != null) {
+				this.pst_SetOnlineStatus.close();
+			}
+			
+			if(this.pst_VerifyLogin != null) {
+				this.pst_VerifyLogin.close();
 			}
 			
 			if(this.dbCon != null) {
