@@ -34,6 +34,9 @@ public class Match {
 	@Override
 	public void finalize() 
 	{
+		// Remove the players from the match
+		this.p1 = this.p2 = null;
+		
 		// Remove this instance from the list of matches
 		matches.remove(this);
 	}
