@@ -18,6 +18,7 @@ public class Match {
 	private static ArrayList<Match> matches = new ArrayList<>();
 	
 	// class members //
+	@SuppressWarnings("unused")
 	private Player p1, p2;
 	
 	// Constructor
