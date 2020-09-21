@@ -1,7 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-
 /*
  * written by Elias Geiger
  * 
@@ -11,6 +9,8 @@ import java.util.ArrayList;
  * to defeat because leaving before finishing is considered as giving up
  * 
  */
+
+import java.util.ArrayList;
 
 public class Match {
 	

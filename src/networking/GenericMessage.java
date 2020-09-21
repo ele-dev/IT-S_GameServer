@@ -1,7 +1,5 @@
 package networking;
 
-import java.io.Serializable;
-
 /*
  * written by Elias Geiger
  * 
@@ -14,6 +12,8 @@ import java.io.Serializable;
  * The constant IDs for all existing message types are also defined in this class
  * 
  */
+
+import java.io.Serializable;
 
 public abstract class GenericMessage implements Serializable {
 
