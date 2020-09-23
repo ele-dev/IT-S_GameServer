@@ -45,7 +45,6 @@ public class ClientConnection extends Thread {
 	private boolean stopOrder;
 	
 	// Login status of the client
-	private boolean loggedIn;
 	public Player playerInstance;
 	
 	// Constructor
@@ -58,7 +57,6 @@ public class ClientConnection extends Thread {
 		threadCounter++;
 		this.clientSocket = socket;
 		this.stopOrder = false;
-		this.loggedIn = false;
 		this.playerInstance = null;
 		
 		// Set the timeout for the client socket
@@ -112,12 +110,6 @@ public class ClientConnection extends Thread {
 			}
 		} catch (IOException e) {
 			Main.logger.printWarning("Could not close client socket properly", true, 1);
-		}
-		
-		// Set the player to offline in the database too
-		if(this.loggedIn && this.playerInstance != null) {
-			this.playerInstance.logout();
-			this.loggedIn = false;
 		}
 	}
 	
@@ -207,16 +199,5 @@ public class ClientConnection extends Thread {
 		
 		// Empty the whole client list
 		clientList.clear();
-	}
-	
-	// Getter & Setter methods for login status
-	public boolean isLoggedIn() 
-	{
-		return this.loggedIn;
-	}
-	
-	public void setLoginStatus(boolean status) 
-	{
-		this.loggedIn = status;
 	}
 }

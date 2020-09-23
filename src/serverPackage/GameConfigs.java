@@ -25,9 +25,6 @@ public class GameConfigs {
 	
 	// relevant game configuration parameters default values
 	public static int serverPort = 1000;
-	public static String dbHost = "localhost";
-	public static String dbUser = "dbUser";
-	public static String dbPassword = "dbPass";
 	public static String logFilename = "log.txt";
 	public static String logLevel = "basic";       // basic | enhanced | detailed
 	
@@ -51,11 +48,6 @@ public class GameConfigs {
 			// General values
 			serverPort = Integer.parseInt(file.getValueByName("server-port"));
 			
-			// Database (MariaDB/MySQL) related configuration values
-			dbHost = file.getValueByName("db-host");
-			dbUser = file.getValueByName("db-user");
-			dbPassword = file.getValueByName("db-password");
-			
 			// Logging related values
 			logFilename = file.getValueByName("log-file");
 			logLevel = file.getValueByName("log-level");
@@ -76,10 +68,6 @@ public class GameConfigs {
 		System.out.println("Configuration Values: ");
 		System.out.println("General:");
 		System.out.println("   Service Port: " + serverPort);
-		System.out.println("Database: ");
-		System.out.println("   Host: " + dbHost);
-		System.out.println("   Username: " + dbUser);
-		System.out.println("   Password: " + dbPassword);
 		System.out.println("Logging: ");
 		System.out.println("   logfile: " + logFilename);
 		System.out.println("   log level: " + logLevel);
