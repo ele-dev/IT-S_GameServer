@@ -32,17 +32,21 @@ public class MessageHandler {
 				// Coerce the message into the right format
 				MsgFieldState fieldMessage = (MsgFieldState) msg;
 				
+				Main.logger.printInfo("received updated field from player", true, 0);
+				
 				// Validate the correctness of the received field by comparing it to the last known field state
 				// ...
 				
 				// Apply updated field and share changes with all clients
 				GameState.updateField(fieldMessage.getField());
 				ClientConnection.broadcastMessage(fieldMessage);
+				Main.logger.printInfo("Applied updated field", true, 0);
 				
 				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();
 				MsgSetTurn turingTeamMessage = new MsgSetTurn(GameState.getActingTeam());
 				ClientConnection.broadcastMessage(turingTeamMessage);
+				Main.logger.printInfo("Switch acting team --> It is " + GameState.getActingTeam() + " turn", true, 0);
 				
 				break;
 			}
