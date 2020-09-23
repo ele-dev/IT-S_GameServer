@@ -1,7 +1,4 @@
 // valName:val 	syntax
-server-port:		50044
-db-host:		localhost
-db-user:		dbuser
-db-password:		secret
+server-port:		50043
 log-file:		log.txt
 log-level:		enhanced		// 0 = basic | 1 = enhanced | 2 = detailed
