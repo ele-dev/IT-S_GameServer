@@ -1,5 +1,7 @@
 package serverPackage;
 
+import game.GameState;
+
 /*
  * written by Elias Geiger
  * 
@@ -33,8 +35,12 @@ public class MessageHandler {
 				// Validate the correctness of the received field by comparing it to the last known field state
 				// ...
 				
-				// Apply updated field and share changes with the other clients
-				// ...
+				// Apply updated field and share changes with all clients
+				GameState.updateField(fieldMessage.getField());
+				ClientConnection.broadcastMessage(fieldMessage);
+				
+				// Switch the acting team
+				GameState.switchActingTeam();
 				
 				break;
 			}
