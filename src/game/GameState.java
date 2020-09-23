@@ -23,6 +23,10 @@ public class GameState {
 		}
 	}
 	
+	public static String getActingTeam() {
+		return actingTeam;
+	}
+	
 	public static void updateField(byte[][] newField) {
 		gameField = newField;
 	}

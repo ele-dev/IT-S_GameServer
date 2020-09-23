@@ -27,6 +27,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+import game.GameState;
 import networking.*;
 
 public class ClientConnection extends Thread {
@@ -80,6 +81,13 @@ public class ClientConnection extends Thread {
 		
 		// add this instance to the client list 
 		clientList.add(this);
+		
+		// Sent messages to inform client about current game state
+		MsgSetTurn msg1 = new MsgSetTurn(GameState.getActingTeam());
+		this.sendMessageToClient(msg1);
+		
+		MsgFieldState msg2 = new MsgFieldState(GameState.getCurrentFieldState());
+		this.sendMessageToClient(msg2);
 	}
 	
 	// Finalizer that is called before garbage collection

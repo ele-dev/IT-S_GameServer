@@ -39,8 +39,10 @@ public class MessageHandler {
 				GameState.updateField(fieldMessage.getField());
 				ClientConnection.broadcastMessage(fieldMessage);
 				
-				// Switch the acting team
+				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();
+				MsgSetTurn turingTeamMessage = new MsgSetTurn(GameState.getActingTeam());
+				ClientConnection.broadcastMessage(turingTeamMessage);
 				
 				break;
 			}
