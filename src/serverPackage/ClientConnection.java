@@ -28,7 +28,6 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import networking.*;
-import game.Player;
 
 public class ClientConnection extends Thread {
 	
@@ -44,9 +43,6 @@ public class ClientConnection extends Thread {
 	// Thread status indicator
 	private boolean stopOrder;
 	
-	// Login status of the client
-	public Player playerInstance;
-	
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
@@ -57,7 +53,6 @@ public class ClientConnection extends Thread {
 		threadCounter++;
 		this.clientSocket = socket;
 		this.stopOrder = false;
-		this.playerInstance = null;
 		
 		// Set the timeout for the client socket
 		try {

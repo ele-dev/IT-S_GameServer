@@ -25,6 +25,20 @@ public class MessageHandler {
 		// Distinguish between all different types of messages
 		switch(type)
 		{
+			case GenericMessage.MSG_UPDATED_FIELD_STATE:
+			{
+				// Coerce the message into the right format
+				MsgFieldState fieldMessage = (MsgFieldState) msg;
+				
+				// Validate the correctness of the received field by comparing it to the last known field state
+				// ...
+				
+				// Apply updated field and share changes with the other clients
+				// ...
+				
+				break;
+			}
+		
 			default:
 			{
 				Main.logger.printWarning("Message of unknown type", true, 0);
