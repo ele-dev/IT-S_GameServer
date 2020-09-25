@@ -93,6 +93,10 @@ public class ClientConnection extends Thread {
 	@Override
 	public void finalize()
 	{
+		// Remove this instance from the client list first to avoid
+		// problems caused by server broadcasts
+		clientList.remove(this);
+		
 		// close the i/o streams
 		try {
 			if(this.objIn != null) {
