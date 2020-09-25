@@ -29,6 +29,11 @@ public class MessageHandler {
 		{
 			case GenericMessage.MSG_UPDATED_FIELD_STATE:
 			{
+				// Only handle message if the game hasn't finished yet
+				if(GameState.isGameOver()) {
+					break;
+				}
+				
 				// Coerce the message into the right format
 				MsgFieldState fieldMessage = (MsgFieldState) msg;
 				
@@ -41,6 +46,9 @@ public class MessageHandler {
 				GameState.updateField(fieldMessage.getField());
 				ClientConnection.broadcastMessage(fieldMessage);
 				Main.logger.printInfo("Applied updated field", true, 0);
+				
+				// Now check if the match is over or not
+				
 				
 				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();
