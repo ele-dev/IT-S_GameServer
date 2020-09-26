@@ -47,8 +47,8 @@ public class MessageHandler {
 				ClientConnection.broadcastMessage(fieldMessage);
 				Main.logger.printInfo("Applied updated field", true, 0);
 				
-				// Now check if the match is over or not
-				// ...
+				// Now check if the match is over or not (--> winner detection and full field detection combined)
+				GameState.checkForGameOver();
 				
 				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();

@@ -1,5 +1,7 @@
 package game;
 
+import serverPackage.Main;
+
 public class GameState {
 
 	// static class members //
@@ -66,6 +68,11 @@ public class GameState {
 		
 		// If either a player has won or the game field is full, the game is over
 		gameIsOver = (winner > 0) || gameFieldFull;
+		
+		// Also print output to the console when a game over was detected
+		if(gameIsOver) {
+			Main.logger.printInfo("--> The Game is over!", true, 0);
+		}
 	}
 	
 	// Return the game over status
