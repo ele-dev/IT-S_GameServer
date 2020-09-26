@@ -27,6 +27,22 @@ public class MessageHandler {
 		// Distinguish between all different types of messages
 		switch(type)
 		{
+			case GenericMessage.MSG_JOIN_TEAM:
+			{
+				// A client can only join a team once, so the message must come from an unassigned player
+				if(sender.getTeam() != 0) {
+					break;
+				}
+				
+				// Coerce the message into the right format
+				MsgJoinTeam teamJoinMessage = (MsgJoinTeam) msg;
+				
+				// Assign the client to the desired team
+				sender.assignTeam(teamJoinMessage.getTeam());
+				
+				break;
+			}
+		
 			case GenericMessage.MSG_UPDATED_FIELD_STATE:
 			{
 				// Only handle message if the game hasn't finished yet
