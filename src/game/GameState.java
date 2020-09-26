@@ -5,7 +5,7 @@ import serverPackage.Main;
 public class GameState {
 
 	// static class members //
-	private static String actingTeam = "cross";
+	private static byte actingTeam = 1;		// team cross is supposed to make the first move
 	private static byte[][] gameField = new byte[3][3];
 	private static boolean gameIsOver = false;
 	private static byte winner = 0;
@@ -26,16 +26,28 @@ public class GameState {
 	
 	// Method switches the team that is currently allowed to make a move
 	public static void switchActingTeam() {
-		if(actingTeam.equalsIgnoreCase("cross")) {
-			actingTeam = "circle";
-		} else if(actingTeam.equalsIgnoreCase("circle")) {
-			actingTeam = "cross";
+		if(actingTeam == 1) {
+			actingTeam = 2;
+		} else if(actingTeam == 2) {
+			actingTeam = 1;
 		}
 	}
 	
 	// Return the acting team
-	public static String getActingTeam() {
+	public static byte getActingTeam() {
 		return actingTeam;
+	}
+	
+	public static String getActingTeamStr() {
+		String str = "";
+		
+		if(actingTeam == 1) {
+			str = "cross";
+		} else if(actingTeam == 2){
+			str = "circle";
+		}
+		
+		return str;
 	}
 	
 	// Method for overwritig the current game field state with a new/updated one
