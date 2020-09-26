@@ -87,7 +87,7 @@ public class ClientConnection extends Thread {
 		clientList.add(this);
 		
 		// Sent messages to inform client about current game state
-		MsgSetTurn msg1 = new MsgSetTurn(GameState.getActingTeam());
+		MsgSetTurn msg1 = new MsgSetTurn(GameState.getActingTeamStr());
 		this.sendMessageToClient(msg1);
 		
 		MsgFieldState msg2 = new MsgFieldState(GameState.getCurrentFieldState());
