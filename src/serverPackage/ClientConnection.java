@@ -221,4 +221,16 @@ public class ClientConnection extends Thread {
 	public byte getTeam() {
 		return this.team;
 	}
+	
+	public String getTeamStr() {
+		String str = "";
+		
+		if(this.team == 1) {
+			str = "cross";
+		} else if(this.team == 2) {
+			str = "circle";
+		}
+		
+		return str;
+	}
 }

@@ -40,7 +40,7 @@ public class MessageHandler {
 				
 				// Assign the client to the desired team
 				sender.assignTeam(teamJoinMessage.getTeam());
-				Main.logger.printInfo("Client joined team " + teamJoinMessage.getTeam(), true, 0);
+				Main.logger.printInfo("Client joined team " + sender.getTeamStr(), true, 0);
 				
 				break;
 			}
