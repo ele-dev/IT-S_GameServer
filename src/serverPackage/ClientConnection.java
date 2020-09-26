@@ -44,6 +44,9 @@ public class ClientConnection extends Thread {
 	// Thread status indicator
 	private boolean stopOrder;
 	
+	// the team the player is playing for (cross, circle or nor assigned)
+	private byte team;
+	
 	// Constructor
 	public ClientConnection(Socket socket)
 	{
@@ -54,6 +57,7 @@ public class ClientConnection extends Thread {
 		threadCounter++;
 		this.clientSocket = socket;
 		this.stopOrder = false;
+		this.team = 0;
 		
 		// Set the timeout for the client socket
 		try {
@@ -206,5 +210,15 @@ public class ClientConnection extends Thread {
 		
 		// Empty the whole client list
 		clientList.clear();
+	}
+	
+	// Setter and getter for the team attribute
+	public void assignTeam(byte teamId) 
+	{
+		this.team = teamId;
+	}
+	
+	public byte getTeam() {
+		return this.team;
 	}
 }
