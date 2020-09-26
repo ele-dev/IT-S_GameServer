@@ -49,6 +49,7 @@ public class GameState {
 	// Method for marking the game to be over
 	public static void checkForGameOver() {
 		
+		// Check if every cell of the game field grid is full
 		boolean gameFieldFull = true;
 		for(int i = 0; i < gridSize; i++)
 		{
@@ -56,16 +57,15 @@ public class GameState {
 			{
 				if(gameField[i][j] == 0) {
 					gameFieldFull = false;
-					
 				}
 			}
 		}
 		
-		// Check if every cell of the game field grid is full
-		// ...
+		// Run the winner detection 
+		checkSomeoneWon();
 		
-		// check if 
-		
+		// If either a player has won or the game field is full, the game is over
+		gameIsOver = (winner > 0) || gameFieldFull;
 	}
 	
 	// Return the game over status
@@ -74,7 +74,7 @@ public class GameState {
 	}
 	
 	// Winner detection
-	public void checkSomeoneWon() {
+	private static void checkSomeoneWon() {
 		
 		// Obtain the current field state from the Game State class
 		byte[][] gameField = GameState.getCurrentFieldState();

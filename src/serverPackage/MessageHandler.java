@@ -48,7 +48,7 @@ public class MessageHandler {
 				Main.logger.printInfo("Applied updated field", true, 0);
 				
 				// Now check if the match is over or not
-				
+				// ...
 				
 				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();
