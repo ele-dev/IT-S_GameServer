@@ -35,6 +35,7 @@ public class ClientConnection extends Thread {
 	// --- static class members --- // 
 	private static ArrayList<ClientConnection> clientList = new ArrayList<>();
 	private static int threadCounter = 0;
+	private static final int maxPlayers = 2;
 	
 	// --- non-static members --- //
 	private Socket clientSocket = null;
@@ -83,8 +84,16 @@ public class ClientConnection extends Thread {
 			Main.logger.printInfo("Object I/O streams created", true, 1);
 		}
 		
-		// add this instance to the client list 
-		clientList.add(this);
+		// Do not let more than two players at a time in
+		if(clientList.size() >= maxPlayers) {
+			// Send server full message to client and close connection
+			SignalMessage serverFullMsg = new SignalMessage(GenericMessage.MSG_SERVER_FULL);
+			this.sendMessageToClient(serverFullMsg);
+			this.finalize();
+		} else {
+			// add this instance to the client list 
+			clientList.add(this);
+		}
 		
 		// Sent messages to inform client about current game state
 		MsgSetTurn msg1 = new MsgSetTurn(GameState.getActingTeamStr());
