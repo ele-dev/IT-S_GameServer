@@ -31,6 +31,7 @@ public class MessageHandler {
 			{
 				// A client can only join a team once, so the message must come from an unassigned player
 				if(sender.getTeam() != 0) {
+					Main.logger.printWarning("No team switching possible!", true, 0);
 					break;
 				}
 				
@@ -39,6 +40,7 @@ public class MessageHandler {
 				
 				// Assign the client to the desired team
 				sender.assignTeam(teamJoinMessage.getTeam());
+				Main.logger.printInfo("Client joined team " + teamJoinMessage.getTeam(), true, 0);
 				
 				break;
 			}
@@ -47,6 +49,11 @@ public class MessageHandler {
 			{
 				// Only handle message if the game hasn't finished yet
 				if(GameState.isGameOver()) {
+					break;
+				}
+				
+				// Don't handle messages from the team that isn't allowed to make a move at the moment
+				if(sender.getTeam() != GameState.getActingTeam()) {
 					break;
 				}
 				
@@ -68,9 +75,9 @@ public class MessageHandler {
 				
 				// Switch the acting team and inform all clients about it
 				GameState.switchActingTeam();
-				MsgSetTurn turingTeamMessage = new MsgSetTurn(GameState.getActingTeam());
+				MsgSetTurn turingTeamMessage = new MsgSetTurn(GameState.getActingTeamStr());
 				ClientConnection.broadcastMessage(turingTeamMessage);
-				Main.logger.printInfo("Switch acting team --> It is " + GameState.getActingTeam() + " turn", true, 0);
+				Main.logger.printInfo("Switch acting team --> It is " + GameState.getActingTeamStr() + " turn", true, 0);
 				
 				break;
 			}
