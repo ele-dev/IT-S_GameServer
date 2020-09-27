@@ -13,11 +13,13 @@ public class ConsoleHandler {
 	// static class members
 	private static String[] commands = {"help", 
 										"exit",
-										"list players"};
+										"list-players",
+										"set-loglevel"};
 	
 	private static String[] descriptions = {"Shows this list of available commands",
 											"Closes all active client connections and the application itself",
-											"Shows list with information about currently connected clients"};
+											"Shows list with information about currently connected clients",
+											"Changes the loglevel (basic, enhanced or detailed)"};
 	
 	// Constants
 	private static final int tableColumnWidth = 20;
@@ -30,7 +32,11 @@ public class ConsoleHandler {
 			return true;
 		}
 		
-		switch(cmd)
+		// Separate possible arguments from the command itself (space as separator char)
+		String[] arguments = cmd.split(" ");
+		int argCount = arguments.length - 1;
+		
+		switch(arguments[0])
 		{
 			// Command to list all existing commands 
 			case "help": 
@@ -47,7 +53,7 @@ public class ConsoleHandler {
 				return false;
 			}
 			
-			case "list players":
+			case "list-players":
 			{
 				System.out.println("List of online players: ");
 				
@@ -57,9 +63,31 @@ public class ConsoleHandler {
 				break;
 			}
 			
+			case "set-loglevel":
+			{
+				// Check for the required argument
+				if(argCount != 1) {
+					Main.logger.printWarning("Argument count does not match. Type 'set-loglevel --help' for more info", false, 0);
+					break;
+				}
+				
+				// Check if the admin wants help to the command usage
+				if(arguments[1].equalsIgnoreCase("--help")) {
+					System.out.println("Usage: set-loglevel [level]");
+					System.out.println("Options for [level]: 'basic', 'enhanced', 'detailed'");
+					System.out.println();
+					break;
+				}
+				
+				// Change the log level
+				Main.logger.setLogLevel(arguments[1]);
+				
+				break;
+			}
+			
 			default:
 			{
-				Main.logger.printWarning("Command does not exist. Type help for more information", false, 0);
+				Main.logger.printWarning("Command does not exist. Type 'help' for more information", false, 0);
 				break;
 			}
 		}

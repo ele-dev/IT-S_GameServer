@@ -38,6 +38,8 @@ public class Main {
 		// Call local init method 
 		initModules();
 		
+		System.out.println("Type 'help' to list all available commands");
+		
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);
 		String consoleInput = "";
