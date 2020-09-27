@@ -45,7 +45,7 @@ public class ClientConnection extends Thread {
 	// Thread status indicator
 	private boolean stopOrder;
 	
-	// the team the player is playing for (cross, circle or nor assigned)
+	// the team the player is playing for (cross, circle or not assigned)
 	private byte team;
 	
 	// Constructor
