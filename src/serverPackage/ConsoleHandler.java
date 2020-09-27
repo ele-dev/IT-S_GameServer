@@ -20,7 +20,7 @@ public class ConsoleHandler {
 											"Shows list with information about currently connected clients"};
 	
 	// Constants
-	private static final int tableColumnWidth = 13;
+	private static final int tableColumnWidth = 20;
 	
 	// Main handler function for command line input
 	public static boolean handleCommand(String cmd) 
@@ -50,8 +50,10 @@ public class ConsoleHandler {
 			case "list players":
 			{
 				System.out.println("List of online players: ");
-				// ...
+				
+				ClientConnection.printClientInfo();
 				System.out.println();
+				
 				break;
 			}
 			
