@@ -41,12 +41,14 @@ public class Main {
 		// Handle command line input in the main frame
 		Scanner scanner = new Scanner(System.in);
 		String consoleInput = "";
+		boolean running = true;
 		
 		do {
 			System.out.print("> ");
 			consoleInput = scanner.nextLine();
+			running = ConsoleHandler.handleCommand(consoleInput);
 			
-		} while(!consoleInput.equals("exit"));		// exit command takes server offline
+		} while(running);		// exit command takes server offline
 		
 		// Call local shutdown method
 		shutdownModules();
