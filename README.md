@@ -15,5 +15,3 @@ The Firewall must be configured properly to allow network traffic through the co
 - Setup the MariaDB/MySQL Backend
 - Set the environment variables and settings in the config.txt file
 - Open terminal, execute java -server -jar GameServer.jar in the directory where the downloaded files are
-
-
