@@ -11,9 +11,9 @@ The application also depends on MariaDB/MySQL Database which has to run on the s
 The Firewall must be configured properly to allow network traffic through the configured port
 
 # Installation/Setup Steps:
-- Clone the master branch of the repo on a linux machine
-- Run the buildApplication.sh script to get a runnable .jar file
+- Download the executable GameServer.jar file and the config.txt file from the repository
+- Setup the MariaDB/MySQL Backend
 - Set the environment variables and settings in the config.txt file
-- Make sure the Database is running on the same host
+- Open terminal, execute java -server -jar GameServer.jar in the directory where the downloaded files are
 
 
