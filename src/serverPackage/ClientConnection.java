@@ -213,6 +213,21 @@ public class ClientConnection extends Thread {
 		clientList.clear();
 	}
 	
+	// static helper methodd that prints a list with info about all connected clients
+	public static void printClientInfo() 
+	{
+		for(ClientConnection cc: clientList)
+		{
+			// Avoid invalid entries from the list
+			if(cc != null && cc.isAlive())
+			{
+				String ipStr = cc.clientSocket.getRemoteSocketAddress().toString();
+				ipStr = ipStr.replace('/', ' ');
+				System.out.println("   Playername: " + cc.playerInstance.getName() + "   Remote Endpoint:" + ipStr);
+			}
+		}
+	}
+	
 	// Getter & Setter methods for login status
 	public boolean isLoggedIn() 
 	{
