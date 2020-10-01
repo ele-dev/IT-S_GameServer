@@ -1,5 +1,13 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class encapsulates a thread which keeps executing tasks in 
+ * the background in a periodic manner
+ * 
+ */
+
 import java.time.Duration;
 import java.time.Instant;
 

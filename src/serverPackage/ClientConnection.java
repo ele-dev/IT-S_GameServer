@@ -93,6 +93,10 @@ public class ClientConnection extends Thread {
 	@Override
 	public void finalize()
 	{
+		// Remove this instance from the client list first to avoid
+		// problems caused by server broadcasts
+		clientList.remove(this);
+		
 		// close the i/o streams
 		try {
 			if(this.objIn != null) {
@@ -207,6 +211,21 @@ public class ClientConnection extends Thread {
 		
 		// Empty the whole client list
 		clientList.clear();
+	}
+	
+	// static helper methodd that prints a list with info about all connected clients
+	public static void printClientInfo() 
+	{
+		for(ClientConnection cc: clientList)
+		{
+			// Avoid invalid entries from the list
+			if(cc != null && cc.isAlive())
+			{
+				String ipStr = cc.clientSocket.getRemoteSocketAddress().toString();
+				ipStr = ipStr.replace('/', ' ');
+				System.out.println("   Playername: " + cc.playerInstance.getName() + "   Remote Endpoint:" + ipStr);
+			}
+		}
 	}
 	
 	// Getter & Setter methods for login status

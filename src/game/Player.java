@@ -1,5 +1,17 @@
 package game;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class represent an online player
+ * Players can either be guests or registered players but all have a few common properties
+ * the name, state (homescreen, searching or playing), account balance (game money)
+ * 
+ * The class is mainly used to track player activities but also includes static variables 
+ * and functions for the waiting queue and matchmaking in general
+ * 
+ */
+
 import java.sql.SQLException;
 
 import serverPackage.Main;
