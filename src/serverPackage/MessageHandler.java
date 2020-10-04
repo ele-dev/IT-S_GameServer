@@ -28,8 +28,15 @@ public class MessageHandler {
 		// Distinguish between all different types of messages
 		switch(type)
 		{
+		
 			case GenericMessage.MSG_LOGIN:
 			{
+				// Ignore messages from clients that are already logged in
+				if(sender.isLoggedIn()) {
+					Main.logger.printWarning("Client is already logged in", true, 1);
+					break;
+				}
+				
 				Main.logger.printInfo("Received login message", false, 2);
 				
 				// Parse the generic message in a more specific format
@@ -61,6 +68,7 @@ public class MessageHandler {
 					if(status) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(guestPlayerName);
+						sender.setName(guestPlayerName);
 						Main.logger.printInfo("Guest login successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Guest login failed", true, 0);
@@ -84,6 +92,7 @@ public class MessageHandler {
 					if(status) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(loginMsg.getUsername());
+						sender.setName(loginMsg.getUsername());
 						Main.logger.printInfo("Player authentification successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Player authentification failed!", true, 0);
@@ -122,10 +131,10 @@ public class MessageHandler {
 				
 				// Delete the player instance of this client to prepare for secondary login
 				sender.setLoginStatus(false);
-				sender.setName("<logged out>");
 				sender.playerInstance = null;
 				
 				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
+				sender.setName("<logged out>");
 				sender.setLoginStatus(false);
 				
 				break;
