@@ -223,7 +223,7 @@ public class ClientConnection extends Thread {
 			{
 				String ipStr = cc.clientSocket.getRemoteSocketAddress().toString();
 				ipStr = ipStr.replace('/', ' ');
-				System.out.println("   Playername: " + cc.playerInstance.getName() + "   Remote Endpoint:" + ipStr);
+				System.out.println("   Playername: " + cc.getName() + "   Remote Endpoint:" + ipStr);
 			}
 		}
 	}
