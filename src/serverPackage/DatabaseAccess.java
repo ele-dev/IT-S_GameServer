@@ -38,6 +38,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_AddGuestPlayer = null;
 	PreparedStatement pst_RemoveGuestPlayer = null;
 	PreparedStatement pst_GetPlayerAttribute = null;
+	PreparedStatement pst_CleanTable = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -69,6 +70,13 @@ public class DatabaseAccess {
 	// Finalizer 
 	@Override
 	public void finalize() {
+		
+		// Clean the table from remaining guest player entries that shouldn't be persistent
+		try {
+			this.pst_CleanTable.executeUpdate();
+		} catch (SQLException e1) {
+			Main.logger.printWarning("Failed to run database cleanup query!", false, 1);
+		}
 		
 		// Close the local database connection and everything related to it (statements, resultSets, etc)
 		try {
@@ -216,6 +224,10 @@ public class DatabaseAccess {
 		// statement for selecting an attribute of a player given by playername
 		queryStr = "SELECT * FROM tbl_userAccounts WHERE playername LIKE ?";
 		this.pst_GetPlayerAttribute = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for deleting remaining table entries of players that aren't connected
+		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE 'guest%'";
+		this.pst_CleanTable = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
