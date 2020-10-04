@@ -117,7 +117,13 @@ public class MessageHandler {
 					break;
 				}
 				
+				// call the logout routine for the sender of this message
 				sender.playerInstance.logout();
+				
+				// Delete the player instance of this client to prepare for secondary login
+				sender.setLoginStatus(false);
+				sender.setName("<logged out>");
+				sender.playerInstance = null;
 				
 				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
 				sender.setLoginStatus(false);
