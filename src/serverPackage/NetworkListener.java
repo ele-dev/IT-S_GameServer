@@ -111,7 +111,7 @@ public class NetworkListener extends Thread {
 				// Print info message that a new client has established a connection
 				String ipStr = clientSocket.getRemoteSocketAddress().toString();
 				ipStr = ipStr.replace('/', ' ');
-				Main.logger.printInfo("Accepted connection request from" + clientSocket.getRemoteSocketAddress().toString(), true, 0);
+				Main.logger.printInfo("Accepted connection request from" + ipStr, true, 0);
 				
 				// create a new client instance and pass the client socket
 				ClientConnection cc = new ClientConnection(clientSocket);
