@@ -16,6 +16,7 @@ import networking.*;
 
 public class MessageHandler {
 
+	@SuppressWarnings("unused")
 	public static void handleMessage(GenericMessage msg, ClientConnection sender) 
 	{
 		if(sender == null) {
@@ -136,6 +137,34 @@ public class MessageHandler {
 				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
 				sender.setName("<logged out>");
 				sender.setLoginStatus(false);
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_REGISTER:
+			{
+				// Ignore messages from client that are currenly logged in (or guests)
+				if(sender.isLoggedIn()) {
+					Main.logger.printWarning("Received register message from client that is logged in at the moment", true, 1);
+					break;
+				}
+				
+				// Coerce the message into the right format
+				MsgRegister registerMsg = (MsgRegister)msg;
+				
+				// Validate payload of the register request
+				String statusDescription = "success";
+				boolean status = true;
+				
+				// check if username is already taken
+				// ...
+				
+				// send request to HTTP backend
+				// ...
+				
+				// Respond with status message that contains success status and description
+				MsgRegisterStatus response = new MsgRegisterStatus(false, "service not available yet!");
+				sender.sendMessageToClient(response);
 				
 				break;
 			}
