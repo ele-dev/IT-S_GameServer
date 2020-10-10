@@ -104,6 +104,10 @@ public class DatabaseAccess {
 				this.pst_VerifyLogin.close();
 			}
 			
+			if(this.pst_CleanTable != null) {
+				this.pst_CleanTable.close();
+			}
+			
 			if(this.dbCon != null) {
 				dbCon.close();
 			}
@@ -181,6 +185,22 @@ public class DatabaseAccess {
 		}
 		
 		return value;
+	}
+	
+	// Method that checks if a given username is free for use or already taken
+	public boolean isNameAvailable(String playername) throws SQLException {
+		boolean isAvailable = true;
+		
+		// Run the query and store the result
+		this.pst_GetPlayerAttribute.setString(1, playername);
+		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
+		
+		// Now count the entries in the result set
+		if(result.getRow() >= 1) {
+			isAvailable = false;
+		}
+		
+		return isAvailable;
 	}
 	
 	// Helper functions // 
