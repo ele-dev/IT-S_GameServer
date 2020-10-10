@@ -171,14 +171,34 @@ public class MessageHandler {
 					statusDescription = "error: database problems";
 				}
 				
-				// send request to HTTP backend
-				// ...
-				
+				if(status) 
+				{
+					// Generate random but unique verification code for new account
+					String verifyKey = "agawgwagdsf";
+					// ...
+					
+					// Create database table entries for new user account 
+					String passwordHash = registerMsg.getPasswordHash();
+					String email = registerMsg.getEmail();
+					try {
+						Main.database.registerNewAccount(playername, email, passwordHash, verifyKey);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						status = false;
+						statusDescription = "error: database problems";
+					}
+					
+					// send request to HTTP backend
+					// ...
+				}
+
 				// disable registration using a little safty percausion
+				/*
 				if(status) {
 					status = false;
 					statusDescription = "registration service not available yet";
 				}
+				*/
 				
 				// Respond with status message that contains success status and description
 				MsgRegisterStatus response = new MsgRegisterStatus(status, statusDescription);

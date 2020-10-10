@@ -251,7 +251,9 @@ public class DatabaseAccess {
 		this.testQuery = this.dbCon.prepareStatement(queryStr);
 		
 		// statement to select all matches to the given login credentials 
-		queryStr = "SELECT * FROM tbl_userAccounts WHERE playername LIKE ? AND password_hash LIKE ?";
+		queryStr = "SELECT * FROM tbl_userAccounts, tbl_accountControl "
+				+ "WHERE tbl_userAccounts.playername = tbl_accountControl.playername "
+				+ "AND tbl_userAccounts.playername LIKE ? AND password_hash LIKE ? AND activationStatus LIKE 'complete'";
 		this.pst_VerifyLogin = this.dbCon.prepareStatement(queryStr);
 		
 		// statement to update a players online state
