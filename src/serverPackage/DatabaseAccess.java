@@ -122,7 +122,7 @@ public class DatabaseAccess {
 	
 	// High level functions for frequently used operations // 
 
-	// Function for handling the login of a registered player 
+	// Functions for handling the login/logout of guest normal registered players 
 	public boolean loginPlayer(String username, String passwordHash) throws SQLException {
 		
 		// Execute the prepared statement and store the result
@@ -141,7 +141,6 @@ public class DatabaseAccess {
 		return true;
 	}
 	
-	// Function for handling the login of an unregistered guest player
 	public void loginGuest(String guestName) throws SQLException {
 		
 		// Insert the new guest player data into the table using prepared statement
@@ -162,7 +161,7 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
-	// Functions for getting an attribute from a player with the give name
+	// Functions for getting an attribute from a player with the given name
 	public String getPlayerAttributeStr(String attr, String playername) throws SQLException {
 		String value = "";
 		this.pst_GetPlayerAttribute.setString(1, playername);

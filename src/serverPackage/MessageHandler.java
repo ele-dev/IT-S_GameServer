@@ -16,7 +16,6 @@ import networking.*;
 
 public class MessageHandler {
 
-	@SuppressWarnings("unused")
 	public static void handleMessage(GenericMessage msg, ClientConnection sender) 
 	{
 		if(sender == null) {
@@ -156,14 +155,33 @@ public class MessageHandler {
 				String statusDescription = "success";
 				boolean status = true;
 				
-				// check if username is already taken
-				// ...
+				// check if username is valid and free to use (not taken)
+				String playername = registerMsg.getUsername();
+				if(playername.contains("guest")) {
+					status = false;
+					statusDescription = "username can not contain 'guest'";
+				}
+				try {
+					if(!Main.database.isNameAvailable(playername)) {
+						status = false;
+						statusDescription = "Sorry name already taken";
+					}
+				} catch (SQLException e) {
+					status = false;
+					statusDescription = "error: database problems";
+				}
 				
 				// send request to HTTP backend
 				// ...
 				
+				// disable registration using a little safty percausion
+				if(status) {
+					status = false;
+					statusDescription = "registration service not available yet";
+				}
+				
 				// Respond with status message that contains success status and description
-				MsgRegisterStatus response = new MsgRegisterStatus(false, "service not available yet!");
+				MsgRegisterStatus response = new MsgRegisterStatus(status, statusDescription);
 				sender.sendMessageToClient(response);
 				
 				break;
