@@ -197,18 +197,15 @@ public class MessageHandler {
 							statusDescription = "error: database problems";
 						}
 						
-						// send request to HTTP backend
-						// ...
+						// send mail with link Weblink to verification backend
+						/*
+						boolean result = Mailer.sendConfirmationMail(registerMsg.getEmail());
+						if(!result) {
+							Main.logger.printError("Failed to send email!", true, 1);
+						}
+						*/
 					}
 				}
-
-				// disable registration using a little safty percausion
-				/*
-				if(status) {
-					status = false;
-					statusDescription = "registration service not available yet";
-				}
-				*/
 				
 				// Respond with status message that contains success status and description
 				MsgRegisterStatus response = new MsgRegisterStatus(status, statusDescription);
