@@ -174,22 +174,32 @@ public class MessageHandler {
 				if(status) 
 				{
 					// Generate random but unique verification code for new account
-					String verifyKey = "agawgwagdsf";
-					// ...
-					
-					// Create database table entries for new user account 
-					String passwordHash = registerMsg.getPasswordHash();
-					String email = registerMsg.getEmail();
+					boolean getKey = true;
+					String verifyKey = "";
 					try {
-						Main.database.registerNewAccount(playername, email, passwordHash, verifyKey);
-					} catch (SQLException e) {
-						e.printStackTrace();
+						verifyKey = Main.database.getUniqueKey();
+					} catch (SQLException e1) {
+						getKey = false;
 						status = false;
 						statusDescription = "error: database problems";
 					}
 					
-					// send request to HTTP backend
-					// ...
+					if(getKey)
+					{
+						// Create database table entries for new user account 
+						String passwordHash = registerMsg.getPasswordHash();
+						String email = registerMsg.getEmail();
+						try {
+							Main.database.registerNewAccount(playername, email, passwordHash, verifyKey);
+						} catch (SQLException e) {
+							e.printStackTrace();
+							status = false;
+							statusDescription = "error: database problems";
+						}
+						
+						// send request to HTTP backend
+						// ...
+					}
 				}
 
 				// disable registration using a little safty percausion

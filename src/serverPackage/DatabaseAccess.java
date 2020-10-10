@@ -20,6 +20,8 @@ package serverPackage;
  */
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class DatabaseAccess {
 
@@ -43,6 +45,7 @@ public class DatabaseAccess {
 	// Account control statements
 	PreparedStatement pst_AddAccount = null;
 	PreparedStatement pst_AddAccountControl = null;
+	PreparedStatement pst_GetVerificationKeys = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -118,6 +121,10 @@ public class DatabaseAccess {
 			
 			if(this.pst_AddAccountControl != null) {
 				this.pst_AddAccountControl.close();
+			}
+			
+			if(this.pst_GetVerificationKeys != null) {
+				this.pst_GetVerificationKeys.close();
 			}
 			
 			if(this.dbCon != null) {
@@ -228,6 +235,35 @@ public class DatabaseAccess {
 		return isAvailable;
 	}
 	
+	// Function that returns a new unique verification key for a newly registered account
+	public String getUniqueKey() throws SQLException {
+		String uniqueKey = "";
+		ArrayList<String> reservedKeys = new ArrayList<String>();
+		
+		// Pull the reserved keys from the database and create a list
+		ResultSet result = this.pst_GetVerificationKeys.executeQuery();
+		while(result.next()) {
+			reservedKeys.add(result.getString("activationKey"));
+		}
+		
+		// Generate a new keys until a unique one comes up
+		String allowedChars = "0123456789abcdefghijklmnopqrstuvwxyz";
+		Random random = new Random();
+		do {
+			uniqueKey = "";
+			StringBuffer buffer = new StringBuffer();
+			for(int i = 0; i < 10; i++) 
+			{
+				int value = random.nextInt(allowedChars.length());
+				buffer.append(allowedChars.charAt(value));
+			}
+			
+			uniqueKey = buffer.toString();
+		} while(reservedKeys.contains(uniqueKey));
+		
+		return uniqueKey;
+	}
+	
 	// Helper functions // 
 	public boolean testConnection() {
 		if(this.dbCon == null) {
@@ -283,6 +319,10 @@ public class DatabaseAccess {
 		// statement for inserting new account control entry into the control table
 		queryStr = "INSERT INTO tbl_accountControl (activationKey, playername) VALUES (?, ?)";
 		this.pst_AddAccountControl = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for pulling a list of all reserved verification keys from the tbl_accountControl
+		queryStr = "SELECT * FROM tbl_accountControl";
+		this.pst_GetVerificationKeys = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
