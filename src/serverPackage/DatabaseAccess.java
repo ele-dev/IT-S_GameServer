@@ -40,6 +40,10 @@ public class DatabaseAccess {
 	PreparedStatement pst_GetPlayerAttribute = null;
 	PreparedStatement pst_CleanTable = null;
 	
+	// Account control statements
+	PreparedStatement pst_AddAccount = null;
+	PreparedStatement pst_AddAccountControl = null;
+	
 	// Constructor
 	public DatabaseAccess()
 	{
@@ -108,6 +112,14 @@ public class DatabaseAccess {
 				this.pst_CleanTable.close();
 			}
 			
+			if(this.pst_AddAccount != null) {
+				this.pst_AddAccount.close();
+			}
+			
+			if(this.pst_AddAccountControl != null) {
+				this.pst_AddAccountControl.close();
+			}
+			
 			if(this.dbCon != null) {
 				dbCon.close();
 			}
@@ -161,6 +173,20 @@ public class DatabaseAccess {
 		this.pst_RemoveGuestPlayer.executeUpdate();
 	}
 	
+	public void registerNewAccount(String user, String email, String pwdHash, String verificationKey) throws SQLException {
+		
+		// First create the account entry in tbl_userAccounts
+		this.pst_AddAccount.setString(1, user);
+		this.pst_AddAccount.setString(2, email);
+		this.pst_AddAccount.setString(3, pwdHash);
+		this.pst_AddAccount.executeUpdate();
+		
+		// Second create the corresponding control entry in tbl_accountControl
+		this.pst_AddAccountControl.setString(1, verificationKey);
+		this.pst_AddAccountControl.setString(2, user);
+		this.pst_AddAccountControl.executeUpdate();
+	}
+	
 	// Functions for getting an attribute from a player with the given name
 	public String getPlayerAttributeStr(String attr, String playername) throws SQLException {
 		String value = "";
@@ -194,8 +220,8 @@ public class DatabaseAccess {
 		this.pst_GetPlayerAttribute.setString(1, playername);
 		ResultSet result = this.pst_GetPlayerAttribute.executeQuery();
 		
-		// Now count the entries in the result set
-		if(result.getRow() >= 1) {
+		// Now count the entries in the result set (1 or more means taken)
+		if(result.next() == true) {
 			isAvailable = false;
 		}
 		
@@ -247,6 +273,14 @@ public class DatabaseAccess {
 		// statement for deleting remaining table entries of players that aren't connected
 		queryStr = "DELETE FROM tbl_userAccounts WHERE playername LIKE 'guest%'";
 		this.pst_CleanTable = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for inserting new user account in the table 
+		queryStr = "INSERT INTO tbl_userAccounts (playername, email, password_hash) VALUES (?, ?, ?)";
+		this.pst_AddAccount = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for inserting new account control entry into the control table
+		queryStr = "INSERT INTO tbl_accountControl (activationKey, playername) VALUES (?, ?)";
+		this.pst_AddAccountControl = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
