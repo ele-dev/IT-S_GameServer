@@ -148,6 +148,8 @@ public class MessageHandler {
 					break;
 				}
 				
+				Main.logger.printInfo("Received an account registration request", true, 0);
+				
 				// Coerce the message into the right format
 				MsgRegister registerMsg = (MsgRegister)msg;
 				
@@ -160,15 +162,18 @@ public class MessageHandler {
 				if(playername.contains("guest")) {
 					status = false;
 					statusDescription = "username can not contain 'guest'";
+					Main.logger.printWarning("Playername '" + playername + "' is not allowed!", true, 0);
 				}
 				try {
 					if(!Main.database.isNameAvailable(playername)) {
 						status = false;
 						statusDescription = "Sorry name already taken";
+						Main.logger.printWarning("The playername '" + playername + "' was already taken!", true, 0);
 					}
 				} catch (SQLException e) {
 					status = false;
 					statusDescription = "error: database problems";
+					Main.logger.printError("Registration process failed because of database problems!", true, 0);
 				}
 				
 				if(status) 
@@ -182,6 +187,7 @@ public class MessageHandler {
 						getKey = false;
 						status = false;
 						statusDescription = "error: database problems";
+						Main.logger.printError("Registration process failed because of database problems!", true, 0);
 					}
 					
 					if(getKey)
@@ -195,12 +201,15 @@ public class MessageHandler {
 							e.printStackTrace();
 							status = false;
 							statusDescription = "error: database problems";
+							Main.logger.printError("Registration process failed because of database problems!", true, 0);
 						}
 						
 						// send mail with link Weblink to verification backend
 						boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
 						if(!result) {
-							Main.logger.printError("Failed to send email!", true, 1);
+							Main.logger.printError("Registration process failed because of mail server issues!", true, 1);
+						} else {
+							Main.logger.printInfo("  --> New account '" + playername + "' has been registered successfully", true, 0);
 						}
 					}
 				}
