@@ -1,7 +1,10 @@
 // valName:val 	syntax
 server-port:		50044
-db-host:		localhost
-db-user:		dbuser
+db-host:			localhost
+db-user:			dbuser
 db-password:		secret
-log-file:		log.txt
-log-level:		enhanced		// 0 = basic | 1 = enhanced | 2 = detailed
+log-file:			log.txt
+log-level:			enhanced		// 0 = basic | 1 = enhanced | 2 = detailed
+mail-address:		example@example.com
+mail-password: 		secret
+mail-host:			smtp.mailserver.com

@@ -31,6 +31,11 @@ public class GameConfigs {
 	public static String logFilename = "log.txt";
 	public static String logLevel = "basic";       // basic | enhanced | detailed
 	
+	public static String noreplyMailAddress = "example@example.com";
+	public static String noreplyMailPassword = "mailPass";
+	public static String smtpServer = "smtp.mailserver.com";
+	
+	
 	public static boolean readConfigFile() {
 		boolean result = true;
 		
@@ -60,7 +65,12 @@ public class GameConfigs {
 			logFilename = file.getValueByName("log-file");
 			logLevel = file.getValueByName("log-level");
 
-			// ... 
+			// Mailserver related values
+			noreplyMailAddress = file.getValueByName("mail-address");
+			noreplyMailPassword = file.getValueByName("mail-password");
+			smtpServer = file.getValueByName("mail-host");
+			
+			// ...
 			
 		} catch(Exception e) {
 			System.out.println(e);

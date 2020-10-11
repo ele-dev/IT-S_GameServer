@@ -198,12 +198,10 @@ public class MessageHandler {
 						}
 						
 						// send mail with link Weblink to verification backend
-						/*
-						boolean result = Mailer.sendConfirmationMail(registerMsg.getEmail());
+						boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
 						if(!result) {
 							Main.logger.printError("Failed to send email!", true, 1);
 						}
-						*/
 					}
 				}
 				

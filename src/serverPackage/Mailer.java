@@ -1,5 +1,14 @@
 package serverPackage;
 
+/*
+ * written by Elias Geiger
+ * 
+ * This class has contains a static method for sending a verification email to a new user
+ * This mail contains a weblink redirects to the verifcation backend (PHP7).
+ * When the user opens the link from his mailbox, his game account will become activated
+ * 
+ */
+
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -8,75 +17,52 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Mailer {
 	
-	// Mail configs
-	private static final String senderMail = "noreply@ele-dev.de";
-	private static final String host = "mail.ele-dev.de";
-	private static final String password = "01022002";
+	// config variables
+	private static String smtpsPort = "465";
+	private static final String webLink = "https://www.ele-server.de/online-game/confirm-registration.php?verification-key=";
 	
-	public static boolean sendConfirmationMail(String recipient) 
-	{
-		// Get the session object
-		Properties props = new Properties();
-		props.put("mail.smtp.host", host);
+	public static boolean sendVerificationMailTo(String receiver, String verificationKey) {
+		
+		MimeMessage message = null;
+		Properties props = null;
+		Session session = null;
+		
+		// Create the properties 
+		props = new  Properties();
+		// props.put("mail.debug", "true");
+		props.put("mail.smtp.host", GameConfigs.smtpServer);
+		props.put("mail.smtp.ssl.enable", "true");
 		props.put("mail.smtp.auth", "true");
-		Session session = Session.getInstance(props,
-				new Authenticator() {
+		props.put("mail.smtp.port", smtpsPort);
+		
+		// Get the session object
+		session = Session.getDefaultInstance(props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(senderMail, password);
+				return new PasswordAuthentication(GameConfigs.noreplyMailAddress, GameConfigs.noreplyMailPassword);
 			}
 		});
+		// session.setDebug(true);
+		
+		// Define content of the mail
+		String mailText = "Your account registration is almost complete.\n"
+				+ "Just click the following Link to complete the registration of your account. \n"
+				+ "Verification Link: " + webLink + verificationKey;
 		
 		// Compose the message
-		MimeMessage message = new MimeMessage(session);
-		InternetAddress sender = null;
 		try {
-			 sender = new InternetAddress(senderMail);
-		} catch (AddressException e) {
+			message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(GameConfigs.noreplyMailAddress));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
+			message.setSubject("Account Verification");
+			message.setText(mailText);
+		} catch(MessagingException e) {
 			e.printStackTrace();
-			return false;
-		}
-		
-		InternetAddress receiver = null;
-		try {
-			receiver = new InternetAddress(recipient);
-		} catch (AddressException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		try {
-			message.setFrom(sender);
-		} catch (MessagingException e1) {
-			e1.printStackTrace();
-			return false;
-		}
-		
-		try {
-			message.addRecipient(Message.RecipientType.TO, receiver);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		// Set the subject
-		try {
-			message.setSubject("Account Confirmation");
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		// set the content of the email
-		try {
-			message.setText("");
-		} catch (MessagingException e) {
-			e.printStackTrace();
+			System.err.println("Error while composing message");
 			return false;
 		}
 		
@@ -85,11 +71,11 @@ public class Mailer {
 			Transport.send(message);
 		} catch (MessagingException e) {
 			e.printStackTrace();
+			System.err.println("Error while sending mail!");
 			return false;
 		}
 		
-		System.out.println("Sent out e-mail to " + recipient);
-		
-		return false;
+		return true;
 	}
+	
 }
