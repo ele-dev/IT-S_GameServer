@@ -207,6 +207,8 @@ public class MessageHandler {
 						// send mail with link Weblink to verification backend
 						boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
 						if(!result) {
+							status = false;
+							statusDescription = "Type in a real email address!";
 							Main.logger.printError("Registration process failed because of mail server issues!", true, 1);
 						} else {
 							Main.logger.printInfo("  --> New account '" + playername + "' has been registered successfully", true, 0);

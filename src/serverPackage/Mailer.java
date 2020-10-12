@@ -13,7 +13,6 @@ import java.util.Properties;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -46,7 +45,10 @@ public class Mailer {
 				return new PasswordAuthentication(GameConfigs.noreplyMailAddress, GameConfigs.noreplyMailPassword);
 			}
 		});
-		// session.setDebug(true);
+		
+		if(GameConfigs.logLevel.equals("detailed")) {
+			session.setDebug(true);
+		}
 		
 		// Define content of the mail
 		String mailText = "Your account registration is almost complete.\n"
@@ -60,7 +62,7 @@ public class Mailer {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
 			message.setSubject("Account Verification");
 			message.setText(mailText);
-		} catch(MessagingException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 			System.err.println("Error while composing message");
 			return false;
@@ -69,7 +71,7 @@ public class Mailer {
 		// Send the email
 		try {
 			Transport.send(message);
-		} catch (MessagingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Error while sending mail!");
 			return false;
