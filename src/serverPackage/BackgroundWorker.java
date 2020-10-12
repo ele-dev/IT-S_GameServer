@@ -1,5 +1,7 @@
 package serverPackage;
 
+import java.sql.SQLException;
+
 /*
  * written by Elias Geiger
  * 
@@ -61,8 +63,14 @@ public class BackgroundWorker extends Thread {
 			now = Instant.now();
 			duration = Duration.between(this.lastAccountPurge, now);
 			if(duration.getSeconds() > accountPurgeIntv) {
-				// ...
 				
+				// Delete all accounts that haven't been verified for a 7 days or more
+				try {
+					Main.database.purgeOldAccounts(7);
+				} catch (SQLException e) {
+					// e.printStackTrace();
+					Main.logger.printWarning("Error during periodic account purge", true, 1);
+				}
 				this.lastAccountPurge = now;
 			}
 			

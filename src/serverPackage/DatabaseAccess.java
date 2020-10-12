@@ -46,6 +46,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_AddAccount = null;
 	PreparedStatement pst_AddAccountControl = null;
 	PreparedStatement pst_GetVerificationKeys = null;
+	PreparedStatement pst_PurgeOldAccounts = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -125,6 +126,10 @@ public class DatabaseAccess {
 			
 			if(this.pst_GetVerificationKeys != null) {
 				this.pst_GetVerificationKeys.close();
+			}
+			
+			if(this.pst_PurgeOldAccounts != null) {
+				this.pst_PurgeOldAccounts.close();
 			}
 			
 			if(this.dbCon != null) {
@@ -264,6 +269,14 @@ public class DatabaseAccess {
 		return uniqueKey;
 	}
 	
+	// Function that purges the database tables from old unconfirmed accounts
+	public void purgeOldAccounts(int daysOfLife) throws SQLException {
+		
+		// Set the maximum tolerated lifetime for these accounts in days
+		this.pst_PurgeOldAccounts.setInt(1, daysOfLife);
+		this.pst_PurgeOldAccounts.executeUpdate();
+	}
+	
 	// Helper functions // 
 	public boolean testConnection() {
 		if(this.dbCon == null) {
@@ -323,6 +336,13 @@ public class DatabaseAccess {
 		// statement for pulling a list of all reserved verification keys from the tbl_accountControl
 		queryStr = "SELECT * FROM tbl_accountControl";
 		this.pst_GetVerificationKeys = this.dbCon.prepareStatement(queryStr);
+		
+		// statement that deletes all unconfirmed accounts after a certain period of time from both tables (accountControl & userAccounts)
+		queryStr = "DELETE tbl_accountControl, tbl_userAccounts FROM tbl_accountControl "
+				+ "INNER JOIN tbl_userAccounts ON tbl_userAccounts.playername = tbl_accountControl.playername "
+				+ "WHERE tbl_accountControl.activationStatus LIKE 'incomplete' "
+				+ "AND tbl_accountControl.creationTime < now() - interval ? DAY";
+		this.pst_PurgeOldAccounts = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
