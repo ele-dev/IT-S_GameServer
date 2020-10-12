@@ -16,12 +16,18 @@ public class BackgroundWorker extends Thread {
 	// Class members //
 	private boolean stopOrder;
 	private Instant lastSQLKeepAlive;
+	private Instant lastAccountPurge;
+	
+	// Intervalls
+	private static final int sqlKeepAliveIntv = 30;		// every 30 seconds
+	private static final int accountPurgeIntv = 50;		// every 50 seconds
 	
 	// Constructor
 	public BackgroundWorker() 
 	{
 		this.stopOrder = false;
 		this.lastSQLKeepAlive = Instant.now();
+		this.lastAccountPurge = Instant.now();
 	}
 	
 	@Override
@@ -45,10 +51,19 @@ public class BackgroundWorker extends Thread {
 		{
 			// Execute the test sql statement to keep the database connection alive
 			Instant now = Instant.now();
-			Duration duration = Duration.between(lastSQLKeepAlive, now);
-			if(duration.getSeconds() > 30) {
+			Duration duration = Duration.between(this.lastSQLKeepAlive, now);
+			if(duration.getSeconds() > sqlKeepAliveIntv) {
 				boolean status = Main.database.testConnection();
-				lastSQLKeepAlive = now;
+				this.lastSQLKeepAlive = now;
+			}
+			
+			// Check if there are accounts in the database exist over long time but have never been verified
+			now = Instant.now();
+			duration = Duration.between(this.lastAccountPurge, now);
+			if(duration.getSeconds() > accountPurgeIntv) {
+				// ...
+				
+				this.lastAccountPurge = now;
 			}
 			
 			// Do background tasks
