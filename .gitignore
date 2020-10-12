@@ -3,5 +3,6 @@
 bin/*
 log.txt
 config.txt
+config.txt.bak
 GameServer.jar
 
