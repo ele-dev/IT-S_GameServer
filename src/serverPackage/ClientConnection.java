@@ -228,12 +228,13 @@ public class ClientConnection extends Thread {
 		}
 	}
 	
-	// Getter & Setter methods for login status
+	// Getters
 	public boolean isLoggedIn() 
 	{
 		return this.loggedIn;
 	}
 	
+	// Setters
 	public void setLoginStatus(boolean status) 
 	{
 		this.loggedIn = status;
