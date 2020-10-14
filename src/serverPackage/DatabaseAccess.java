@@ -47,6 +47,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_AddAccountControl = null;
 	PreparedStatement pst_GetVerificationKeys = null;
 	PreparedStatement pst_PurgeOldAccounts = null;
+	PreparedStatement pst_CheckVerification = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -132,6 +133,10 @@ public class DatabaseAccess {
 				this.pst_PurgeOldAccounts.close();
 			}
 			
+			if(this.pst_CheckVerification != null) {
+				this.pst_CheckVerification.close();
+			}
+			
 			if(this.dbCon != null) {
 				dbCon.close();
 			}
@@ -146,7 +151,7 @@ public class DatabaseAccess {
 	
 	// High level functions for frequently used operations // 
 
-	// Functions for handling the login/logout of guest normal registered players 
+	// Functions for handling the login/logout, register/verified-checks of guest and normal registered players 
 	public boolean loginPlayer(String username, String passwordHash) throws SQLException {
 		
 		// Execute the prepared statement and store the result
@@ -197,6 +202,18 @@ public class DatabaseAccess {
 		this.pst_AddAccountControl.setString(1, verificationKey);
 		this.pst_AddAccountControl.setString(2, user);
 		this.pst_AddAccountControl.executeUpdate();
+	}
+	
+	public boolean isAccountVerified(String username) throws SQLException {
+		
+		// Check if this account had been verified already
+		this.pst_CheckVerification.setString(1, username);
+		ResultSet verifyResult = this.pst_CheckVerification.executeQuery();
+		if(verifyResult.next()) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	// Functions for getting an attribute from a player with the given name
@@ -343,6 +360,13 @@ public class DatabaseAccess {
 				+ "WHERE tbl_accountControl.activationStatus LIKE 'incomplete' "
 				+ "AND tbl_accountControl.creationTime < now() - interval ? DAY";
 		this.pst_PurgeOldAccounts = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for checking the verification status of an user account
+		queryStr = "SELECT * FROM tbl_userAccounts, tbl_accountControl "
+				+ "WHERE tbl_userAccounts.playername = tbl_accountControl.playername "
+				+ "AND tbl_userAccounts.playername LIKE ? "
+				+ "AND tbl_accountControl.activationStatus LIKE 'complete'";
+		this.pst_CheckVerification = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
