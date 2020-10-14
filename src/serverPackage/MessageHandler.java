@@ -85,7 +85,7 @@ public class MessageHandler {
 					} catch(SQLException e) {}
 					
 					// Respond with a login status message 
-					MsgLoginStatus response = new MsgLoginStatus(status);
+					MsgLoginStatus response = new MsgLoginStatus(status, false);
 					sender.sendMessageToClient(response);
 					
 					// Print the result status of the login to the console
