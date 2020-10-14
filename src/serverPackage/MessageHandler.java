@@ -43,7 +43,7 @@ public class MessageHandler {
 				MsgLogin loginMsg = (MsgLogin) msg;
 				
 				// Important variables for login procedure
-				boolean status = true;
+				boolean loginStatus = true;
 				String guestPlayerName = "";
 				
 				// Check if it's a guest or an account player who wants to login
@@ -58,14 +58,14 @@ public class MessageHandler {
 					try {
 						Main.database.loginGuest(guestPlayerName);
 					} catch(SQLException e) {
-						status = false;
+						loginStatus = false;
 					}
 					
 					// Respond with a login status message that contains the assigned guest player name additionally
-					MsgLoginStatus response = new MsgLoginStatus(status, guestPlayerName);
+					MsgLoginStatus response = new MsgLoginStatus(loginStatus, guestPlayerName);
 					sender.sendMessageToClient(response);
 					
-					if(status) {
+					if(loginStatus) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(guestPlayerName);
 						sender.setName(guestPlayerName);
@@ -77,19 +77,21 @@ public class MessageHandler {
 				else 
 				{
 					// intialize the status as false for this case
-					status = false;
+					loginStatus = false;
+					boolean verifiedStatus = false;
 					
 					// Validate the login request by checking the credentials in the database
 					try {
-						status = Main.database.loginPlayer(loginMsg.getUsername(), loginMsg.getPasswordHash());
+						loginStatus = Main.database.loginPlayer(loginMsg.getUsername(), loginMsg.getPasswordHash());
+						verifiedStatus = Main.database.isAccountVerified(loginMsg.getUsername());
 					} catch(SQLException e) {}
 					
 					// Respond with a login status message 
-					MsgLoginStatus response = new MsgLoginStatus(status, false);
+					MsgLoginStatus response = new MsgLoginStatus(loginStatus, verifiedStatus);
 					sender.sendMessageToClient(response);
 					
 					// Print the result status of the login to the console
-					if(status) {
+					if(loginStatus) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(loginMsg.getUsername());
 						sender.setName(loginMsg.getUsername());
