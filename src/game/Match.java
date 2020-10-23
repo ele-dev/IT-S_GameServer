@@ -41,4 +41,10 @@ public class Match {
 		// Remove this instance from the list of matches
 		matches.remove(this);
 	}
+	
+	// static method that prints the running Matches formatted to the console
+	public static void printMatches()
+	{
+		
+	}
 }

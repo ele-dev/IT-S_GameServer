@@ -210,7 +210,13 @@ public class Logger {
     {
     	LocalTime now = LocalTime.now();
     	
-    	String timestamp = "[" + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "] ";
+    	String hour = now.getHour() < 10 ? "0" : "";
+    	hour += now.getHour();
+    	String minute = now.getMinute() < 10 ? "0" : "";
+    	minute += now.getMinute();
+    	String second = now.getSecond() < 10 ? "0" : "";
+    	second += now.getSecond();
+    	String timestamp = "[" + hour + ":" + minute + ":" + second + "] ";
     	
     	return timestamp;
     }
