@@ -20,7 +20,7 @@ public class Match {
 	// class members //
 	private Player p1, p2;
 	
-	// Constructor
+	// Default Constructor
 	public Match()
 	{
 		// initialize the class members 
@@ -63,7 +63,20 @@ public class Match {
 			}
 			
 			System.out.print("   Match " + i + ": ");
-			System.out.println(matches.get(i).p1.getName() + " vs " + matches.get(i).p2.getName());
+			if(matches.get(i).p1 == null && matches.get(i).p2 == null) {
+				System.out.println(" <empty>");
+			} else {
+				System.out.println(matches.get(i).p1.getName() + " vs " + matches.get(i).p2.getName());
+			}
+		}
+	}
+	
+	// static method for ending all matches immediately
+	public static void stopAllMatches() 
+	{
+		for(Match m: matches) 
+		{
+			m.finalize();
 		}
 	}
 }
