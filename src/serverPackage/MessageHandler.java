@@ -11,6 +11,7 @@ package serverPackage;
 
 import java.sql.SQLException;
 
+import game.Match;
 import game.Player;
 import networking.*;
 
@@ -263,7 +264,7 @@ public class MessageHandler {
 					potentialEnemy.setState("playing");
 					
 					// Create a new Match with the two players and inform them 
-					// ...
+					new Match(potentialEnemy, sender.playerInstance);
 					Main.logger.printInfo("Starting new match: " + sender.getName() + " vs " + potentialEnemy.getName(), true, 0);
 				}
 				

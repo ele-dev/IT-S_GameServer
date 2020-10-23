@@ -30,6 +30,17 @@ public class Match {
 		matches.add(this);
 	}
 	
+	// Advanced constructor takes two players
+	public Match(Player player1, Player player2)
+	{
+		// Call the default constructor
+		this();
+		
+		// store this players in the class
+		this.p1 = player1;
+		this.p2 = player2;
+	}
+	
 	// Finalizer 
 	@Override
 	public void finalize() 
