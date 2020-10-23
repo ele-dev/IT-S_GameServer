@@ -8,6 +8,8 @@ package serverPackage;
  * 
  */
 
+import game.Match;
+
 public class ConsoleHandler {
 	
 	// static class members
@@ -66,11 +68,12 @@ public class ConsoleHandler {
 				break;
 			}
 			
+			// Command for listing all running matches with its players
 			case "list-matches":
 			{
 				System.out.println("Running matches: ");
 				
-				// ...
+				Match.printMatches();
 				System.out.println();
 				
 				break;
