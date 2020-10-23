@@ -11,6 +11,8 @@ package serverPackage;
 
 import java.util.Scanner;
 
+import game.Match;
+
 public class Main {
 	
 	// The main parts of the application
@@ -83,11 +85,17 @@ public class Main {
 		// intit and launch the backgeound worker thread
 		worker = new BackgroundWorker();
 		worker.start();
+		
+		// create a empty dummy match
+		new Match();
 	}
 	
 	// Shutdown of the application modules
 	private static void shutdownModules()
 	{
+		// Stop and terminate all running matches
+		Match.stopAllMatches();
+		
 		// Finalize the background worker first
 		if(worker != null) {
 			// The tell the worker thread to complete his work
