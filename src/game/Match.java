@@ -18,7 +18,6 @@ public class Match {
 	private static ArrayList<Match> matches = new ArrayList<>();
 	
 	// class members //
-	@SuppressWarnings("unused")
 	private Player p1, p2;
 	
 	// Constructor
@@ -45,6 +44,15 @@ public class Match {
 	// static method that prints the running Matches formatted to the console
 	public static void printMatches()
 	{
-		
+		for(int i = 0; i < matches.size(); i++)
+		{
+			// skip invalid matches
+			if(matches.get(i) == null) {
+				continue;
+			}
+			
+			System.out.print("   Match " + i + ": ");
+			System.out.println(matches.get(i).p1.getName() + " vs " + matches.get(i).p2.getName());
+		}
 	}
 }

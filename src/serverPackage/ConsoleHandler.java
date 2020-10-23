@@ -14,11 +14,13 @@ public class ConsoleHandler {
 	private static String[] commands = {"help", 
 										"exit",
 										"list-players",
+										"list-matches",
 										"set-loglevel"};
 	
 	private static String[] descriptions = {"Shows this list of available commands",
 											"Closes all active client connections and the application itself",
 											"Shows list with information about currently connected clients",
+											"Shows list of all running matches",
 											"Changes the loglevel (basic, enhanced or detailed)"};
 	
 	// Constants
@@ -59,6 +61,16 @@ public class ConsoleHandler {
 				System.out.println("List of online players: ");
 				
 				ClientConnection.printClientInfo();
+				System.out.println();
+				
+				break;
+			}
+			
+			case "list-matches":
+			{
+				System.out.println("Running matches: ");
+				
+				// ...
 				System.out.println();
 				
 				break;
