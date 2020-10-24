@@ -54,6 +54,22 @@ public class Match {
 		this.p1 = this.p2 = null;
 	}
 	
+	public void leaveMatch(Player player) 
+	{
+		// Determine which player wants to leave the match
+		if(player.equals(this.p1)) {
+			
+		} else if(player.equals(this.p2)) {
+			
+		} else {
+			// ...
+			return;
+		}
+		
+		// Remove this unfinished match from the list
+		matches.remove(this);
+	}
+	
 	// static method that prints the running Matches formatted to the console
 	public static void printMatches()
 	{
