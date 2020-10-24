@@ -68,8 +68,8 @@ public class MessageHandler {
 					
 					if(loginStatus) {
 						sender.setLoginStatus(true);
-						sender.playerInstance = new Player(guestPlayerName);
-						sender.setName(guestPlayerName);
+						sender.playerInstance = new Player(guestPlayerName, sender);
+						// sender.setName(guestPlayerName);
 						Main.logger.printInfo("Guest login successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Guest login failed", true, 0);
@@ -94,8 +94,8 @@ public class MessageHandler {
 					// Print the result status of the login to the console
 					if(loginStatus) {
 						sender.setLoginStatus(true);
-						sender.playerInstance = new Player(loginMsg.getUsername());
-						sender.setName(loginMsg.getUsername());
+						sender.playerInstance = new Player(loginMsg.getUsername(), sender);
+						// sender.setName(loginMsg.getUsername());
 						Main.logger.printInfo("Player authentification successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Player authentification failed!", true, 0);
@@ -133,11 +133,12 @@ public class MessageHandler {
 				sender.playerInstance.logout();
 				
 				// Delete the player instance of this client to prepare for secondary login
+				String nameOfPlayer = sender.playerInstance.getName();
 				sender.setLoginStatus(false);
 				sender.playerInstance = null;
 				
-				Main.logger.printInfo("Received logout message from " + sender.getName(), false, 0);
-				sender.setName("<logged out>");
+				Main.logger.printInfo("Received logout message from " + nameOfPlayer, false, 0);
+				// sender.setName("<logged out>");
 				sender.setLoginStatus(false);
 				
 				break;
@@ -249,7 +250,7 @@ public class MessageHandler {
 				
 				// First update the players state 
 				sender.playerInstance.setState("searching");
-				Main.logger.printInfo(sender.getName() + " wants to play a quick match --> searching second player", true, 0);
+				Main.logger.printInfo(sender.playerInstance.getName() + " wants to play a quick match --> searching second player", true, 0);
 				
 				// Look in the quick match waiting queue for an enemy
 				Player potentialEnemy = Player.getWaitingPlayer();
@@ -257,7 +258,7 @@ public class MessageHandler {
 				// If there is no other player currently searching an enemy, put the request sender on the queue
 				if(potentialEnemy == null) {
 					Player.putPlayerOnWaitingSlot(sender.playerInstance);
-					Main.logger.printInfo("Put " + sender.getName() + " on the waiting slot", true, 1);
+					Main.logger.printInfo("Put " + sender.playerInstance.getName() + " on the waiting slot", true, 1);
 				} else {
 					// Update the players states
 					sender.playerInstance.setState("playing");
@@ -265,7 +266,10 @@ public class MessageHandler {
 					
 					// Create a new Match with the two players and inform them 
 					new Match(potentialEnemy, sender.playerInstance);
-					Main.logger.printInfo("Starting new match: " + sender.getName() + " vs " + potentialEnemy.getName(), true, 0);
+					SignalMessage foundMatchMsg = new SignalMessage(GenericMessage.MSG_FOUND_MATCH);
+					potentialEnemy.sendMessage(foundMatchMsg);
+					sender.sendMessageToClient(foundMatchMsg);
+					Main.logger.printInfo("Starting new match: " + sender.playerInstance.getName() + " vs " + potentialEnemy.getName(), true, 0);
 				}
 				
 				break;
@@ -274,7 +278,7 @@ public class MessageHandler {
 			case GenericMessage.MSG_ABORT_MATCH_SEARCH:
 			{
 				// Ignore messages from unauthentificated clients
-				if(!sender.isLoggedIn()) {
+				if(!sender.isLoggedIn() || sender.playerInstance == null) {
 					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
 					break;
 				}
@@ -286,7 +290,7 @@ public class MessageHandler {
 				if(isAborted) {
 					// Update the player state and output the message to the console
 					sender.playerInstance.setState("homescreen");
-					Main.logger.printInfo(sender.getName() + " aborted match search", true, 0);
+					Main.logger.printInfo(sender.playerInstance.getName() + " aborted match search", true, 0);
 				} else {
 					// Output message about useless/misplaced match search abortion message
 					Main.logger.printWarning("Invalid match search abortion request", true, 1);
