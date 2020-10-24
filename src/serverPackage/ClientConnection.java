@@ -223,7 +223,7 @@ public class ClientConnection extends Thread {
 			{
 				String ipStr = cc.clientSocket.getRemoteSocketAddress().toString();
 				ipStr = ipStr.replace('/', ' ');
-				String playerStr = cc.playerInstance == null ? "<not logged in>" : cc.playerInstance.getName();
+				String playerStr = cc.playerInstance == null ? " <not logged in>" : cc.playerInstance.getName();
 				System.out.println("   Playername: " + playerStr + "   Remote Endpoint:" + ipStr);
 			}
 		}
