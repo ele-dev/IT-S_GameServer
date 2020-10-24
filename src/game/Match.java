@@ -45,11 +45,13 @@ public class Match {
 	@Override
 	public void finalize() 
 	{
+		// Remove this instance from the list of running matches
+		// matches.remove(this);
+		
+		// ...
+		
 		// Remove the players from the match
 		this.p1 = this.p2 = null;
-		
-		// Remove this instance from the list of matches
-		matches.remove(this);
 	}
 	
 	// static method that prints the running Matches formatted to the console
@@ -62,7 +64,7 @@ public class Match {
 				continue;
 			}
 			
-			System.out.print("   Match " + i + ": ");
+			System.out.print("   Match " + (i+1) + ": ");
 			if(matches.get(i).p1 == null && matches.get(i).p2 == null) {
 				System.out.println(" <empty>");
 			} else {
@@ -74,9 +76,16 @@ public class Match {
 	// static method for ending all matches immediately
 	public static void stopAllMatches() 
 	{
+		// Stop all running matches 
 		for(Match m: matches) 
 		{
-			m.finalize();
+			if(m != null) 
+			{
+				m.finalize();
+			}
 		}
+		
+		// Empty the list
+		matches.clear();
 	}
 }
