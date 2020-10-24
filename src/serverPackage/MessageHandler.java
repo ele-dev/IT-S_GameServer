@@ -138,7 +138,6 @@ public class MessageHandler {
 				sender.playerInstance = null;
 				
 				Main.logger.printInfo("Received logout message from " + nameOfPlayer, false, 0);
-				// sender.setName("<logged out>");
 				sender.setLoginStatus(false);
 				
 				break;
@@ -265,10 +264,13 @@ public class MessageHandler {
 					potentialEnemy.setState("playing");
 					
 					// Create a new Match with the two players and inform them 
-					new Match(potentialEnemy, sender.playerInstance);
+					Match match = new Match(potentialEnemy, sender.playerInstance);
 					SignalMessage foundMatchMsg = new SignalMessage(GenericMessage.MSG_FOUND_MATCH);
 					potentialEnemy.sendMessage(foundMatchMsg);
+					potentialEnemy.joinMatch(match);
 					sender.sendMessageToClient(foundMatchMsg);
+					sender.playerInstance.joinMatch(match);
+					
 					Main.logger.printInfo("Starting new match: " + sender.playerInstance.getName() + " vs " + potentialEnemy.getName(), true, 0);
 				}
 				
@@ -295,6 +297,23 @@ public class MessageHandler {
 					// Output message about useless/misplaced match search abortion message
 					Main.logger.printWarning("Invalid match search abortion request", true, 1);
 				}
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_LEAVE_MATCH:
+			{
+				// Ignore messages from unauthentificated clients or players that aren't ingame
+				if(!sender.isLoggedIn() || sender.playerInstance == null || sender.playerInstance.getState().equals("playing")) {
+					Main.logger.printWarning("Received invalid leave match message!", true, 1);
+					break;
+				}
+				
+				// Remove the player from his current match (surrender to the enemy)
+				sender.playerInstance.leaveMatch();
+				
+				// Update the players state
+				sender.playerInstance.setState("homescreen");
 				
 				break;
 			}
