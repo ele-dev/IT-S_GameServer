@@ -61,6 +61,7 @@ public class Player {
 	public void leaveMatch() 
 	{
 		this.currentMatch.leaveMatch(this);
+		this.currentMatch = null;
 	}
 	
 	// Method that simplifies player logout no matter if guest or registered
