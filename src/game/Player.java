@@ -14,6 +14,8 @@ package game;
 
 import java.sql.SQLException;
 
+import networking.GenericMessage;
+import serverPackage.ClientConnection;
 import serverPackage.Main;
 
 public class Player {
@@ -23,6 +25,7 @@ public class Player {
 	private static Player quickMatchWaitingSlot = null;
 	
 	// Class members 
+	private ClientConnection cc;
 	private String name;
 	private int accountBalance;
 	private String currentState;		// states: homescreen | searching | playing
@@ -30,15 +33,17 @@ public class Player {
 	// Default constructor for creating empty Player
 	public Player()
 	{
+		this.cc = null;
 		this.name = "";
 		this.accountBalance = 0;
 		this.currentState = "homescreen";
 	}
 	
 	// Additional constructor for creating player with name
-	public Player(String name) 
+	public Player(String name, ClientConnection cc) 
 	{
 		this();
+		this.cc = cc;
 		this.name = name;
 	}
 	
@@ -63,6 +68,12 @@ public class Player {
 				Main.database.logoutPlayer(this.name);
 			} catch (SQLException e) {}
 		}
+	}
+	
+	// Method that calls the send method of the client connection instance
+	public void sendMessage(GenericMessage msg) 
+	{
+		this.cc.sendMessageToClient(msg);
 	}
 	
 	// Getters //
