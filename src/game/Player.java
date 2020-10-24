@@ -30,6 +30,8 @@ public class Player {
 	private int accountBalance;
 	private String currentState;		// states: homescreen | searching | playing
 	
+	private Match currentMatch;
+	
 	// Default constructor for creating empty Player
 	public Player()
 	{
@@ -37,6 +39,8 @@ public class Player {
 		this.name = "";
 		this.accountBalance = 0;
 		this.currentState = "homescreen";
+		
+		this.currentMatch = null;
 	}
 	
 	// Additional constructor for creating player with name
@@ -47,9 +51,24 @@ public class Player {
 		this.name = name;
 	}
 	
-	// Method that simplyfies player logout no matter if guest or registered
+	// Method that assigns this player to a running match
+	public void joinMatch(Match match)
+	{
+		this.currentMatch = match;
+	}
+	
+	// Method that makes this player leave his current match (surrender)
+	public void leaveMatch() 
+	{
+		this.currentMatch.leaveMatch(this);
+	}
+	
+	// Method that simplifies player logout no matter if guest or registered
 	public void logout() 
 	{
+		// If the player is still ingame then leave the match first (surrender)
+		this.currentMatch.leaveMatch(this);
+		
 		// Get the playername of the sender of this message
 		boolean isGuest = this.name.contains("guest");
 		
