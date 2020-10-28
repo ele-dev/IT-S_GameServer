@@ -271,6 +271,12 @@ public class MessageHandler {
 					sender.sendMessageToClient(foundMatchMsg);
 					sender.playerInstance.joinMatch(match);
 					
+					// Send initial info messages to the two players
+					MsgMatchInfo matchInfo1 = new MsgMatchInfo(sender.playerInstance.getName());
+					MsgMatchInfo matchInfo2 = new MsgMatchInfo(potentialEnemy.getName());
+					potentialEnemy.sendMessage(matchInfo1);
+					sender.sendMessageToClient(matchInfo2);
+					
 					Main.logger.printInfo("Starting new match: " + sender.playerInstance.getName() + " vs " + potentialEnemy.getName(), true, 0);
 				}
 				
