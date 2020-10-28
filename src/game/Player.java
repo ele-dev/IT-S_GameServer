@@ -68,8 +68,10 @@ public class Player {
 	public void logout() 
 	{
 		// If the player is still ingame then leave the match first (surrender)
-		this.currentMatch.leaveMatch(this);
-		
+		if(this.currentMatch != null) {
+			this.currentMatch.leaveMatch(this);
+		}
+
 		// Get the playername of the sender of this message
 		boolean isGuest = this.name.contains("guest");
 		
