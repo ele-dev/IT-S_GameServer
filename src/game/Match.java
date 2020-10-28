@@ -12,6 +12,9 @@ package game;
 
 import java.util.ArrayList;
 
+import networking.GenericMessage;
+import networking.SignalMessage;
+
 public class Match {
 	
 	// static class members //
@@ -56,10 +59,17 @@ public class Match {
 	
 	public void leaveMatch(Player player) 
 	{
+		// Create an enemy surrender signal message
+		SignalMessage surrender = new SignalMessage(GenericMessage.MSG_ENEMY_SURRENDER);
+		
 		// Determine which player wants to leave the match
 		if(player.equals(this.p1)) {
+			// Send the enemy surrender message to player 2
+			this.p2.sendMessage(surrender);
 			
 		} else if(player.equals(this.p2)) {
+			// Send the enemy surrender message to player 1
+			this.p1.sendMessage(surrender);
 			
 		} else {
 			// ...
