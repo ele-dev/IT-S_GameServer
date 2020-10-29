@@ -85,9 +85,6 @@ public class Main {
 		// intit and launch the backgeound worker thread
 		worker = new BackgroundWorker();
 		worker.start();
-		
-		// create a empty dummy match
-		new Match();
 	}
 	
 	// Shutdown of the application modules
