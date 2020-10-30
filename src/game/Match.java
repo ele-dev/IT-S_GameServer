@@ -13,6 +13,7 @@ package game;
 import java.util.ArrayList;
 
 import networking.GenericMessage;
+import networking.MsgMatchInfo;
 import networking.SignalMessage;
 
 public class Match {
@@ -57,6 +58,26 @@ public class Match {
 		this.p1 = this.p2 = null;
 	}
 	
+	// match start function
+	public void beginMatch() 
+	{
+		SignalMessage foundMatchMsg = new SignalMessage(GenericMessage.MSG_FOUND_MATCH);
+		this.p1.sendMessage(foundMatchMsg);
+		this.p1.joinMatch(this);
+		this.p2.sendMessage(foundMatchMsg);
+		this.p2.joinMatch(this);
+		
+		// Send initial info messages to the two players
+		MsgMatchInfo matchInfo1 = new MsgMatchInfo(this.p2.getName());
+		MsgMatchInfo matchInfo2 = new MsgMatchInfo(this.p1.getName());
+		this.p1.sendMessage(matchInfo1);
+		this.p2.sendMessage(matchInfo2);
+		
+		// Let player1 do his first move
+		SignalMessage yourTurnMsg = new SignalMessage(GenericMessage.MSG_BEGIN_TURN);
+		this.p1.sendMessage(yourTurnMsg);
+	}
+	
 	public void leaveMatch(Player player) 
 	{
 		// Create an enemy surrender signal message
@@ -72,7 +93,7 @@ public class Match {
 			this.p1.sendMessage(surrender);
 			
 		} else {
-			// ...
+			// If the player doesn't match with one these players then continue the match
 			return;
 		}
 		
