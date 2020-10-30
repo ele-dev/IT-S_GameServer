@@ -78,6 +78,7 @@ public class Match {
 		// Let player1 do his first move
 		SignalMessage yourTurnMsg = new SignalMessage(GenericMessage.MSG_BEGIN_TURN);
 		this.p1.sendMessage(yourTurnMsg);
+		System.out.println("--> " + this.p1.getName() + " is allowed to act now");
 	}
 	
 	// This function takes a player instance as argument 
@@ -95,9 +96,11 @@ public class Match {
 		if(this.p1.getName().equals(this.currentlyActingPlayer)) {
 			this.currentlyActingPlayer = this.p2.getName();
 			this.p2.sendMessage(yourTurnMsg);
+			System.out.println("--> " + this.p2.getName() + " is allowed to act now");
 		} else {
 			this.currentlyActingPlayer = this.p1.getName();
 			this.p1.sendMessage(yourTurnMsg);
+			System.out.println("--> " + this.p1.getName() + " is allowed to act now");
 		}
 		
 		return true;

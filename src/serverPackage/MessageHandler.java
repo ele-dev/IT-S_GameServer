@@ -314,6 +314,23 @@ public class MessageHandler {
 				break;
 			}
 		
+			case GenericMessage.MSG_END_TURN:
+			{
+				// Ignore messages from clients that arent ingame at the moment
+				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
+					Main.logger.printWarning("Received invalid end turn message from client!", true, 1);
+					break;
+				}
+				
+				// Attempt to switch the turns and store success result
+				boolean result = sender.playerInstance.getMatch().switchTurn(sender.playerInstance);
+				if(!result) {
+					Main.logger.printWarning("The request for switching turns was invalid!", true, 1);
+				}
+				
+				break;
+			}
+			
 			default:
 			{
 				Main.logger.printWarning("Message of unknown type", true, 0);
