@@ -23,11 +23,13 @@ public class Match {
 	
 	// class members //
 	private Player p1, p2;
+	private String currentlyActingPlayer;
 	
 	// Default Constructor
 	public Match()
 	{
 		// initialize the class members 
+		this.currentlyActingPlayer = "";
 		this.p1 = this.p2 = null;
 		
 		// Add this instance to the list of matches
@@ -76,6 +78,29 @@ public class Match {
 		// Let player1 do his first move
 		SignalMessage yourTurnMsg = new SignalMessage(GenericMessage.MSG_BEGIN_TURN);
 		this.p1.sendMessage(yourTurnMsg);
+	}
+	
+	// This function takes a player instance as argument 
+	// If the player is the one that is currently allowed make moves
+	// then switch turns and let the other player react
+	public boolean switchTurn(Player finishedTurn) 
+	{
+		if(!finishedTurn.getName().equals(this.currentlyActingPlayer)) {
+			// Player isn't allowed 
+			return false;
+		}
+		
+		// Switch turns and inform players about it
+		SignalMessage yourTurnMsg = new SignalMessage(GenericMessage.MSG_BEGIN_TURN);
+		if(this.p1.getName().equals(this.currentlyActingPlayer)) {
+			this.currentlyActingPlayer = this.p2.getName();
+			this.p2.sendMessage(yourTurnMsg);
+		} else {
+			this.currentlyActingPlayer = this.p1.getName();
+			this.p1.sendMessage(yourTurnMsg);
+		}
+		
+		return true;
 	}
 	
 	public void leaveMatch(Player player) 
