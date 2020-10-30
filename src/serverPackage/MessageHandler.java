@@ -226,19 +226,6 @@ public class MessageHandler {
 				break;
 			}
 			
-			case GenericMessage.MSG_KEEP_ALIVE:
-			{
-				// Ignore messages from unauthentificated clients
-				if(!sender.isLoggedIn()) {
-					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
-					break;
-				}
-				
-				Main.logger.printInfo("Received keep alive message", false, 2);
-				
-				break;
-			}
-			
 			case GenericMessage.MSG_JOIN_QUICKMATCH:
 			{
 				// Ignore messages from unauthentificated clients
