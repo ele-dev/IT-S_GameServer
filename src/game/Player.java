@@ -114,6 +114,11 @@ public class Player {
 		return this.currentState;
 	}
 	
+	public Match getMatch() 
+	{
+		return this.currentMatch;
+	}
+	
 	// If there is a waiting player on the waiting slot then return him and free the slot
 	// Otherwise the function returns null to signal an empty waiting slot
 	public static Player getWaitingPlayer()
