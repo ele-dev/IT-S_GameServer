@@ -287,7 +287,7 @@ public class MessageHandler {
 			case GenericMessage.MSG_LEAVE_MATCH:
 			{
 				// Ignore messages from unauthentificated clients or players that aren't ingame
-				if(!sender.isLoggedIn() || sender.playerInstance == null || sender.playerInstance.getState().equals("playing")) {
+				if(!sender.isLoggedIn() || sender.playerInstance == null || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid leave match message!", true, 1);
 					break;
 				}
