@@ -45,6 +45,9 @@ public class Match {
 		// store this players in the class
 		this.p1 = player1;
 		this.p2 = player2;
+		
+		// Player won is always the player that makes the first move
+		this.currentlyActingPlayer = this.p1.getName();
 	}
 	
 	// Finalizer 
@@ -70,14 +73,16 @@ public class Match {
 		this.p2.joinMatch(this);
 		
 		// Send initial info messages to the two players
-		MsgMatchInfo matchInfo1 = new MsgMatchInfo(this.p2.getName());
-		MsgMatchInfo matchInfo2 = new MsgMatchInfo(this.p1.getName());
+		MsgMatchInfo matchInfo1 = new MsgMatchInfo(this.p2.getName(), (byte)1);	// player1 -> team blue
+		MsgMatchInfo matchInfo2 = new MsgMatchInfo(this.p1.getName(), (byte)2);	// player2 -> team red
 		this.p1.sendMessage(matchInfo1);
 		this.p2.sendMessage(matchInfo2);
 		
 		// Let player1 do his first move
+		/*
 		SignalMessage yourTurnMsg = new SignalMessage(GenericMessage.MSG_BEGIN_TURN);
 		this.p1.sendMessage(yourTurnMsg);
+		*/
 		System.out.println("--> " + this.p1.getName() + " is allowed to act now");
 	}
 	
@@ -86,6 +91,10 @@ public class Match {
 	// then switch turns and let the other player react
 	public boolean switchTurn(Player finishedTurn) 
 	{
+		if(this.currentlyActingPlayer == null) {
+			return false;
+		}
+		
 		if(!finishedTurn.getName().equals(this.currentlyActingPlayer)) {
 			// Player isn't allowed 
 			return false;
