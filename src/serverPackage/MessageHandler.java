@@ -318,6 +318,30 @@ public class MessageHandler {
 				break;
 			}
 			
+			case GenericMessage.MSG_MAKE_MOVE:
+			{
+				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
+				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
+					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
+				}
+				
+				// ...
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_ATTACK:
+			{
+				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
+				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
+					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
+				}
+				
+				// ...
+				
+				break;
+			}
+			
 			default:
 			{
 				Main.logger.printWarning("Message of unknown type", true, 0);
