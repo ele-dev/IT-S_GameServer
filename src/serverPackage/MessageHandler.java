@@ -325,7 +325,21 @@ public class MessageHandler {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
 				}
 				
-				// ...
+				// Coerce the message into the right format
+				MsgMakeMove moveMsg = (MsgMakeMove) msg;
+				
+				// Forward move message to enemy client if all attributes are given
+				if(moveMsg.getMovingPlayerPos() != null && moveMsg.getTargetField() != null) {
+					// Send the message to the other client
+					Player enemy = sender.playerInstance.getMatch().getEnemyOf(sender.playerInstance);
+					if(enemy == null) {
+						Main.logger.printError("Failed to forward move message from " + sender.playerInstance.getName() + " to his enemy!", true, 0);
+						break;
+					}
+					
+					enemy.sendMessage(moveMsg);
+					Main.logger.printInfo("Forwarded move message from " + sender.playerInstance.getName() + " to " + enemy.getName(), true, 0);
+ 				}
 				
 				break;
 			}
@@ -337,7 +351,21 @@ public class MessageHandler {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
 				}
 				
-				// ...
+				// Coerce the message into the right format
+				MsgAttack attackMsg = (MsgAttack) msg;
+				
+				// Forward attack message to the enemy client if all the attributes are given 
+				if(attackMsg.getAttackerPiece() != null && attackMsg.getVicitimPos() != null) {
+					// Send the message to the other client
+					Player enemy = sender.playerInstance.getMatch().getEnemyOf(sender.playerInstance);
+					if(enemy == null) {
+						Main.logger.printError("Failed to forward attack message from " + sender.playerInstance.getName() + " to his enemy!", true, 0);
+						break;
+					}
+					
+					enemy.sendMessage(attackMsg);
+					Main.logger.printInfo("Forwarded attack message from " + sender.playerInstance.getName() + " to " + enemy.getName(), true, 0);
+				}
 				
 				break;
 			}

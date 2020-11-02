@@ -138,6 +138,23 @@ public class Match {
 		matches.remove(this);
 	}
 	
+	// Helper function that returns the enemy of the player passed to this function
+	// It returns null if the passed player isn't in this match himself
+	public Player getEnemyOf(Player player) 
+	{	
+		// If the passed player is player1 then return player2
+		if(player.equals(this.p1)) {
+			return this.p2;
+		}
+		
+		// If the passed player is player2 then return player1
+		if(player.equals(this.p2)) {
+			return this.p1;
+		}
+		
+		return null;
+	}
+	
 	// static method that prints the running Matches formatted to the console
 	public static void printMatches()
 	{
