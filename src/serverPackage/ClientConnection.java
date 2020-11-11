@@ -229,6 +229,22 @@ public class ClientConnection extends Thread {
 		}
 	}
 	
+	// static method for retrieving the current online player count (->logged in players only)
+	public static int getOnlinePlayerCount() 
+	{
+		int count = 0;
+		
+		// Go throug the global client list, only count authentificated clients
+		for(ClientConnection cc: clientList) 
+		{
+			if(cc.isLoggedIn()) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
 	// Getters
 	public boolean isLoggedIn() 
 	{

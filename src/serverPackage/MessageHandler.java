@@ -95,27 +95,11 @@ public class MessageHandler {
 					if(loginStatus) {
 						sender.setLoginStatus(true);
 						sender.playerInstance = new Player(loginMsg.getUsername(), sender);
-						// sender.setName(loginMsg.getUsername());
 						Main.logger.printInfo("Player authentification successfull", true, 0);
 					} else {
 						Main.logger.printInfo("Player authentification failed!", true, 0);
 						break;
 					}
-					
-					// After successfull authentification send a player stats message to the client
-					int playedMatches = 0;
-					int accountBalance = 0;
-					try {
-						playedMatches = Main.database.getPlayerAttributeInt("playedMatches", loginMsg.getUsername());
-						accountBalance = Main.database.getPlayerAttributeInt("accountBalance", loginMsg.getUsername());
-					} catch (SQLException e) {
-						Main.logger.printWarning("Exception thrown during SQL Query", true, 1);
-					}
-					
-					// Create and send the message
-					MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
-					sender.sendMessageToClient(statsMsg);
-					Main.logger.printInfo("Sent Account Stats to the newly logged in player", true, 1);
 				}
 				
 				break;

@@ -15,6 +15,8 @@ package game;
 import java.sql.SQLException;
 
 import networking.GenericMessage;
+import networking.MsgAccountStats;
+import networking.MsgGameData;
 import serverPackage.ClientConnection;
 import serverPackage.Main;
 
@@ -29,6 +31,7 @@ public class Player {
 	private String name;
 	private int accountBalance;
 	private String currentState;		// states: homescreen | searching | playing
+	private int playedMatches;
 	
 	private Match currentMatch;
 	
@@ -38,6 +41,7 @@ public class Player {
 		this.cc = null;
 		this.name = "";
 		this.accountBalance = 0;
+		this.playedMatches = 0;
 		this.currentState = "homescreen";
 		
 		this.currentMatch = null;
@@ -49,6 +53,23 @@ public class Player {
 		this();
 		this.cc = cc;
 		this.name = name;
+		
+		// After successfull authentification fetch some intial data for the player
+		try {
+			this.playedMatches = Main.database.getPlayerAttributeInt("playedMatches", this.name);
+			this.accountBalance = Main.database.getPlayerAttributeInt("accountBalance", this.name);
+		} catch (SQLException e) {
+			Main.logger.printWarning("Exception thrown during SQL Query", true, 1);
+			return;
+		}
+		
+		// Create and send initial messages with account and global game data
+		MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
+		this.sendMessage(statsMsg);
+		
+		this.sendGameDataToPlayer();
+		
+		Main.logger.printInfo("Sent Account and Game Stats to the newly logged in player", true, 1);
 	}
 	
 	// Method that assigns this player to a running match
@@ -92,10 +113,19 @@ public class Player {
 		}
 	}
 	
+	// Method that sends current game infos to the player
+	public void sendGameDataToPlayer() 
+	{
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+		this.sendMessage(gameDataMsg);
+	}
+	
 	// Method that calls the send method of the client connection instance
 	public void sendMessage(GenericMessage msg) 
 	{
-		this.cc.sendMessageToClient(msg);
+		if(this.cc != null) {
+			this.cc.sendMessageToClient(msg);
+		}
 	}
 	
 	// Getters //
@@ -107,6 +137,11 @@ public class Player {
 	public int getAccountBalance() 
 	{
 		return this.accountBalance;
+	}
+	
+	public int getPlayedMatches() 
+	{
+		return this.playedMatches;
 	}
 	
 	public String getState() 
