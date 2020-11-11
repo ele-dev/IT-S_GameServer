@@ -48,6 +48,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_GetVerificationKeys = null;
 	PreparedStatement pst_PurgeOldAccounts = null;
 	PreparedStatement pst_CheckVerification = null;
+	PreparedStatement pst_CheckEmailUsed = null;
 	
 	// Constructor
 	public DatabaseAccess()
@@ -137,6 +138,10 @@ public class DatabaseAccess {
 				this.pst_CheckVerification.close();
 			}
 			
+			if(this.pst_CheckEmailUsed != null) {
+				this.pst_CheckEmailUsed.close();
+			}
+			
 			if(this.dbCon != null) {
 				dbCon.close();
 			}
@@ -214,6 +219,20 @@ public class DatabaseAccess {
 		}
 		
 		return false;
+	}
+	
+	// Function that checks if an email address is already used used by an account
+	public boolean isEmailUsedAlready(String email) throws SQLException {
+		boolean isUsed = false;
+		
+		// Select players with the given email address 
+		this.pst_CheckEmailUsed.setString(1, email);
+		ResultSet result = this.pst_CheckEmailUsed.executeQuery();
+		if(result.next()) {
+			isUsed = true;
+		}
+		
+		return isUsed;
 	}
 	
 	// Functions for getting an attribute from a player with the given name
@@ -365,6 +384,10 @@ public class DatabaseAccess {
 				+ "AND tbl_userAccounts.playername LIKE ? "
 				+ "AND tbl_accountControl.activationStatus LIKE 'complete'";
 		this.pst_CheckVerification = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for selecting a player entry with a given email address
+		queryStr = "SELECT * FROM tbl_userAccounts WHERE email LIKE ?";
+		this.pst_CheckEmailUsed = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}
