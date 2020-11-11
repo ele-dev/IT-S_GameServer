@@ -121,6 +121,10 @@ public class MessageHandler {
 				sender.setLoginStatus(false);
 				sender.playerInstance = null;
 				
+				// Send broadcast message MSG_GAME_DATA to the remaining players
+				MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+				ClientConnection.broadcastMessage(gameDataMsg, true);
+				
 				Main.logger.printInfo("Received logout message from " + nameOfPlayer, false, 0);
 				sender.setLoginStatus(false);
 				

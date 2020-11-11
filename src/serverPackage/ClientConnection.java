@@ -184,12 +184,21 @@ public class ClientConnection extends Thread {
 	}
 	
 	// Method for sending broadcast messages to all conected clients
-	public static void broadcastMessage(GenericMessage networkMessage)
+	public static void broadcastMessage(GenericMessage networkMessage, boolean loggedInOnly)
 	{
 		// Loop through the list and send the message to everyone
 		for(int i = 0; i < clientList.size(); i++)
 		{
-			clientList.get(i).sendMessageToClient(networkMessage);
+			if(loggedInOnly) 
+			{
+				if(clientList.get(i).isLoggedIn()) {
+					clientList.get(i).sendMessageToClient(networkMessage);
+				}
+			}
+			else 
+			{
+				clientList.get(i).sendMessageToClient(networkMessage);
+			}
 		}
 	}
 	

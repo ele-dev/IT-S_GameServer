@@ -95,7 +95,7 @@ public class BackgroundWorker extends Thread {
 			if(duration.getSeconds() > gameStatsSyncIntv) {
 				
 				// Send the message to the player clients
-				this.sendGameStats();
+				// ...
 			}
 			
 			// Do background tasks
@@ -110,13 +110,5 @@ public class BackgroundWorker extends Thread {
 		}
 		
 		this.finalize();
-	}
-	
-	private void sendGameStats() 
-	{
-		// Create a MSG_ACCOUNT_STATS message
-		// MsgAccountStats statsMsg = new MsgAccountStats();
-		
-		return;
 	}
 }

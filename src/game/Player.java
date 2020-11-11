@@ -67,7 +67,11 @@ public class Player {
 		MsgAccountStats statsMsg = new MsgAccountStats(playedMatches, accountBalance);
 		this.sendMessage(statsMsg);
 		
-		this.sendGameDataToPlayer();
+		// Broadcast game data message to all clients
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+		ClientConnection.broadcastMessage(gameDataMsg, true);
+		
+		// this.sendGameDataToPlayer();
 		
 		Main.logger.printInfo("Sent Account and Game Stats to the newly logged in player", true, 1);
 	}
