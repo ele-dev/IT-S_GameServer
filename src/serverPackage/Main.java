@@ -68,10 +68,10 @@ public class Main {
 		System.out.println("Loading modules ... ");
 		
 		// create a logger instance 
-		logger = new Logger();
+		logger = Logger.getLoggerInstance();
 		
 		// init and test local database connection
-		database = new DatabaseAccess();
+		database = DatabaseAccess.getDatabaseInstance();
 		boolean working = database.testConnection();
 		if(!working) {
 			shutdownModules();
@@ -79,11 +79,11 @@ public class Main {
 		}
 		
 		// init and launch the network listener thread 
-		listener = new NetworkListener();
+		listener = NetworkListener.getNetworkListenerInstance();
 		listener.start();
 		
-		// intit and launch the backgeound worker thread
-		worker = new BackgroundWorker();
+		// intit and launch the background worker thread
+		worker = BackgroundWorker.getBackgroundWorkerInstance();
 		worker.start();
 	}
 	
@@ -117,7 +117,7 @@ public class Main {
 			database.finalize();
 		}
 		
-		// Finalize the logger module
+		// Finalize the logger module at last
 		if(logger != null) {
 			logger.finalize();
 		}

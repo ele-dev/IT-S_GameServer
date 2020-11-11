@@ -32,6 +32,9 @@ public class Logger {
 	
 	// static class members //
 	
+	// the single instance
+	private static Logger logger = new Logger();
+	
 	// Console color codes
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
@@ -61,7 +64,7 @@ public class Logger {
     private int logLevel;		// basic = 0 | enhanced = 1 | detailed = 2
     
     // Constructor
-    public Logger()
+    private Logger()
     {
     	// Create or reopen the log file in append mode
     	try {
@@ -85,6 +88,12 @@ public class Logger {
     	
     	// Set the initial log level
     	this.setLogLevel(GameConfigs.logLevel);
+    }
+    
+    // Static method for retriving the intance
+    public static Logger getLoggerInstance() 
+    {
+    	return logger;
     }
     
     // Finalizer

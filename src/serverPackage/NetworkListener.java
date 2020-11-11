@@ -20,19 +20,18 @@ import java.net.SocketTimeoutException;
 
 public class NetworkListener extends Thread {
 
-	// class members //
+	// single instance
+	private static NetworkListener networkListener = new NetworkListener();
 	
 	// server socket and the well known service port
 	ServerSocket serverSocket = null;
 	private static int wellknownPort = 0;
 	
 	// Thread status indicator for outside surveillance
-	private boolean stopOrder;
-	
-	// Methods // 
+	private boolean stopOrder; 
 	
 	// Constructor 
-	public NetworkListener()
+	private NetworkListener()
 	{
 		super();
 		super.setName("ServerListenerThread");
@@ -55,6 +54,12 @@ public class NetworkListener extends Thread {
 		
 		if(status)
 			Main.logger.printInfo("Created Server Socket and bound to Port " + wellknownPort, true, 0);
+	}
+	
+	// Public static function for retrieving the instance
+	public static NetworkListener getNetworkListenerInstance() 
+	{
+		return networkListener;
 	}
 	
 	// Thread function for listening in the background

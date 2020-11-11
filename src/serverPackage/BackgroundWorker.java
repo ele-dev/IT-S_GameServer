@@ -14,24 +14,36 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class BackgroundWorker extends Thread {
+	
+	// single instance 
+	private static BackgroundWorker backgroundWorker = new BackgroundWorker();
 
 	// Class members //
 	private boolean stopOrder;
 	private Instant lastSQLKeepAlive;
 	private Instant lastAccountPurge;
+	private Instant lastGameStatsSync;
 	
 	// Intervalls
 	private static final int sqlKeepAliveIntv = 30;		// every 30 seconds
 	private static final int accountPurgeIntv = 50;		// every 50 seconds
+	private static final int gameStatsSyncIntv = 10;	// every 10 seconds
 	
 	// Constructor
-	public BackgroundWorker() 
+	private BackgroundWorker() 
 	{
 		this.stopOrder = false;
 		this.lastSQLKeepAlive = Instant.now();
 		this.lastAccountPurge = Instant.now();
+		this.lastGameStatsSync = Instant.now();
 	}
 	
+	// Static method to retrieve the instance
+	public static BackgroundWorker getBackgroundWorkerInstance()
+	{
+		return backgroundWorker;
+	}
+
 	@Override
 	public void finalize()
 	{
@@ -44,7 +56,6 @@ public class BackgroundWorker extends Thread {
 	}
 	
 	// Thread function that runs background tasks periodically
-	@SuppressWarnings("unused")
 	@Override
 	public void run() 
 	{
@@ -56,7 +67,11 @@ public class BackgroundWorker extends Thread {
 			Duration duration = Duration.between(this.lastSQLKeepAlive, now);
 			if(duration.getSeconds() > sqlKeepAliveIntv) {
 				boolean status = Main.database.testConnection();
-				this.lastSQLKeepAlive = now;
+				if(status) {
+					this.lastSQLKeepAlive = now;
+				} else {
+					// ...
+				}
 			}
 			
 			// Check if there are accounts in the database exist over long time but have never been verified
@@ -74,6 +89,15 @@ public class BackgroundWorker extends Thread {
 				this.lastAccountPurge = now;
 			}
 			
+			// Send current game statistics and account info to every online player that isn't ingame
+			now = Instant.now();
+			duration = Duration.between(this.lastGameStatsSync, now);
+			if(duration.getSeconds() > gameStatsSyncIntv) {
+				
+				// Send the message to the player clients
+				this.sendGameStats();
+			}
+			
 			// Do background tasks
 			// ...
 			
@@ -86,5 +110,13 @@ public class BackgroundWorker extends Thread {
 		}
 		
 		this.finalize();
+	}
+	
+	private void sendGameStats() 
+	{
+		// Create a MSG_ACCOUNT_STATS message
+		// MsgAccountStats statsMsg = new MsgAccountStats();
+		
+		return;
 	}
 }

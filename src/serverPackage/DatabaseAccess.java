@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class DatabaseAccess {
+	
+	// single static instance
+	private static DatabaseAccess database = new DatabaseAccess();
 
 	// Class members
 	private Connection dbCon = null;
@@ -51,7 +54,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_CheckEmailUsed = null;
 	
 	// Constructor
-	public DatabaseAccess()
+	private DatabaseAccess()
 	{
 		// First obtain the global configuration values
 		dbUser = GameConfigs.dbUser;
@@ -75,6 +78,12 @@ public class DatabaseAccess {
 			this.dbCon = null;
 			return;
 		}
+	}
+	
+	// public static method for retrieving the instance
+	public static DatabaseAccess getDatabaseInstance() 
+	{
+		return database;
 	}
 	
 	// Finalizer 
