@@ -323,6 +323,7 @@ public class MessageHandler {
 				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
+					break;
 				}
 				
 				// Coerce the message into the right format
@@ -349,6 +350,7 @@ public class MessageHandler {
 				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
+					break;
 				}
 				
 				// Coerce the message into the right format
@@ -365,6 +367,34 @@ public class MessageHandler {
 					
 					enemy.sendMessage(attackMsg);
 					Main.logger.printInfo("Forwarded attack message from " + sender.playerInstance.getName() + " to " + enemy.getName(), true, 0);
+				}
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_SPAWN_GAMEPIECE:
+			{
+				// Ignore messages from clients that aren't ingame at the moment
+				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
+					Main.logger.printWarning("Received invalid spawn gamepiece message from client!", true, 1);
+					break;
+				}
+				
+				// Coerce the message into the right format
+				MsgSpawnGamepiece spawnMsg = (MsgSpawnGamepiece) msg;
+				
+				// If all the attributes are given and valid then forward the message to the enemy client
+				if(spawnMsg.getFieldCoordinates() != null && spawnMsg.getGamePieceClass() != null
+						&& spawnMsg.getTeamColor() != null) {
+					// Send the message to the other client
+					Player enemy = sender.playerInstance.getMatch().getEnemyOf(sender.playerInstance);
+					if(enemy == null) {
+						Main.logger.printError("Failed to forward the message", true, 1);
+						break;
+					}
+					
+					enemy.sendMessage(spawnMsg);
+					Main.logger.printInfo("Forwarded spawn gamepiece message from " + sender.playerInstance.getName() + " to " + enemy.getName(), true, 0);
 				}
 				
 				break;
