@@ -160,6 +160,21 @@ public class MessageHandler {
 				String statusDescription = "success";
 				boolean status = true;
 				
+				// Check if the email address is free or already used by another account
+				boolean mailUsed = false;
+				try {
+					mailUsed = Main.database.isEmailUsedAlready(registerMsg.getEmail());
+					if(mailUsed) {
+						status = false;
+						statusDescription = "";
+						Main.logger.printWarning("Registration failed: " + registerMsg.getEmail() + " is already used by another account!", true, 0);
+					}
+				} catch (SQLException e2) {
+					status = false;
+					statusDescription = "error: database problems";
+					Main.logger.printError("Registration process failed because of database problems!", true, 0);
+				}
+				
 				// check if username is valid and free to use (not taken)
 				String playername = registerMsg.getUsername();
 				if(playername.contains("guest")) {
