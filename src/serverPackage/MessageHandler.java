@@ -166,7 +166,7 @@ public class MessageHandler {
 					mailUsed = Main.database.isEmailUsedAlready(registerMsg.getEmail());
 					if(mailUsed) {
 						status = false;
-						statusDescription = "";
+						statusDescription = "This email address is already used by another account";
 						Main.logger.printWarning("Registration failed: " + registerMsg.getEmail() + " is already used by another account!", true, 0);
 					}
 				} catch (SQLException e2) {
@@ -185,7 +185,7 @@ public class MessageHandler {
 				try {
 					if(!Main.database.isNameAvailable(playername)) {
 						status = false;
-						statusDescription = "Sorry name already taken";
+						statusDescription = "Sorry name already taken. Try another one";
 						Main.logger.printWarning("The playername '" + playername + "' was already taken!", true, 0);
 					}
 				} catch (SQLException e) {
