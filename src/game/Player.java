@@ -117,6 +117,22 @@ public class Player {
 		}
 	}
 	
+	// Method that stores the current account stats of the player in the database
+	public void storeStatsInDB() 
+	{
+		// Only available for non-guest players of course
+		if(this.name.contains("guest")) {
+			return;
+		}
+		
+		// Call the database function to store the stats persistently
+		try {
+			Main.database.updatePlayerAccountStats(this.name, this.accountBalance, this.playedMatches);
+		} catch (SQLException e) {
+			Main.logger.printWarning("Database error: Failed to store account stats!", true, 1);
+		}
+	}
+	
 	// Method that sends current game infos to the player
 	public void sendGameDataToPlayer() 
 	{
@@ -138,6 +154,11 @@ public class Player {
 		return this.name;
 	}
 	
+	public boolean isGuestPlayer() 
+	{
+		return this.name.contains("guest");
+	}
+	
 	public int getAccountBalance() 
 	{
 		return this.accountBalance;
@@ -156,6 +177,17 @@ public class Player {
 	public Match getMatch() 
 	{
 		return this.currentMatch;
+	}
+	
+	// Setters //
+	public void setAccountBalance(int money) 
+	{
+		this.accountBalance = money;
+	}
+	
+	public void setPlayedMatches(int count) 
+	{
+		this.playedMatches = count;
 	}
 	
 	// If there is a waiting player on the waiting slot then return him and free the slot

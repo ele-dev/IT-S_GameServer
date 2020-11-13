@@ -44,6 +44,7 @@ public class DatabaseAccess {
 	PreparedStatement pst_RemoveGuestPlayer = null;
 	PreparedStatement pst_GetPlayerAttribute = null;
 	PreparedStatement pst_CleanTable = null;
+	PreparedStatement pst_UpdateAccStats = null;
 	
 	// Account control statements
 	PreparedStatement pst_AddAccount = null;
@@ -149,6 +150,10 @@ public class DatabaseAccess {
 			
 			if(this.pst_CheckEmailUsed != null) {
 				this.pst_CheckEmailUsed.close();
+			}
+			
+			if(this.pst_UpdateAccStats != null) {
+				this.pst_UpdateAccStats.close();
 			}
 			
 			if(this.dbCon != null) {
@@ -267,6 +272,15 @@ public class DatabaseAccess {
 		}
 		
 		return value;
+	}
+	
+	public void updatePlayerAccountStats(String player, int money, int playedMatches) throws SQLException {
+		
+		// Define the arguments and execute the update query
+		this.pst_UpdateAccStats.setInt(1, money);
+		this.pst_UpdateAccStats.setInt(2, playedMatches);
+		this.pst_UpdateAccStats.setString(3, player);
+		this.pst_UpdateAccStats.executeUpdate();
 	}
 	
 	// Method that checks if a given username is free for use or already taken
@@ -397,6 +411,10 @@ public class DatabaseAccess {
 		// statement for selecting a player entry with a given email address
 		queryStr = "SELECT * FROM tbl_userAccounts WHERE email LIKE ?";
 		this.pst_CheckEmailUsed = this.dbCon.prepareStatement(queryStr);
+		
+		// statement for updating the account stats of a player
+		queryStr = "UPDATE tbl_userAccounts SET accountBalance = ?, tbl_userAccounts.playedMatches = ? WHERE playername LIKE ?";
+		this.pst_UpdateAccStats = this.dbCon.prepareStatement(queryStr);
 		
 		Main.logger.printInfo("All prepared SQL statements are compiled and ready", true, 1);
 	}

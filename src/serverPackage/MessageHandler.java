@@ -229,6 +229,28 @@ public class MessageHandler {
 				break;
 			}
 			
+			case GenericMessage.MSG_ACCOUNT_STATS:
+			{
+				// Ignore messages from guest players or unauthentificated clients
+				if(!sender.isLoggedIn() || sender.playerInstance.isGuestPlayer()) {
+					Main.logger.printWarning("Received invalid MSG_ACCOUNT_STATS message!", true, 1);
+					break;
+				}
+				
+				// Coerce the message into the right format
+				MsgAccountStats accStats = (MsgAccountStats) msg;
+				
+				// Validate the contained values and store them in the database
+				if(sender.playerInstance != null) {
+					break;
+				}
+				sender.playerInstance.setAccountBalance(accStats.getAccountBalance());
+				sender.playerInstance.setPlayedMatches(accStats.getPlayedMatches());
+				sender.playerInstance.storeStatsInDB();
+				
+				break;
+			}
+			
 			case GenericMessage.MSG_JOIN_QUICKMATCH:
 			{
 				// Ignore messages from unauthentificated clients
