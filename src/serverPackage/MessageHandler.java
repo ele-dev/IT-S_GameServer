@@ -29,7 +29,7 @@ public class MessageHandler {
 		// Distinguish between all different types of messages
 		switch(type)
 		{
-		
+			
 			case GenericMessage.MSG_LOGIN:
 			{
 				// Ignore messages from clients that are already logged in
@@ -122,7 +122,7 @@ public class MessageHandler {
 				sender.playerInstance = null;
 				
 				// Send broadcast message MSG_GAME_DATA to the remaining players
-				MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+				MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
 				ClientConnection.broadcastMessage(gameDataMsg, true);
 				
 				Main.logger.printInfo("Received logout message from " + nameOfPlayer, false, 0);

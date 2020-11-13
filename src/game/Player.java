@@ -68,7 +68,7 @@ public class Player {
 		this.sendMessage(statsMsg);
 		
 		// Broadcast game data message to all clients
-		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
 		ClientConnection.broadcastMessage(gameDataMsg, true);
 		
 		// this.sendGameDataToPlayer();
@@ -120,7 +120,7 @@ public class Player {
 	// Method that sends current game infos to the player
 	public void sendGameDataToPlayer() 
 	{
-		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
 		this.sendMessage(gameDataMsg);
 	}
 	
