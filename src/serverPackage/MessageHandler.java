@@ -29,7 +29,7 @@ public class MessageHandler {
 		// Distinguish between all different types of messages
 		switch(type)
 		{
-		
+			
 			case GenericMessage.MSG_LOGIN:
 			{
 				// Ignore messages from clients that are already logged in
@@ -108,7 +108,7 @@ public class MessageHandler {
 			case GenericMessage.MSG_LOGOUT:
 			{
 				// Ignore messages from unauthentificated clients
-				if(!sender.isLoggedIn()) {
+				if(sender == null || !sender.isLoggedIn()) {
 					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
 					break;
 				}
@@ -122,7 +122,7 @@ public class MessageHandler {
 				sender.playerInstance = null;
 				
 				// Send broadcast message MSG_GAME_DATA to the remaining players
-				MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount());
+				MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
 				ClientConnection.broadcastMessage(gameDataMsg, true);
 				
 				Main.logger.printInfo("Received logout message from " + nameOfPlayer, false, 0);
@@ -225,6 +225,28 @@ public class MessageHandler {
 				// Respond with status message that contains success status and description
 				MsgRegisterStatus response = new MsgRegisterStatus(status, statusDescription);
 				sender.sendMessageToClient(response);
+				
+				break;
+			}
+			
+			case GenericMessage.MSG_ACCOUNT_STATS:
+			{
+				// Ignore messages from guest players or unauthentificated clients
+				if(!sender.isLoggedIn() || sender.playerInstance.isGuestPlayer()) {
+					Main.logger.printWarning("Received invalid MSG_ACCOUNT_STATS message!", true, 1);
+					break;
+				}
+				
+				// Coerce the message into the right format
+				MsgAccountStats accStats = (MsgAccountStats) msg;
+				
+				// Validate the contained values and store them in the database
+				if(sender.playerInstance == null) {
+					break;
+				}
+				sender.playerInstance.setAccountBalance(accStats.getAccountBalance());
+				sender.playerInstance.setPlayedMatches(accStats.getPlayedMatches());
+				sender.playerInstance.storeStatsInDB();
 				
 				break;
 			}

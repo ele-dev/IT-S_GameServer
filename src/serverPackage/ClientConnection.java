@@ -173,6 +173,11 @@ public class ClientConnection extends Thread {
 	// Method for sending messages to this individual client
 	public void sendMessageToClient(GenericMessage networkMessage) 
 	{
+		// Make sure the connection to the client is alive before attempt to send something
+		if(this.clientSocket.isClosed()) {
+			return;
+		}
+		
 		// Write the serializable object to the stream pipe
 		try {
 			this.objOut.writeObject(networkMessage);
@@ -183,21 +188,23 @@ public class ClientConnection extends Thread {
 		return;
 	}
 	
-	// Method for sending broadcast messages to all conected clients
+	// Method for sending broadcast messages to all connected clients
 	public static void broadcastMessage(GenericMessage networkMessage, boolean loggedInOnly)
-	{
+	{	
 		// Loop through the list and send the message to everyone
 		for(int i = 0; i < clientList.size(); i++)
 		{
 			if(loggedInOnly) 
 			{
-				if(clientList.get(i).isLoggedIn()) {
+				if(clientList.get(i) != null && clientList.get(i).isLoggedIn()) {
 					clientList.get(i).sendMessageToClient(networkMessage);
 				}
 			}
 			else 
 			{
-				clientList.get(i).sendMessageToClient(networkMessage);
+				if(clientList.get(i) != null) {
+					clientList.get(i).sendMessageToClient(networkMessage);
+				}
 			}
 		}
 	}
@@ -246,7 +253,7 @@ public class ClientConnection extends Thread {
 		// Go throug the global client list, only count authentificated clients
 		for(ClientConnection cc: clientList) 
 		{
-			if(cc.isLoggedIn()) {
+			if(cc != null && cc.isLoggedIn() && !cc.clientSocket.isClosed()) {
 				count++;
 			}
 		}

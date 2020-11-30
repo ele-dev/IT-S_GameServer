@@ -13,8 +13,10 @@ package game;
 import java.util.ArrayList;
 
 import networking.GenericMessage;
+import networking.MsgGameData;
 import networking.MsgMatchInfo;
 import networking.SignalMessage;
+import serverPackage.ClientConnection;
 
 public class Match {
 	
@@ -46,7 +48,11 @@ public class Match {
 		this.p1 = player1;
 		this.p2 = player2;
 		
-		// Player won is always the player that makes the first move
+		// Broadcast a GameData message to all online players to inform about the running match
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
+		ClientConnection.broadcastMessage(gameDataMsg, true);
+		
+		// Player p1 is always the player that makes the first move
 		this.currentlyActingPlayer = this.p1.getName();
 	}
 	
@@ -54,11 +60,6 @@ public class Match {
 	@Override
 	public void finalize() 
 	{
-		// Remove this instance from the list of running matches
-		// matches.remove(this);
-		
-		// ...
-		
 		// Remove the players from the match
 		this.p1 = this.p2 = null;
 	}
@@ -136,6 +137,10 @@ public class Match {
 		
 		// Remove this unfinished match from the list
 		matches.remove(this);
+		
+		// Broadcast a GameData message to inform all online players
+		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
+		ClientConnection.broadcastMessage(gameDataMsg, true);
 	}
 	
 	// Helper function that returns the enemy of the player passed to this function
@@ -153,6 +158,12 @@ public class Match {
 		}
 		
 		return null;
+	}
+	
+	// Public static method function that returns the amount of running matches
+	public static int getRunningMatchesCount() 
+	{
+		return matches.size();
 	}
 	
 	// static method that prints the running Matches formatted to the console
