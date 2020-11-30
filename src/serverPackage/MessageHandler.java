@@ -108,7 +108,7 @@ public class MessageHandler {
 			case GenericMessage.MSG_LOGOUT:
 			{
 				// Ignore messages from unauthentificated clients
-				if(!sender.isLoggedIn()) {
+				if(sender == null || !sender.isLoggedIn()) {
 					Main.logger.printWarning("Received message from unauthentificated client!", true, 1);
 					break;
 				}
