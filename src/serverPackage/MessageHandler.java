@@ -241,7 +241,7 @@ public class MessageHandler {
 				MsgAccountStats accStats = (MsgAccountStats) msg;
 				
 				// Validate the contained values and store them in the database
-				if(sender.playerInstance != null) {
+				if(sender.playerInstance == null) {
 					break;
 				}
 				sender.playerInstance.setAccountBalance(accStats.getAccountBalance());
