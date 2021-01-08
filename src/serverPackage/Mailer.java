@@ -4,7 +4,7 @@ package serverPackage;
  * written by Elias Geiger
  * 
  * This class has contains a static method for sending a verification email to a new user
- * This mail contains a weblink redirects to the verifcation backend (PHP7).
+ * This mail contains a web link redirects to the verification backend (PHP7).
  * When the user opens the link from his mailbox, his game account will become activated
  * 
  */

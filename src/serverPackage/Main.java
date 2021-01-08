@@ -5,7 +5,7 @@ package serverPackage;
  * 
  * This is the main class, with the application entry point of
  * Things are done on a high abstraction level.
- * This way the application structure is more comprehendable
+ * This way the application structure is more comprehensible
  * 
  */
 
@@ -35,7 +35,7 @@ public class Main {
 			System.out.println("Configuration was loaded from file");
 		}
 		
-		// Print out the config values that will be used
+		// Print out the configuration values that will be used
 		GameConfigs.printConfig();
 		
 		// Call local init method 
@@ -62,7 +62,7 @@ public class Main {
 		return;
 	}
 	
-	// Intialization of the application modules
+	// Initialization of the application modules
 	private static void initModules() 
 	{
 		System.out.println("Loading modules ... ");
@@ -122,5 +122,4 @@ public class Main {
 			logger.finalize();
 		}
 	}
-
 }

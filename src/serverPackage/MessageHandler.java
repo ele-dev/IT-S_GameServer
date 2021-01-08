@@ -3,9 +3,9 @@ package serverPackage;
 /*
  * written by Elias Geiger
  * 
- * This Class is reponsible for all the message handling and is only used
+ * This Class is responsible for all the message handling and is only used
  * in a static context. The handleMessage() Function is called from the clientHandler threads
- * everytime a new message is received
+ * every time a new message is received
  * 
  */
 
@@ -77,7 +77,7 @@ public class MessageHandler {
 				}
 				else 
 				{
-					// intialize the status as false for this case
+					// Initialize the status as false for this case
 					loginStatus = false;
 					boolean verifiedStatus = false;
 					
@@ -133,7 +133,7 @@ public class MessageHandler {
 			
 			case GenericMessage.MSG_REGISTER:
 			{
-				// Ignore messages from client that are currenly logged in (or guests)
+				// Ignore messages from client that are currently logged in (or guests) 
 				if(sender.isLoggedIn()) {
 					Main.logger.printWarning("Received register message from client that is logged in at the moment", true, 1);
 					break;
@@ -210,7 +210,7 @@ public class MessageHandler {
 							Main.logger.printError("Registration process failed because of database problems!", true, 0);
 						}
 						
-						// send mail with link Weblink to verification backend
+						// send mail with link Web link to verification backend
 						boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
 						if(!result) {
 							status = false;
@@ -296,7 +296,7 @@ public class MessageHandler {
 				// Call the function for aborting a players quick match search and store the result
 				boolean isAborted = Player.abortWaiting(sender.playerInstance);
 				
-				// The result tells us if the abortion actually happended or if the request was invalid
+				// The result tells us if the abortion actually happened or if the request was invalid
 				if(isAborted) {
 					// Update the player state and output the message to the console
 					sender.playerInstance.setState("homescreen");
@@ -311,7 +311,7 @@ public class MessageHandler {
 			
 			case GenericMessage.MSG_LEAVE_MATCH:
 			{
-				// Ignore messages from unauthentificated clients or players that aren't ingame
+				// Ignore messages from unauthentificated clients or players that aren't in-game
 				if(!sender.isLoggedIn() || sender.playerInstance == null || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid leave match message!", true, 1);
 					break;
@@ -328,7 +328,7 @@ public class MessageHandler {
 		
 			case GenericMessage.MSG_END_TURN:
 			{
-				// Ignore messages from clients that arent ingame at the moment
+				// Ignore messages from clients that aren't in-game at the moment
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid end turn message from client!", true, 1);
 					break;
@@ -345,7 +345,7 @@ public class MessageHandler {
 			
 			case GenericMessage.MSG_MAKE_MOVE:
 			{
-				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
+				// Ignore messages from clients that aren't in-game or even logged in or aren't allowed to act
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
 					break;
@@ -372,7 +372,7 @@ public class MessageHandler {
 			
 			case GenericMessage.MSG_ATTACK:
 			{
-				// Ignore messages from clients that aren't ingame or even logged in or arent allowed to act
+				// Ignore messages from clients that aren't in-game or even logged in or aren't allowed to act
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid make move message from client!", true, 1);
 					break;
@@ -399,7 +399,7 @@ public class MessageHandler {
 			
 			case GenericMessage.MSG_SPAWN_GAMEPIECE:
 			{
-				// Ignore messages from clients that aren't ingame at the moment
+				// Ignore messages from clients that aren't in-game at the moment
 				if(!sender.isLoggedIn() || !sender.playerInstance.getState().equals("playing")) {
 					Main.logger.printWarning("Received invalid spawn gamepiece message from client!", true, 1);
 					break;
