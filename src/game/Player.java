@@ -5,7 +5,7 @@ package game;
  * 
  * This class represent an online player
  * Players can either be guests or registered players but all have a few common properties
- * the name, state (homescreen, searching or playing), account balance (game money)
+ * the name, state (home screen, searching or playing), account balance (game money)
  * 
  * The class is mainly used to track player activities but also includes static variables 
  * and functions for the waiting queue and matchmaking in general
@@ -30,7 +30,7 @@ public class Player {
 	private ClientConnection cc;
 	private String name;
 	private int accountBalance;
-	private String currentState;		// states: homescreen | searching | playing
+	private String currentState;		// states: home screen | searching | playing
 	private int playedMatches;
 	
 	private Match currentMatch;
@@ -54,7 +54,7 @@ public class Player {
 		this.cc = cc;
 		this.name = name;
 		
-		// After successfull authentification fetch some intial data for the player
+		// After successful authentification fetch some initial data for the player
 		try {
 			this.playedMatches = Main.database.getPlayerAttributeInt("playedMatches", this.name);
 			this.accountBalance = Main.database.getPlayerAttributeInt("accountBalance", this.name);
@@ -92,7 +92,7 @@ public class Player {
 	// Method that simplifies player logout no matter if guest or registered
 	public void logout() 
 	{
-		// If the player is still ingame then leave the match first (surrender)
+		// If the player is still in-game then leave the match first (surrender)
 		if(this.currentMatch != null) {
 			this.currentMatch.leaveMatch(this);
 		}
@@ -117,7 +117,7 @@ public class Player {
 		}
 	}
 	
-	// Method that stores the current account stats of the player in the database
+	// Method that stores the current account statistics of the player in the database
 	public void storeStatsInDB() 
 	{
 		// Only available for non-guest players of course
@@ -125,7 +125,7 @@ public class Player {
 			return;
 		}
 		
-		// Call the database function to store the stats persistently
+		// Call the database function to store the statistics persistently
 		try {
 			Main.database.updatePlayerAccountStats(this.name, this.accountBalance, this.playedMatches);
 		} catch (SQLException e) {
@@ -133,7 +133,7 @@ public class Player {
 		}
 	}
 	
-	// Method that sends current game infos to the player
+	// Method that sends current game info to the player
 	public void sendGameDataToPlayer() 
 	{
 		MsgGameData gameDataMsg = new MsgGameData(ClientConnection.getOnlinePlayerCount(), Match.getRunningMatchesCount());
