@@ -163,25 +163,31 @@ public class MessageHandler {
 					Main.logger.printError("Registration process failed because of database problems!", true, 0);
 				}
 				
-				// check if username is valid and free to use (not taken)
+				// only check the playername if the email was valid before
 				String playername = registerMsg.getUsername();
-				if(playername.contains("guest")) {
-					status = false;
-					statusDescription = "username can not contain 'guest'";
-					Main.logger.printWarning("Playername '" + playername + "' is not allowed!", true, 0);
-				}
-				try {
-					if(!Main.database.isNameAvailable(playername)) {
+				if(status)
+				{
+					// check if username is valid and free to use (not taken)
+					if(playername.contains("guest")) {
 						status = false;
-						statusDescription = "Sorry name already taken. Try another one";
-						Main.logger.printWarning("The playername '" + playername + "' was already taken!", true, 0);
+						statusDescription = "username can not contain 'guest'";
+						Main.logger.printWarning("Playername '" + playername + "' is not allowed!", true, 0);
+					} else {
+						try {
+							if(!Main.database.isNameAvailable(playername)) {
+								status = false;
+								statusDescription = "Sorry name already taken. Try another one";
+								Main.logger.printWarning("The playername '" + playername + "' was already taken!", true, 0);
+							}
+						} catch (SQLException e) {
+							status = false;
+							statusDescription = "error: database problems";
+							Main.logger.printError("Registration process failed because of database problems!", true, 0);
+						}
 					}
-				} catch (SQLException e) {
-					status = false;
-					statusDescription = "error: database problems";
-					Main.logger.printError("Registration process failed because of database problems!", true, 0);
 				}
 				
+				// Only if the email and playername are valid and still available, then finish the registration process and store it in the database 
 				if(status) 
 				{
 					// Generate random but unique verification code for new account
@@ -210,15 +216,22 @@ public class MessageHandler {
 							Main.logger.printError("Registration process failed because of database problems!", true, 0);
 						}
 						
-						// send mail with link Web link to verification backend
-						boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
-						if(!result) {
-							status = false;
-							statusDescription = "Type in a real email address!";
-							Main.logger.printError("Registration process failed because of mail server issues!", true, 1);
-						} else {
-							Main.logger.printInfo("  --> New account '" + playername + "' has been registered successfully", true, 0);
+						// only continue when everything worked without problems
+						if(status) {
+							// send mail with link Web link to verification backend
+							boolean result = Mailer.sendVerificationMailTo(registerMsg.getEmail(), verifyKey);
+							if(!result) {
+								status = false;
+								statusDescription = "Type in a real email address!";
+								Main.logger.printError("Registration process failed because of mail server issues!", true, 1);
+							} else {
+								Main.logger.printInfo("  --> New account '" + playername + "' has been registered successfully", true, 0);
+							}
 						}
+					}
+					else 
+					{
+						Main.logger.printError("Registration failed while creating unique verification key!", true, 1);
 					}
 				}
 				
