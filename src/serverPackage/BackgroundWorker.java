@@ -58,6 +58,9 @@ public class BackgroundWorker extends Thread {
 	@Override
 	public void run() 
 	{
+		// Wait until logger module is available 
+		while(Main.logger == null) { }
+		
 		// Run until a stop order from the main thread arrives
 		while(!stopOrder)
 		{
@@ -65,6 +68,7 @@ public class BackgroundWorker extends Thread {
 			Instant now = Instant.now();
 			Duration duration = Duration.between(this.lastSQLKeepAlive, now);
 			if(duration.getSeconds() > sqlKeepAliveIntv) {
+				Main.logger.printInfo("Executed SQL keep alive query", true, 2);
 				boolean status = Main.database.testConnection();
 				if(status) {
 					this.lastSQLKeepAlive = now;
@@ -73,13 +77,14 @@ public class BackgroundWorker extends Thread {
 				}
 			}
 			
-			// Check if there are accounts in the database exist over long time but have never been verified
+			// Check if there are accounts in the database that exist over long time but have never been verified
 			now = Instant.now();
 			duration = Duration.between(this.lastAccountPurge, now);
 			if(duration.getSeconds() > accountPurgeIntv) {
 				
-				// Delete all accounts that haven't been verified for a 7 days or more
+				// Delete all accounts that haven't been verified for 7 days or more
 				try {
+					Main.logger.printInfo("Executed SQL account purge query", false, 2);
 					Main.database.purgeOldAccounts(7);
 				} catch (SQLException e) {
 					// e.printStackTrace();
