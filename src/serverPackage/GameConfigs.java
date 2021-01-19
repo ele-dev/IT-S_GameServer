@@ -7,8 +7,8 @@ package serverPackage;
  * Inside the readConfigFile Function all config values that are expected to be present in the configuration file
  * are retrieved, parsed to other datatypes if necessary and finally stored inside public accessible variables
  * 
- * This additional class for config variables makes it even more comfortable to introduce additonal configuration variables
- * into the project because the ConfigFile Class can remain untouched and stays resusable for other projects while 
+ * This additional class for config variables makes it even more comfortable to introduce additional configuration variables
+ * into the project because the ConfigFile Class can remain untouched and stays reusable for other projects while 
  * it requires only two lines of code more in this class to read in a new value
  * 
  * Last but not least the class offers the option to define default fallback values for the variable that will be used 
@@ -50,7 +50,7 @@ public class GameConfigs {
 		}
 		// Get all the values we need from the config file
 		try {
-			// General paradigma for reading in config values
+			// General paradigm for reading in config values
 			// value = file.getValueByName("valName");
 			
 			// General values
@@ -65,7 +65,7 @@ public class GameConfigs {
 			logFilename = file.getValueByName("log-file");
 			logLevel = file.getValueByName("log-level");
 
-			// Mailserver related values
+			// Mail server related values
 			noreplyMailAddress = file.getValueByName("mail-address");
 			noreplyMailPassword = file.getValueByName("mail-password");
 			smtpServer = file.getValueByName("mail-host");

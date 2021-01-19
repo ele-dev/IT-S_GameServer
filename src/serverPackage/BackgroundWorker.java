@@ -1,7 +1,5 @@
 package serverPackage;
 
-import java.sql.SQLException;
-
 /*
  * written by Elias Geiger
  * 
@@ -10,6 +8,7 @@ import java.sql.SQLException;
  * 
  */
 
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -24,7 +23,7 @@ public class BackgroundWorker extends Thread {
 	private Instant lastAccountPurge;
 	private Instant lastGameStatsSync;
 	
-	// Intervalls
+	// Intervals
 	private static final int sqlKeepAliveIntv = 30;		// every 30 seconds
 	private static final int accountPurgeIntv = 50;		// every 50 seconds
 	private static final int gameStatsSyncIntv = 10;	// every 10 seconds
@@ -59,13 +58,17 @@ public class BackgroundWorker extends Thread {
 	@Override
 	public void run() 
 	{
+		// Wait until logger module is available 
+		while(Main.logger == null) { }
+		
 		// Run until a stop order from the main thread arrives
 		while(!stopOrder)
 		{
-			// Execute the test sql statement to keep the database connection alive
+			// Execute the test SQL statement to keep the database connection alive
 			Instant now = Instant.now();
 			Duration duration = Duration.between(this.lastSQLKeepAlive, now);
 			if(duration.getSeconds() > sqlKeepAliveIntv) {
+				Main.logger.printInfo("Executed SQL keep alive query", true, 2);
 				boolean status = Main.database.testConnection();
 				if(status) {
 					this.lastSQLKeepAlive = now;
@@ -74,13 +77,14 @@ public class BackgroundWorker extends Thread {
 				}
 			}
 			
-			// Check if there are accounts in the database exist over long time but have never been verified
+			// Check if there are accounts in the database that exist over long time but have never been verified
 			now = Instant.now();
 			duration = Duration.between(this.lastAccountPurge, now);
 			if(duration.getSeconds() > accountPurgeIntv) {
 				
-				// Delete all accounts that haven't been verified for a 7 days or more
+				// Delete all accounts that haven't been verified for 7 days or more
 				try {
+					Main.logger.printInfo("Executed SQL account purge query", false, 2);
 					Main.database.purgeOldAccounts(7);
 				} catch (SQLException e) {
 					// e.printStackTrace();
@@ -89,7 +93,7 @@ public class BackgroundWorker extends Thread {
 				this.lastAccountPurge = now;
 			}
 			
-			// Send current game statistics and account info to every online player that isn't ingame
+			// Send current game statistics and account info to every online player that isn't in-game
 			now = Instant.now();
 			duration = Duration.between(this.lastGameStatsSync, now);
 			if(duration.getSeconds() > gameStatsSyncIntv) {

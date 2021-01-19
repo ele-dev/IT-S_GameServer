@@ -5,7 +5,7 @@ package serverPackage;
  * 
  * This class is the endpoint of one client connected to the server
  * The game server works with TCP/IP connections and has therefore 
- * one Socket and one seperate Thread per client connection to handle.
+ * one Socket and one separate Thread per client connection to handle.
  * It means every time the server socket accepts a connection request, a new client handler
  * thread is launched.
  * 
@@ -125,7 +125,7 @@ public class ClientConnection extends Thread {
 		}
 	}
 	
-	// Thread function that runs simultanenious
+	// Thread function that runs simultaneous
 	@Override
 	public void run()
 	{
@@ -229,7 +229,7 @@ public class ClientConnection extends Thread {
 		clientList.clear();
 	}
 	
-	// static helper methodd that prints a list with info about all connected clients
+	// static helper method that prints a list with info about all connected clients
 	public static void printClientInfo() 
 	{
 		for(ClientConnection cc: clientList)
@@ -250,7 +250,7 @@ public class ClientConnection extends Thread {
 	{
 		int count = 0;
 		
-		// Go throug the global client list, only count authentificated clients
+		// Go through the global client list, only count authentificated clients
 		for(ClientConnection cc: clientList) 
 		{
 			if(cc != null && cc.isLoggedIn() && !cc.clientSocket.isClosed()) {

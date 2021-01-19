@@ -8,16 +8,16 @@ package serverPackage;
  * 
  * There are 3 different console output channels: INFO (white), WARNING (yellow), ERROR (red) 
  * this way it is possible to highlight messages and classify them. The three different Methods are 
- * used in all source file when console output is printed out. Additonally the it can be specified through
+ * used in all source file when console output is printed out. Additionally the it can be specified through
  * a boolean flag parameter if a console message should be written to the log file or not
  * 
  * Another handy feature is the conditional output implemented using a logLevel that can be 0, 1 or 2
  * It's mainly used for debugging. If you need to know the value of a variable at a specific point of time for example 
- * then it is useful to increase the loglevel for the debug message, then it is only shown if the log level during execution
- * is high enough. The intial loglevel is also defined in the config.txt by the way
+ * then it is useful to increase the log-level for the debug message, then it is only shown if the log level during execution
+ * is high enough. The initial log-level is also defined in the config.txt by the way
  * 
  * Note: The color codes for colored console messages aren't working on windows and aren't cross-platform in general
- * They only work on linux platforms and since the server application is supposed to run on linux
+ * They only work on Linux platforms and since the server application is supposed to run on Linux
  * anyway I decided to keep this simple implementation coloring the console text
  * 
  */
@@ -78,7 +78,7 @@ public class Logger {
     	long time = date.getTime();
     	Timestamp ts = new Timestamp(time);
     	
-    	// Enter a seperation line to mark the application launch in the logfile
+    	// Enter a separation line to mark the application launch in the log file
     	try {
     		fileWriter.write("\n\n");
 			fileWriter.write("---------------------- Application launch at " + ts + " ----------------------\n\n");
@@ -90,7 +90,7 @@ public class Logger {
     	this.setLogLevel(GameConfigs.logLevel);
     }
     
-    // Static method for retriving the intance
+    // Static method for retrieving the instance
     public static Logger getLoggerInstance() 
     {
     	return logger;
@@ -108,7 +108,7 @@ public class Logger {
 			System.err.println("Failed to close file writer");
 		}
     	
-    	// Make sure the console text color is resetted before the application closes
+    	// Make sure the console text color is reseted before the application closes
     	System.out.print(RESET);
     }
     
@@ -151,7 +151,7 @@ public class Logger {
     	if(level > logLevel) 
     		return;
     	
-    	// First get a formatted timestamp
+    	// First get a formatted time stamp
     	String tStamp = getTimestamp();
     	
     	// Then print the output to console in the right color
@@ -159,7 +159,7 @@ public class Logger {
     	System.out.print(WHITE + "[Info]: ");
     	System.out.println(output);
     	
-    	// Optionally write to the logfile too
+    	// Optionally write to the log file too
     	if(loggingOn) {
     		try {
     			this.fileWriter.write(tStamp + "[Info]: " + output + "\n");
@@ -173,7 +173,7 @@ public class Logger {
     	if(level > logLevel) 
     		return;
     	
-    	// First get a formatted timestamp
+    	// First get a formatted time stamp
     	String tStamp = getTimestamp();
     	
     	// Then print the output to console in the right color
@@ -182,7 +182,7 @@ public class Logger {
     	System.out.println(output);
     	System.out.print(WHITE);
     	
-    	// Optionally write to the logfile too
+    	// Optionally write to the log file too
     	if(loggingOn) {
     		try {
     			this.fileWriter.write(tStamp + "[Error]: " + output + "\n");
@@ -196,7 +196,7 @@ public class Logger {
     	if(level > logLevel) 
     		return;
     	
-    	// First get a formatted timestamp
+    	// First get a formatted time stamp
     	String tStamp = getTimestamp();
     	
     	// Then print the output to console in the right color
@@ -205,7 +205,7 @@ public class Logger {
     	System.out.println(output);
     	System.out.print(WHITE);
     	
-    	// Optionally write to the logfile too
+    	// Optionally write to the log file too
     	if(loggingOn) {
     		try {
     			this.fileWriter.write(tStamp + "[Warning]: " + output + "\n");
@@ -213,8 +213,8 @@ public class Logger {
     	}
     }
     
-    // Private function that returns a formatted timestamp for console output
-    // Desired timestamp format 	[hh:mm:ss]
+    // Private function that returns a formatted time stamp for console output
+    // Desired time stamp format 	[hh:mm:ss]
     private static String getTimestamp()
     {
     	LocalTime now = LocalTime.now();

@@ -4,12 +4,12 @@ package serverPackage;
  * written by Elias Geiger
  * 
  * This class is the interface to the mariaDB/MySQL Database backend
- * which is neccessary to provide persistency for important game data
+ * which is necessary to provide persistence for important game data
  * 
  * The class attempts to connect to the database in the constructor and executes a test query 
  * to make sure the connection is working properly. The finalize method is responsible for the closeup
  * before the application itself closes. The Majority of the required SQL Queries for are used very
- * frequently with only slight changes in the paramaters. Thats why Prepared statements are used.
+ * frequently with only slight changes in the parameters. Thats why Prepared statements are used.
  * They can be prepared/precompiled during application initialization with a few placeholders for parameters passing
  * and later on they can be executed faster compared to the normal statements
  * 
@@ -164,7 +164,7 @@ public class DatabaseAccess {
 			return;
 		}
 		
-		// Ouput status message about clean close up
+		// Output status message about clean close up
 		Main.logger.printInfo("Database Module unloaded", true, 0);
 	}
 	
@@ -181,7 +181,7 @@ public class DatabaseAccess {
 			return false;
 		}
 		
-		// if the login was successfull then mark the player as online
+		// if the login was successful then mark the player as online
 		this.pst_SetOnlineStatus.setString(1, "online");
 		this.pst_SetOnlineStatus.setString(2, username);
 		this.pst_SetOnlineStatus.executeUpdate();
@@ -352,7 +352,7 @@ public class DatabaseAccess {
 		return true;
 	}
 	
-	// Method precompiles all neccessary prepared statements for faster execution during runtime
+	// Method precompiles all necessary prepared statements for faster execution during runtime
 	private void precompileStatements() throws SQLException {
 		// test statement
 		String queryStr = "SELECT * FROM tbl_userAccounts";
@@ -412,7 +412,7 @@ public class DatabaseAccess {
 		queryStr = "SELECT * FROM tbl_userAccounts WHERE email LIKE ?";
 		this.pst_CheckEmailUsed = this.dbCon.prepareStatement(queryStr);
 		
-		// statement for updating the account stats of a player
+		// statement for updating the account statistics of a player
 		queryStr = "UPDATE tbl_userAccounts SET accountBalance = ?, tbl_userAccounts.playedMatches = ? WHERE playername LIKE ?";
 		this.pst_UpdateAccStats = this.dbCon.prepareStatement(queryStr);
 		

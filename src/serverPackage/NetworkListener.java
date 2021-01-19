@@ -38,7 +38,7 @@ public class NetworkListener extends Thread {
 		
 		boolean status = true;
 		
-		// Obtain the configured server port from the global config
+		// Obtain the configured server port from the global configuration
 		wellknownPort = GameConfigs.serverPort;
 		
 		// Reset the stop order flag at first
@@ -68,7 +68,7 @@ public class NetworkListener extends Thread {
 		// Print info message that server listener thread has just been launched
 		Main.logger.printInfo("Server listener thread launched", true, 1);
 		
-		// begin to listen continously for connection requests
+		// begin to listen continuously for connection requests
 		this.listen();
 		
 		// Notify all client handler threads to finish their work
