@@ -1,7 +1,7 @@
 package serverPackage;
 
 /*
- * writte by Elias Geiger
+ * written by Elias Geiger
  * 
  * This class simplifies the usage of external config files in a simple key:value format
  * When instantiated, it reads in the given textfile, separates the lines from each other
